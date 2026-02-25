@@ -163,11 +163,11 @@ export function LandingPage() {
             track your progress.
           </p>
           <div className="landing-hero-actions">
-            <a href="https://proselab.io" className="landing-btn-primary" id="start">
-              Open ProseLab
+            <a href="https://app.proselab.io/signup" className="landing-btn-primary" id="start">
+              Start writing
             </a>
-            <a href="#how" className="landing-btn-secondary">
-              How it works
+            <a href="https://app.proselab.io" className="landing-btn-secondary">
+              Browse passages
             </a>
           </div>
         </div>
@@ -409,15 +409,15 @@ export function LandingPage() {
           constraints, and feedback. Study the masters. Write more.
         </p>
         <div className="landing-reveal landing-cta-buttons">
-          <Link href="/lab" className="landing-btn-primary">
-            Browse Passages →
-          </Link>
-          <Link href="/pricing" className="landing-btn-outline">
-            View pricing →
-          </Link>
-          <Link href="/signup" className="landing-btn-outline">
-            Create account →
-          </Link>
+          <a href="https://app.proselab.io/signup" className="landing-btn-primary">
+            Start writing →
+          </a>
+          <a href="https://app.proselab.io/pricing" className="landing-btn-outline">
+            View plans →
+          </a>
+          <a href="https://app.proselab.io" className="landing-btn-outline">
+            Browse passages →
+          </a>
         </div>
         <p className="landing-cta-badge landing-reveal">
           No account needed to browse — sign up to save your work
