@@ -396,8 +396,7 @@ export function LandingPage() {
 
       {/* CTA */}
       <section className="landing-cta">
-        <p className="landing-cta-tag landing-reveal">Free &amp; Open Source</p>
-        <h2 className="landing-cta-title landing-reveal">
+<h2 className="landing-cta-title landing-reveal">
           Start
           <br />
           <em>Writing</em>
@@ -428,18 +427,7 @@ export function LandingPage() {
       <footer className="landing-footer">
         <div className="landing-footer-top">
           <span className="landing-footer-logo">Proselab</span>
-          <span className="landing-footer-mono">
-            Next.js 16 · React 19 · Supabase · Anthropic Claude · ElevenLabs
-          </span>
-          <a
-            href="https://github.com/LucaLyon1/writinggym"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="landing-footer-mono"
-            style={{ color: 'var(--landing-rust)' }}
-          >
-            GitHub ↗
-          </a>
+          <span className="landing-footer-tagline">Train Your Voice. Every Day.</span>
         </div>
         <div className="landing-footer-contact">
           <Link href="/privacy" className="landing-footer-mono">
@@ -455,7 +443,7 @@ export function LandingPage() {
             Contact
           </Link>
           <a href="mailto:contact@proselab.io" className="landing-footer-mono">
-            contact@proselab.io
+            Email ↗
           </a>
           <a
             href="https://x.com/LucaSav_io"
