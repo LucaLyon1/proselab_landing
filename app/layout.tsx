@@ -20,6 +20,22 @@ export const metadata: Metadata = {
   title: "ProseLab",
   description:
     "Train your voice. Study passages with AI craft analysis, write your own version, get feedback, and track your progress.",
+  openGraph: {
+    url: "https://www.proselab.io/",
+    type: "website",
+    title: "ProseLab",
+    description:
+      "Train your voice. Study passages with AI craft analysis, write your own version, get feedback, and track your progress.",
+    images: [{ url: "https://www.proselab.io/opengraph.png" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "proselab.io",
+    title: "ProseLab",
+    description:
+      "Train your voice. Study passages with AI craft analysis, write your own version, get feedback, and track your progress.",
+    images: ["https://www.proselab.io/opengraph.png"],
+  },
   icons: {
     icon: [
       { url: "/favicon/favicon.ico", sizes: "any" },
