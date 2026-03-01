@@ -69,7 +69,7 @@ body {
   text-transform: uppercase;
   color: var(--ink);
   text-decoration: none;
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: Georgia, serif;
   transition: color 0.15s;
 }
 

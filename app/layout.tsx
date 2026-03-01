@@ -57,9 +57,7 @@ export default function RootLayout({
       <body>
         <header className="auth-header">
           <Link href="/" className="auth-header-logo">
-            <span style={{ fontFamily: "var(--font-cormorant-garamond), serif" }}>
-              Proselab
-            </span>
+            Proselab
           </Link>
           <AuthNav />
         </header>

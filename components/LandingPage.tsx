@@ -446,7 +446,7 @@ export function LandingPage() {
             Email ↗
           </a>
           <a
-            href="https://x.com/LucaSav_io"
+            href="https://x.com/proselab_io"
             target="_blank"
             rel="noopener noreferrer"
             className="landing-footer-mono"
@@ -454,7 +454,7 @@ export function LandingPage() {
             X ↗
           </a>
           <a
-            href="https://substack.com/@lucasavio"
+            href="https://proselab.substack.com"
             target="_blank"
             rel="noopener noreferrer"
             className="landing-footer-mono"
