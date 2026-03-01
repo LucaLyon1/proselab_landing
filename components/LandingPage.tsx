@@ -166,8 +166,8 @@ export function LandingPage() {
             <a href="https://app.proselab.io/signup" className="landing-btn-primary" id="start">
               Start writing
             </a>
-            <a href="https://app.proselab.io" className="landing-btn-secondary">
-              Browse passages
+            <a href="https://proselab.substack.com" target="_blank" rel="noopener noreferrer" className="landing-btn-secondary">
+              Read Newsletter
             </a>
           </div>
         </div>
