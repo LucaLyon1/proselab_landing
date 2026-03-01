@@ -414,8 +414,8 @@ export function LandingPage() {
           <a href="https://app.proselab.io/pricing" className="landing-btn-outline">
             View plans →
           </a>
-          <a href="https://app.proselab.io" className="landing-btn-outline">
-            Browse passages →
+          <a href="https://proselab.substack.com" target="_blank" rel="noopener noreferrer" className="landing-btn-outline">
+            Read Newsletter →
           </a>
         </div>
         <p className="landing-cta-badge landing-reveal">
