@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -239,7 +240,15 @@ export function LandingPage() {
         </div>
         <div className="landing-phases-grid">
           <div className="landing-phase-card landing-reveal">
-            <div className="landing-phase-image" />
+            <div className="landing-phase-image">
+              <Image
+                src="/features/feature-01-study.gif"
+                alt="Craft analysis — hover highlighted segments to read annotations"
+                fill
+                unoptimized
+                style={{ objectFit: 'cover', objectPosition: 'top' }}
+              />
+            </div>
             <span className="landing-phase-num">01</span>
             <span className="landing-phase-icon">🔍</span>
             <h3 className="landing-phase-name">
