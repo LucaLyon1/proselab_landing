@@ -239,6 +239,7 @@ export function LandingPage() {
         </div>
         <div className="landing-phases-grid">
           <div className="landing-phase-card landing-reveal">
+            <div className="landing-phase-image" />
             <span className="landing-phase-num">01</span>
             <span className="landing-phase-icon">🔍</span>
             <h3 className="landing-phase-name">
@@ -254,6 +255,7 @@ export function LandingPage() {
             className="landing-phase-card landing-reveal"
             style={{ transitionDelay: '0.1s' }}
           >
+            <div className="landing-phase-image" />
             <span className="landing-phase-num">02</span>
             <span className="landing-phase-icon">✍️</span>
             <h3 className="landing-phase-name">
@@ -269,6 +271,7 @@ export function LandingPage() {
             className="landing-phase-card landing-reveal"
             style={{ transitionDelay: '0.2s' }}
           >
+            <div className="landing-phase-image" />
             <span className="landing-phase-num">03</span>
             <span className="landing-phase-icon">💬</span>
             <h3 className="landing-phase-name">

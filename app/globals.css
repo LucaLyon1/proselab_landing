@@ -546,6 +546,14 @@ body {
   color: var(--landing-muted);
 }
 
+.landing-phase-image {
+  margin: -3rem -2.5rem 2.5rem;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(26, 23, 20, 0.08);
+}
+
 /* Passages */
 .landing-passages {
   padding: 8rem 8% 4rem 8%;
