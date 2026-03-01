@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+
 
 const MANUSCRIPT_NOTES = {
   voice:
@@ -241,13 +241,9 @@ export function LandingPage() {
         <div className="landing-phases-grid">
           <div className="landing-phase-card landing-reveal">
             <div className="landing-phase-image">
-              <Image
-                src="/features/feature-01-study.gif"
-                alt="Craft analysis — hover highlighted segments to read annotations"
-                fill
-                unoptimized
-                style={{ objectFit: 'cover', objectPosition: 'top' }}
-              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/features/feature-01-study.gif" alt="Craft analysis — hover highlighted segments to read annotations" className="landing-phase-gif" />
+              <div className="landing-phase-image-overlay" />
             </div>
             <span className="landing-phase-num">01</span>
             <span className="landing-phase-icon">🔍</span>
@@ -264,7 +260,11 @@ export function LandingPage() {
             className="landing-phase-card landing-reveal"
             style={{ transitionDelay: '0.1s' }}
           >
-            <div className="landing-phase-image" />
+            <div className="landing-phase-image">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/features/feature-02-write.gif" alt="Writing exercise with constraints" className="landing-phase-gif" />
+              <div className="landing-phase-image-overlay" />
+            </div>
             <span className="landing-phase-num">02</span>
             <span className="landing-phase-icon">✍️</span>
             <h3 className="landing-phase-name">
@@ -280,7 +280,11 @@ export function LandingPage() {
             className="landing-phase-card landing-reveal"
             style={{ transitionDelay: '0.2s' }}
           >
-            <div className="landing-phase-image" />
+            <div className="landing-phase-image">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/features/feature-03-feedback.gif" alt="AI feedback on your writing" className="landing-phase-gif" />
+              <div className="landing-phase-image-overlay" />
+            </div>
             <span className="landing-phase-num">03</span>
             <span className="landing-phase-icon">💬</span>
             <h3 className="landing-phase-name">

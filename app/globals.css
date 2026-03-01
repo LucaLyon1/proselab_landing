@@ -499,6 +499,7 @@ body {
   border-right: 1px solid rgba(26, 23, 20, 0.12);
   position: relative;
   overflow: hidden;
+  background: rgba(245, 240, 232, 0.03);
   transition: background 0.3s;
 }
 
@@ -547,11 +548,28 @@ body {
 }
 
 .landing-phase-image {
-  margin: -3rem -2.5rem 2.5rem;
+  margin: 0 0 2.5rem;
   height: 220px;
   position: relative;
   overflow: hidden;
-  background: rgba(26, 23, 20, 0.08);
+  background: rgba(26, 23, 20, 0.12);
+  border: 1px solid rgba(245, 240, 232, 0.1);
+  border-radius: 3px;
+}
+
+.landing-phase-gif {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.75);
+  transition: filter 0.3s;
+}
+
+.landing-phase-card:hover .landing-phase-gif {
+  filter: brightness(1);
 }
 
 /* Passages */
