@@ -6,6 +6,9 @@ import { createPortal } from 'react-dom'
 import { ExitIntentModal } from './ExitIntentModal'
 
 
+const CONSTRAINT_PROMPT =
+  "Rewrite this passage so that the character's loneliness is conveyed entirely through concrete, physical detail — what the body does, what the senses register, what the world looks like. Remove every abstraction: no 'sense,' no 'feeling,' no naming of emotions. Let the reader feel the isolation only through tangible things."
+
 const MANUSCRIPT_NOTES = {
   voice:
     "Woolf's interior voice: \"perpetual\" suggests something ongoing, inescapable — not a passing mood but a state of being. The word choice bleeds personality.",
@@ -108,12 +111,9 @@ export function LandingPage() {
             track your progress.
           </p>
           <div className="landing-hero-actions">
-            <a href="https://app.proselab.io/signup" className="landing-btn-primary" id="start">
-              Start writing
+            <a href="https://app.proselab.io/" className="landing-btn-primary" id="start">
+              Explore passages
             </a>
-            <button data-supascribe-popup-trigger="986078388068" className="landing-btn-secondary">
-              Read Newsletter
-            </button>
           </div>
         </div>
         <div className="landing-hero-right">
@@ -161,10 +161,15 @@ export function LandingPage() {
             </div>
             <div style={{ marginTop: '1.5rem' }}>
               <p
-                className="landing-ms-phase-header"
+                className="landing-ms-phase-header landing-prompt-header"
                 style={{ marginBottom: '0.75rem' }}
               >
                 Try it — write your own version
+                <CraftTooltip note={CONSTRAINT_PROMPT}>
+                  <span className="landing-prompt-hint" aria-label="Writing prompt hint">
+                    ℹ
+                  </span>
+                </CraftTooltip>
               </p>
               <textarea
                 className="landing-user-textarea"
@@ -176,7 +181,7 @@ export function LandingPage() {
               <a
                 href={
                   userText.trim()
-                    ? `https://app.proselab.io/extract/woolf-loneliness?userText=${encodeURIComponent(userText.trim())}`
+                    ? `https://app.proselab.io/extract/woolf-dalloway-loneliness?userText=${encodeURIComponent(userText.trim())}`
                     : undefined
                 }
                 className={`landing-btn-analyze${userText.trim() ? '' : ' landing-btn-analyze-disabled'}`}
@@ -372,7 +377,7 @@ export function LandingPage() {
 
       {/* CTA */}
       <section className="landing-cta">
-<h2 className="landing-cta-title landing-reveal">
+        <h2 className="landing-cta-title landing-reveal">
           Start
           <br />
           <em>Writing</em>
@@ -384,15 +389,12 @@ export function LandingPage() {
           constraints, and feedback. Study the masters. Write more.
         </p>
         <div className="landing-reveal landing-cta-buttons">
-          <a href="https://app.proselab.io/signup" className="landing-btn-primary">
-            Start writing →
+          <a href="https://app.proselab.io/" className="landing-btn-primary">
+            Explore passages →
           </a>
           <a href="https://app.proselab.io/pricing" className="landing-btn-outline">
             View plans →
           </a>
-          <button data-supascribe-popup-trigger="986078388068" className="landing-btn-outline">
-            Read Newsletter →
-          </button>
         </div>
         <p className="landing-cta-badge landing-reveal">
           No account needed to browse — sign up to save your work

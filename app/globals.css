@@ -514,6 +514,32 @@ body {
   pointer-events: none;
 }
 
+.landing-prompt-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.landing-prompt-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 1.1em;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--landing-rust);
+  background: rgba(184, 76, 46, 0.18);
+  cursor: help;
+  border-radius: 50%;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.landing-prompt-hint:hover {
+  background: rgba(184, 76, 46, 0.3);
+}
+
 /* Phases */
 .landing-phases {
   padding: 8rem 8% 8rem;
