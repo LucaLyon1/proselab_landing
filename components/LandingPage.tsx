@@ -213,7 +213,6 @@ export function LandingPage() {
               <img src="/features/feature-01-study.gif" alt="Craft analysis — hover highlighted segments to read annotations" className="landing-phase-gif" />
             </div>
             <span className="landing-phase-num">01</span>
-            <span className="landing-phase-icon">🔍</span>
             <h3 className="landing-phase-name">
               <em>Study</em> the Extract
             </h3>
@@ -232,7 +231,6 @@ export function LandingPage() {
               <img src="/features/feature-02-write.gif" alt="Writing exercise with constraints" className="landing-phase-gif" />
             </div>
             <span className="landing-phase-num">02</span>
-            <span className="landing-phase-icon">✍️</span>
             <h3 className="landing-phase-name">
               Write <em>Your</em> Version
             </h3>
@@ -251,7 +249,6 @@ export function LandingPage() {
               <img src="/features/feature-03-feedback.gif" alt="AI feedback on your writing" className="landing-phase-gif" />
             </div>
             <span className="landing-phase-num">03</span>
-            <span className="landing-phase-icon">💬</span>
             <h3 className="landing-phase-name">
               Get <em>Feedback</em> &amp; Save
             </h3>
