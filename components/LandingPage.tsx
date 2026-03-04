@@ -167,7 +167,7 @@ export function LandingPage() {
                 Try it — write your own version
                 <CraftTooltip note={CONSTRAINT_PROMPT}>
                   <span className="landing-prompt-hint" aria-label="Writing prompt hint">
-                    ℹ
+                    (hover to see prompt)
                   </span>
                 </CraftTooltip>
               </p>

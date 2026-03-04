@@ -521,23 +521,19 @@ body {
 }
 
 .landing-prompt-hint {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.5em;
-  height: 1.5em;
-  font-size: 1.1em;
+  font-family: var(--landing-mono);
+  font-size: 0.72rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: 0.04em;
   color: var(--landing-rust);
-  background: rgba(184, 76, 46, 0.18);
   cursor: help;
-  border-radius: 50%;
-  transition: opacity 0.2s, background 0.2s;
+  opacity: 0.75;
+  transition: opacity 0.2s;
 }
 
 .landing-prompt-hint:hover {
-  background: rgba(184, 76, 46, 0.3);
+  opacity: 1;
 }
 
 /* Phases */
