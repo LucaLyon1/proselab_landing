@@ -459,6 +459,61 @@ body {
   51%, 100% { opacity: 0; }
 }
 
+/* User textarea + Analyze button */
+.landing-user-textarea {
+  width: 100%;
+  font-family: var(--landing-body);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--landing-ink);
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(26, 23, 20, 0.18);
+  border-left: 3px solid var(--landing-rust);
+  padding: 0.9rem 1rem 0.9rem 1.25rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.landing-user-textarea:focus {
+  border-color: rgba(26, 23, 20, 0.3);
+  border-left-color: var(--landing-rust);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.landing-user-textarea::placeholder {
+  font-style: italic;
+  color: rgba(92, 82, 70, 0.45);
+}
+
+.landing-btn-analyze {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: var(--landing-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--landing-paper);
+  background: var(--landing-rust);
+  border: 2px solid var(--landing-rust);
+  padding: 0.7rem 1.8rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.landing-btn-analyze:hover {
+  background: var(--landing-rust-dark);
+  border-color: var(--landing-rust-dark);
+}
+
+.landing-btn-analyze-disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
 /* Phases */
 .landing-phases {
   padding: 8rem 8% 8rem;

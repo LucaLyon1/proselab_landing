@@ -51,85 +51,9 @@ function CraftTooltip({ note, children }: { note: string; children: React.ReactN
   )
 }
 
-function TypewriterExercise() {
-  const phrases = [
-    { type: 'She felt the weight of the morning...', correct: 'She felt the weight of the morning light on her skin.' },
-    { type: 'The city waited outside...', correct: 'The city waited outside the window, silent and vast.' },
-    { type: 'Something shifted in the air...', correct: 'Something shifted in the air between them.' },
-  ]
-  const [phraseIndex, setPhraseIndex] = useState(0)
-  const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting' | 'correcting' | 'done'>('typing')
-  const [display, setDisplay] = useState('')
-  const [displayIndex, setDisplayIndex] = useState(0)
-
-  useEffect(() => {
-    const { type, correct } = phrases[phraseIndex]
-
-    if (phase === 'typing') {
-      if (displayIndex < type.length) {
-        const t = setTimeout(() => {
-          setDisplay(type.slice(0, displayIndex + 1))
-          setDisplayIndex(displayIndex + 1)
-        }, 50)
-        return () => clearTimeout(t)
-      }
-      const t = setTimeout(() => setPhase('pausing'), 400)
-      return () => clearTimeout(t)
-    }
-
-    if (phase === 'pausing') {
-      const t = setTimeout(() => setPhase('deleting'), 1200)
-      return () => clearTimeout(t)
-    }
-
-    if (phase === 'deleting') {
-      if (displayIndex > 0) {
-        const t = setTimeout(() => {
-          setDisplay(type.slice(0, displayIndex - 1))
-          setDisplayIndex(displayIndex - 1)
-        }, 30)
-        return () => clearTimeout(t)
-      }
-      const t = setTimeout(() => {
-        setPhase('correcting')
-        setDisplayIndex(0)
-      }, 200)
-      return () => clearTimeout(t)
-    }
-
-    if (phase === 'correcting') {
-      if (displayIndex < correct.length) {
-        const t = setTimeout(() => {
-          setDisplay(correct.slice(0, displayIndex + 1))
-          setDisplayIndex(displayIndex + 1)
-        }, 45)
-        return () => clearTimeout(t)
-      }
-      const t = setTimeout(() => setPhase('done'), 800)
-      return () => clearTimeout(t)
-    }
-
-    if (phase === 'done') {
-      const t = setTimeout(() => {
-        setPhase('typing')
-        setDisplay('')
-        setDisplayIndex(0)
-        setPhraseIndex((phraseIndex + 1) % phrases.length)
-      }, 1500)
-      return () => clearTimeout(t)
-    }
-  }, [phase, displayIndex, phraseIndex])
-
-  return (
-    <div className="landing-typewriter">
-      <span className="landing-typewriter-text">{display}</span>
-      <span className="landing-typewriter-cursor" />
-    </div>
-  )
-}
-
 export function LandingPage() {
   const [discountOpen, setDiscountOpen] = useState(false)
+  const [userText, setUserText] = useState('')
 
   useEffect(() => {
     const reveals = document.querySelectorAll('.landing-reveal')
@@ -240,9 +164,28 @@ export function LandingPage() {
                 className="landing-ms-phase-header"
                 style={{ marginBottom: '0.75rem' }}
               >
-                Your exercise
+                Try it — write your own version
               </p>
-              <TypewriterExercise />
+              <textarea
+                className="landing-user-textarea"
+                placeholder="Inspired by Woolf's passage, write your own version here..."
+                value={userText}
+                onChange={(e) => setUserText(e.target.value)}
+                rows={4}
+              />
+              <a
+                href={
+                  userText.trim()
+                    ? `https://app.proselab.io/extract/woolf-loneliness?userText=${encodeURIComponent(userText.trim())}`
+                    : undefined
+                }
+                className={`landing-btn-analyze${userText.trim() ? '' : ' landing-btn-analyze-disabled'}`}
+                onClick={(e) => {
+                  if (!userText.trim()) e.preventDefault()
+                }}
+              >
+                Analyze my writing
+              </a>
             </div>
           </div>
         </div>
