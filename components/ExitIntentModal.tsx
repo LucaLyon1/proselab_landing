@@ -1,0 +1,85 @@
+'use client'
+
+import { useState } from 'react'
+
+interface ExitIntentModalProps {
+  open: boolean
+  onClose: () => void
+}
+
+export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setStatus('loading')
+
+    const res = await fetch('/api/discount', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    })
+    const json = await res.json()
+
+    if (json.error) {
+      setStatus('error')
+    } else {
+      setStatus('success')
+    }
+  }
+
+  if (!open) return null
+
+  return (
+    <div className="exit-modal-backdrop" onClick={onClose}>
+      <div className="exit-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="exit-modal-close" onClick={onClose} aria-label="Close">
+          ✕ close
+        </button>
+
+        {status === 'success' ? (
+          <div className="exit-modal-success">
+            <p className="exit-modal-eyebrow">Check your inbox</p>
+            <h2 className="exit-modal-title">Your discount is on its way.</h2>
+            <p className="exit-modal-sub">
+              We&apos;ve sent your 10% off code to {email}.
+            </p>
+          </div>
+        ) : (
+          <>
+            <p className="exit-modal-eyebrow">Before you go</p>
+            <h2 className="exit-modal-title">
+              10% off your
+              <br />
+              <em>first month</em>
+            </h2>
+            <p className="exit-modal-sub">
+              Enter your email and we&apos;ll send you a discount code for your first month of Proselab.
+            </p>
+            <form className="exit-modal-form" onSubmit={handleSubmit}>
+              <input
+                type="email"
+                required
+                placeholder="your@email.com"
+                className="exit-modal-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="exit-modal-submit"
+                disabled={status === 'loading'}
+              >
+                {status === 'loading' ? 'Sending...' : 'Get 10% off →'}
+              </button>
+            </form>
+            {status === 'error' && (
+              <p className="exit-modal-error">Something went wrong. Please try again.</p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  )
+}

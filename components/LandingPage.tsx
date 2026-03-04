@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { ExitIntentModal } from './ExitIntentModal'
 
 
 const MANUSCRIPT_NOTES = {
@@ -128,6 +129,8 @@ function TypewriterExercise() {
 }
 
 export function LandingPage() {
+  const [discountOpen, setDiscountOpen] = useState(false)
+
   useEffect(() => {
     const reveals = document.querySelectorAll('.landing-reveal')
     const observer = new IntersectionObserver(
@@ -143,6 +146,23 @@ export function LandingPage() {
     )
     reveals.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (sessionStorage.getItem('exit-modal-seen')) return
+
+    const readyAt = Date.now() + 5000
+
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY < 5 && Date.now() >= readyAt) {
+        setDiscountOpen(true)
+        document.documentElement.removeEventListener('mouseleave', handleMouseLeave)
+        sessionStorage.setItem('exit-modal-seen', '1')
+      }
+    }
+
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave)
+    return () => document.documentElement.removeEventListener('mouseleave', handleMouseLeave)
   }, [])
 
   return (
@@ -167,9 +187,9 @@ export function LandingPage() {
             <a href="https://app.proselab.io/signup" className="landing-btn-primary" id="start">
               Start writing
             </a>
-            <a href="https://proselab.substack.com" target="_blank" rel="noopener noreferrer" className="landing-btn-secondary">
+            <button data-supascribe-popup-trigger="986078388068" className="landing-btn-secondary">
               Read Newsletter
-            </a>
+            </button>
           </div>
         </div>
         <div className="landing-hero-right">
@@ -243,7 +263,6 @@ export function LandingPage() {
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/features/feature-01-study.gif" alt="Craft analysis — hover highlighted segments to read annotations" className="landing-phase-gif" />
-              <div className="landing-phase-image-overlay" />
             </div>
             <span className="landing-phase-num">01</span>
             <span className="landing-phase-icon">🔍</span>
@@ -263,7 +282,6 @@ export function LandingPage() {
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/features/feature-02-write.gif" alt="Writing exercise with constraints" className="landing-phase-gif" />
-              <div className="landing-phase-image-overlay" />
             </div>
             <span className="landing-phase-num">02</span>
             <span className="landing-phase-icon">✍️</span>
@@ -283,7 +301,6 @@ export function LandingPage() {
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/features/feature-03-feedback.gif" alt="AI feedback on your writing" className="landing-phase-gif" />
-              <div className="landing-phase-image-overlay" />
             </div>
             <span className="landing-phase-num">03</span>
             <span className="landing-phase-icon">💬</span>
@@ -430,14 +447,25 @@ export function LandingPage() {
           <a href="https://app.proselab.io/pricing" className="landing-btn-outline">
             View plans →
           </a>
-          <a href="https://proselab.substack.com" target="_blank" rel="noopener noreferrer" className="landing-btn-outline">
+          <button data-supascribe-popup-trigger="986078388068" className="landing-btn-outline">
             Read Newsletter →
-          </a>
+          </button>
         </div>
         <p className="landing-cta-badge landing-reveal">
           No account needed to browse — sign up to save your work
         </p>
+        <button
+          onClick={() => setDiscountOpen(true)}
+          className="landing-btn-secondary landing-reveal"
+          style={{ marginTop: '1.5rem', fontSize: '0.8rem' }}
+        >
+          Get 10% off your first month
+        </button>
       </section>
+
+      <div data-supascribe-embed-id="986078388068" data-supascribe-popup=""></div>
+
+      <ExitIntentModal open={discountOpen} onClose={() => setDiscountOpen(false)} />
 
       {/* FOOTER */}
       <footer className="landing-footer">

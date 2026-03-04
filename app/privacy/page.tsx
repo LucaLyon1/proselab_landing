@@ -18,7 +18,7 @@ export default function PrivacyPage() {
         <header className="legal-header">
           <p className="legal-eyebrow">Legal</p>
           <h1 className="legal-title">Privacy Policy</h1>
-          <p className="legal-updated">Last updated: February 2025</p>
+          <p className="legal-updated">Last updated: March 2026</p>
         </header>
 
         <article className="legal-content">

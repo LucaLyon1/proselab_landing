@@ -969,7 +969,7 @@ body {
   z-index: 1;
   max-width: 680px;
   margin: 0 auto;
-  padding: 4rem 2rem 5rem;
+  padding: 6rem 2rem 5rem;
 }
 
 .legal-back-link {
@@ -1118,4 +1118,151 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+/* ─── Exit Intent Modal ───────────────────────────────────── */
+.exit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 23, 20, 0.72);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: exit-modal-fade-in 0.2s ease;
+}
+
+.exit-modal {
+  background: var(--landing-paper, #f5f0e8);
+  border: 1px solid rgba(26, 23, 20, 0.14);
+  max-width: 460px;
+  width: 100%;
+  padding: 3rem 3rem 2.5rem;
+  position: relative;
+  animation: exit-modal-slide-up 0.28s ease;
+}
+
+.exit-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--landing-muted, #5c5246);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.15s;
+}
+
+.exit-modal-close:hover {
+  color: var(--landing-ink, #1a1714);
+}
+
+.exit-modal-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--landing-rust, #b84c2e);
+  margin-bottom: 1rem;
+}
+
+.exit-modal-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--landing-ink, #1a1714);
+  margin-bottom: 1.25rem;
+}
+
+.exit-modal-title em {
+  font-style: italic;
+  color: var(--landing-rust, #b84c2e);
+}
+
+.exit-modal-sub {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--landing-muted, #5c5246);
+  margin-bottom: 1.75rem;
+}
+
+.exit-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exit-modal-input {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--landing-ink, #1a1714);
+  background: #fff;
+  border: 1px solid rgba(26, 23, 20, 0.22);
+  padding: 0.8rem 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.exit-modal-input:focus {
+  border-color: var(--landing-rust, #b84c2e);
+}
+
+.exit-modal-input::placeholder {
+  color: rgba(92, 82, 70, 0.5);
+}
+
+.exit-modal-submit {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--landing-paper, #f5f0e8);
+  background: var(--landing-ink, #1a1714);
+  border: 2px solid var(--landing-ink, #1a1714);
+  padding: 0.85rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.exit-modal-submit:hover:not(:disabled) {
+  background: var(--landing-rust, #b84c2e);
+  border-color: var(--landing-rust, #b84c2e);
+}
+
+.exit-modal-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.exit-modal-error {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--landing-rust, #b84c2e);
+  margin-top: 0.5rem;
+}
+
+.exit-modal-success {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@keyframes exit-modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes exit-modal-slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
