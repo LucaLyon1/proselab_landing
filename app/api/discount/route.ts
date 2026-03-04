@@ -16,7 +16,6 @@ export async function POST(request: Request) {
       <p>Use code <strong>PROSELAB10</strong> at checkout for 10% off your first month.</p>
       <p><a href="https://app.proselab.io/signup">Start writing →</a></p>
     `,
-    idempotencyKey: `discount-offer/${email}`,
   });
 
   if (error) {
