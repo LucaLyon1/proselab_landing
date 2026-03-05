@@ -5,6 +5,13 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ExitIntentModal } from './ExitIntentModal'
 
+declare global {
+  interface Window {
+    datafast?: { track: (event: string, props?: Record<string, unknown>) => void }
+    umami?: { track: (event: string, props?: Record<string, unknown>) => void }
+  }
+}
+
 
 const CONSTRAINT_PROMPT =
   "Rewrite this passage so that the character's loneliness is conveyed entirely through concrete, physical detail — what the body does, what the senses register, what the world looks like. Remove every abstraction: no 'sense,' no 'feeling,' no naming of emotions. Let the reader feel the isolation only through tangible things."
@@ -111,7 +118,15 @@ export function LandingPage() {
             track your progress.
           </p>
           <div className="landing-hero-actions">
-            <a href="https://app.proselab.io/" className="landing-btn-primary" id="start">
+            <a
+              href="https://app.proselab.io/"
+              className="landing-btn-primary"
+              id="start"
+              onClick={() => {
+                window.datafast?.track('explore_click', { location: 'hero' })
+                window.umami?.track('explore_click', { location: 'hero' })
+              }}
+            >
               Explore passages
             </a>
           </div>
@@ -186,7 +201,12 @@ export function LandingPage() {
                 }
                 className={`landing-btn-analyze${userText.trim() ? '' : ' landing-btn-analyze-disabled'}`}
                 onClick={(e) => {
-                  if (!userText.trim()) e.preventDefault()
+                  if (!userText.trim()) {
+                    e.preventDefault()
+                  } else {
+                    window.datafast?.track('analyze_click', { text_length: userText.trim().length })
+                    window.umami?.track('analyze_click', { text_length: userText.trim().length })
+                  }
                 }}
               >
                 Analyze my writing
@@ -386,7 +406,14 @@ export function LandingPage() {
           constraints, and feedback. Study the masters. Write more.
         </p>
         <div className="landing-reveal landing-cta-buttons">
-          <a href="https://app.proselab.io/" className="landing-btn-primary">
+          <a
+            href="https://app.proselab.io/"
+            className="landing-btn-primary"
+            onClick={() => {
+              window.datafast?.track('explore_click', { location: 'cta' })
+              window.umami?.track('explore_click', { location: 'cta' })
+            }}
+          >
             Explore passages →
           </a>
           <a href="https://app.proselab.io/pricing" className="landing-btn-outline">

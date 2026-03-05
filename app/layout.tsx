@@ -4,7 +4,6 @@ import Script from "next/script";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
-import { DataFastAnalytics } from "@/components/DataFastAnalytics";
 
 // Import Cormorant Garamond font from Google Fonts (local or CDN)
 import { Cormorant_Garamond } from "next/font/google";
@@ -62,7 +61,13 @@ export default function RootLayout({
           <AuthNav />
         </header>
         {children}
-        <DataFastAnalytics />
+        <Script
+          src="https://datafa.st/script.js"
+          data-website-id={process.env.NEXT_PUBLIC_DATAFAST_WEBSITE_ID}
+          strategy="afterInteractive"
+          async
+          defer
+        />
         <Script
           id="cookieyes"
           type="text/javascript"
