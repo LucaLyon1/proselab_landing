@@ -401,7 +401,7 @@ export function LandingPage() {
           className="landing-btn-secondary landing-reveal"
           style={{ marginTop: '1.5rem', fontSize: '0.8rem' }}
         >
-          Get 10% off your first month
+          Subscribe for updates
         </button>
       </section>
 

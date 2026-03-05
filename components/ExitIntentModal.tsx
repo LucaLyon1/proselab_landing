@@ -40,22 +40,22 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
 
         {status === 'success' ? (
           <div className="exit-modal-success">
-            <p className="exit-modal-eyebrow">Check your inbox</p>
-            <h2 className="exit-modal-title">Your discount is on its way.</h2>
+            <p className="exit-modal-eyebrow">You&apos;re in</p>
+            <h2 className="exit-modal-title">We&apos;ll keep you posted.</h2>
             <p className="exit-modal-sub">
-              We&apos;ve sent your 10% off code to {email}.
+              We&apos;ve added {email} to the list. You&apos;ll be the first to know when we launch.
             </p>
           </div>
         ) : (
           <>
             <p className="exit-modal-eyebrow">Before you go</p>
             <h2 className="exit-modal-title">
-              10% off your
+              Stay in
               <br />
-              <em>first month</em>
+              <em>the loop</em>
             </h2>
             <p className="exit-modal-sub">
-              Enter your email and we&apos;ll send you a discount code for your first month of Proselab.
+              We&apos;re launching on March 7th. Subscribe to get notified and receive early updates.
             </p>
             <form className="exit-modal-form" onSubmit={handleSubmit}>
               <input
@@ -71,7 +71,7 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
                 className="exit-modal-submit"
                 disabled={status === 'loading'}
               >
-                {status === 'loading' ? 'Sending...' : 'Get 10% off →'}
+                {status === 'loading' ? 'Subscribing...' : 'Subscribe →'}
               </button>
             </form>
             {status === 'error' && (
