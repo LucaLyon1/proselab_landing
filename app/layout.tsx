@@ -62,12 +62,11 @@ export default function RootLayout({
         </header>
         {children}
         <Script
-          src="https://datafa.st/script.js"
-          data-website-id={process.env.NEXT_PUBLIC_DATAFAST_WEBSITE_ID}
-          data-domain="www.proselab.io"
-          strategy="afterInteractive"
-          async
           defer
+          data-website-id="dfid_IBYj6a8XOWT1aRRW4PExx"
+          data-domain="www.proselab.io"
+          src="https://datafa.st/js/script.js"
+          strategy="afterInteractive"
         />
         <Script
           id="cookieyes"
