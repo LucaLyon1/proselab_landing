@@ -99,6 +99,12 @@ export function LandingPage() {
     return () => document.documentElement.removeEventListener('mouseleave', handleMouseLeave)
   }, [])
 
+  useEffect(() => {
+    const openModal = () => setDiscountOpen(true)
+    window.addEventListener('open-subscribe-modal', openModal)
+    return () => window.removeEventListener('open-subscribe-modal', openModal)
+  }, [])
+
   return (
     <div className="landing-root">
       {/* HERO */}
@@ -118,17 +124,17 @@ export function LandingPage() {
             track your progress.
           </p>
           <div className="landing-hero-actions">
-            <a
-              href="https://app.proselab.io/"
+            <button
               className="landing-btn-primary"
               id="start"
               onClick={() => {
                 window.datafast?.track('explore_click', { location: 'hero' })
                 window.umami?.track('explore_click', { location: 'hero' })
+                setDiscountOpen(true)
               }}
             >
               Explore passages
-            </a>
+            </button>
           </div>
         </div>
         <div className="landing-hero-right">
@@ -193,24 +199,17 @@ export function LandingPage() {
                 onChange={(e) => setUserText(e.target.value)}
                 rows={4}
               />
-              <a
-                href={
-                  userText.trim()
-                    ? `https://app.proselab.io/extract/woolf-dalloway-loneliness?userText=${encodeURIComponent(userText.trim())}`
-                    : undefined
-                }
+              <button
                 className={`landing-btn-analyze${userText.trim() ? '' : ' landing-btn-analyze-disabled'}`}
-                onClick={(e) => {
-                  if (!userText.trim()) {
-                    e.preventDefault()
-                  } else {
-                    window.datafast?.track('analyze_click', { text_length: userText.trim().length })
-                    window.umami?.track('analyze_click', { text_length: userText.trim().length })
-                  }
+                onClick={() => {
+                  if (!userText.trim()) return
+                  window.datafast?.track('analyze_click', { text_length: userText.trim().length })
+                  window.umami?.track('analyze_click', { text_length: userText.trim().length })
+                  setDiscountOpen(true)
                 }}
               >
                 Analyze my writing
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -406,30 +405,23 @@ export function LandingPage() {
           constraints, and feedback. Study the masters. Write more.
         </p>
         <div className="landing-reveal landing-cta-buttons">
-          <a
-            href="https://app.proselab.io/"
+          <button
             className="landing-btn-primary"
             onClick={() => {
               window.datafast?.track('explore_click', { location: 'cta' })
               window.umami?.track('explore_click', { location: 'cta' })
+              setDiscountOpen(true)
             }}
           >
             Explore passages →
-          </a>
-          <a href="https://app.proselab.io/pricing" className="landing-btn-outline">
-            View plans →
-          </a>
+          </button>
+          <button className="landing-btn-outline" onClick={() => setDiscountOpen(true)}>
+            Subscribe for updates →
+          </button>
         </div>
         <p className="landing-cta-badge landing-reveal">
-          No account needed to browse — sign up to save your work
+          We&apos;re closed while we prepare for launch — subscribe to get notified
         </p>
-        <button
-          onClick={() => setDiscountOpen(true)}
-          className="landing-btn-secondary landing-reveal"
-          style={{ marginTop: '1.5rem', fontSize: '0.8rem' }}
-        >
-          Subscribe for updates
-        </button>
       </section>
 
       <div data-supascribe-embed-id="986078388068" data-supascribe-popup=""></div>

@@ -43,19 +43,19 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
             <p className="exit-modal-eyebrow">You&apos;re in</p>
             <h2 className="exit-modal-title">We&apos;ll keep you posted.</h2>
             <p className="exit-modal-sub">
-              We&apos;ve added {email} to the list. You&apos;ll be the first to know when we launch.
+              We&apos;ve added {email} to the list. You&apos;ll be the first to know when we open the doors.
             </p>
           </div>
         ) : (
           <>
-            <p className="exit-modal-eyebrow">Before you go</p>
+            <p className="exit-modal-eyebrow">Doors are closed</p>
             <h2 className="exit-modal-title">
-              Stay in
+              We&apos;re getting
               <br />
-              <em>the loop</em>
+              <em>ready</em>
             </h2>
             <p className="exit-modal-sub">
-              We&apos;re launching on March 7th. Subscribe to get notified and receive early updates.
+              Proselab is closed while we prepare for launch. Sign up to get notified when we open the doors, plus early updates and news.
             </p>
             <form className="exit-modal-form" onSubmit={handleSubmit}>
               <input
