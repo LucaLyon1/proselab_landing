@@ -15,7 +15,7 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
     e.preventDefault()
     setStatus('loading')
 
-    const res = await fetch('/api/discount', {
+    const res = await fetch('/api/waitlist', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
@@ -48,14 +48,14 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
           </div>
         ) : (
           <>
-            <p className="exit-modal-eyebrow">Doors are closed</p>
+            <p className="exit-modal-eyebrow">Coming soon</p>
             <h2 className="exit-modal-title">
-              We&apos;re getting
+              Join the
               <br />
-              <em>ready</em>
+              <em>waitlist</em>
             </h2>
             <p className="exit-modal-sub">
-              Proselab is closed while we prepare for launch. Sign up to get notified when we open the doors, plus early updates and news.
+              We&apos;re letting people in one by one. Join the waitlist and we&apos;ll reach out when it&apos;s your turn.
             </p>
             <form className="exit-modal-form" onSubmit={handleSubmit}>
               <input
@@ -71,7 +71,7 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
                 className="exit-modal-submit"
                 disabled={status === 'loading'}
               >
-                {status === 'loading' ? 'Subscribing...' : 'Subscribe →'}
+                {status === 'loading' ? 'Joining...' : 'Join waitlist →'}
               </button>
             </form>
             {status === 'error' && (

@@ -65,24 +65,7 @@ export function LandingPage() {
   const [discountOpen, setDiscountOpen] = useState(false)
   const [userText, setUserText] = useState('')
 
-  useEffect(() => {
-    const reveals = document.querySelectorAll('.landing-reveal')
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('landing-reveal-visible')
-            observer.unobserve(e.target)
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
-    reveals.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
+useEffect(() => {
     if (sessionStorage.getItem('exit-modal-seen')) return
 
     const readyAt = Date.now() + 5000
@@ -217,7 +200,7 @@ export function LandingPage() {
 
       {/* PHASES */}
       <section className="landing-phases" id="how">
-        <div className="landing-section-header landing-reveal">
+        <div className="landing-section-header">
           <span className="landing-section-num">01 /</span>
           <h2 className="landing-section-title">
             Study, Write,
@@ -226,7 +209,7 @@ export function LandingPage() {
           </h2>
         </div>
         <div className="landing-phases-grid">
-          <div className="landing-phase-card landing-reveal">
+          <div className="landing-phase-card">
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/features/feature-01-study.gif" alt="Craft analysis — hover highlighted segments to read annotations" className="landing-phase-gif" />
@@ -241,10 +224,7 @@ export function LandingPage() {
               passage work before you write.
             </p>
           </div>
-          <div
-            className="landing-phase-card landing-reveal"
-            style={{ transitionDelay: '0.1s' }}
-          >
+          <div className="landing-phase-card">
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/features/feature-02-write.gif" alt="Writing exercise with constraints" className="landing-phase-gif" />
@@ -259,10 +239,7 @@ export function LandingPage() {
               it read aloud with ElevenLabs.
             </p>
           </div>
-          <div
-            className="landing-phase-card landing-reveal"
-            style={{ transitionDelay: '0.2s' }}
-          >
+          <div className="landing-phase-card">
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/features/feature-03-feedback.gif" alt="AI feedback on your writing" className="landing-phase-gif" />
@@ -281,7 +258,7 @@ export function LandingPage() {
 
       {/* PASSAGES */}
       <section className="landing-passages">
-        <div className="landing-section-header landing-reveal">
+        <div className="landing-section-header">
           <span className="landing-section-num">02 /</span>
           <h2 className="landing-section-title">9 Categories, 40+ Passages</h2>
         </div>
@@ -300,10 +277,7 @@ export function LandingPage() {
           &amp; style, tension &amp; dread, poetry. Filter by tags. Each one teaches
           something different.
         </p>
-        <div
-          className="landing-authors-list landing-reveal"
-          style={{ transitionDelay: '0.15s' }}
-        >
+        <div className="landing-authors-list">
           <div className="landing-author-item">
             <p className="landing-author-name">Virginia Woolf</p>
             <p className="landing-author-note">Interiority</p>
@@ -326,7 +300,7 @@ export function LandingPage() {
 
       {/* HOW IT WORKS */}
       <section className="landing-how">
-        <div className="landing-section-header landing-reveal">
+        <div className="landing-section-header">
           <span className="landing-section-num">03 /</span>
           <h2 className="landing-section-title">
             How It
@@ -334,10 +308,7 @@ export function LandingPage() {
             Works
           </h2>
         </div>
-        <div
-          className="landing-steps landing-reveal"
-          style={{ transitionDelay: '0.15s' }}
-        >
+        <div className="landing-steps">
           <div className="landing-step">
             <span className="landing-step-num">01</span>
             <div className="landing-step-body">
@@ -393,14 +364,14 @@ export function LandingPage() {
 
       {/* CTA */}
       <section className="landing-cta">
-        <h2 className="landing-cta-title landing-reveal">
+        <h2 className="landing-cta-title">
           Start
           <br />
           <em>Writing</em>
           <br />
           Today.
         </h2>
-        <p className="landing-cta-sub landing-reveal">
+        <p className="landing-cta-sub">
           Proselab gives you AI-powered craft analysis, hand-authored
           constraints, and feedback. Study the masters. Write more.
         </p>
@@ -416,11 +387,11 @@ export function LandingPage() {
             Explore passages →
           </button>
           <button className="landing-btn-outline" onClick={() => setDiscountOpen(true)}>
-            Subscribe for updates →
+            Join waitlist →
           </button>
         </div>
-        <p className="landing-cta-badge landing-reveal">
-          We&apos;re closed while we prepare for launch — subscribe to get notified
+        <p className="landing-cta-badge">
+          We&apos;re letting people in gradually — join the waitlist
         </p>
       </section>
 

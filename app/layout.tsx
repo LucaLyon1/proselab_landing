@@ -4,6 +4,7 @@ import Script from "next/script";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 // Import Cormorant Garamond font from Google Fonts (local or CDN)
 import { Cormorant_Garamond } from "next/font/google";
@@ -54,6 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`light ${GeistMono.variable} ${cormorantGaramond.variable}`}>
       <body>
+        <SmoothScroll />
         <header className="auth-header">
           <Link href="/" className="auth-header-logo">
             Proselab
