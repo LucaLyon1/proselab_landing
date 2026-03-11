@@ -689,6 +689,7 @@ body {
 }
 
 .landing-author-item {
+  position: relative;
   padding: 2.5rem 2rem;
   background: var(--landing-ink);
   transition: background 0.25s;
@@ -713,6 +714,40 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(245, 240, 232, 0.55);
+}
+
+.landing-author-passages {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(245, 240, 232, 0.08);
+  animation: landing-passages-in 0.2s ease;
+}
+
+.landing-author-quote {
+  font-family: var(--landing-serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: rgba(245, 240, 232, 0.75);
+}
+
+.landing-author-quote-source {
+  font-family: var(--landing-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: rgba(245, 240, 232, 0.35);
+  margin-top: 0.6rem;
+}
+
+@keyframes landing-passages-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .landing-author-more {

@@ -27,6 +27,47 @@ const MANUSCRIPT_NOTES = {
     '"Alone." A single word. The sentence stops. The pause lets the weight of isolation land before the next thought.',
 } as const
 
+const AUTHOR_QUOTES: Record<string, { quote: string; work: string }> = {
+  'Virginia Woolf': {
+    quote: 'She had a perpetual sense, as she watched the taxi cabs, of being out, out, far out to sea and alone.',
+    work: 'Mrs Dalloway',
+  },
+  'Toni Morrison': {
+    quote: 'It was not a story to pass on. They forgot her like a bad dream.',
+    work: 'Beloved',
+  },
+  'Ernest Hemingway': {
+    quote: '"Would you please please please please please please please stop talking?"',
+    work: 'Hills Like White Elephants',
+  },
+  'Raymond Carver': {
+    quote: 'He kept talking. He asked me to do this for him. I did it. He was having a good time.',
+    work: 'Cathedral',
+  },
+}
+
+function AuthorCard({ name, note }: { name: string; note: string }) {
+  const [show, setShow] = useState(false)
+  const quote = AUTHOR_QUOTES[name]
+
+  return (
+    <div
+      className="landing-author-item"
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      <p className="landing-author-name">{name}</p>
+      <p className="landing-author-note">{note}</p>
+      {show && quote && (
+        <div className="landing-author-passages">
+          <p className="landing-author-quote">&ldquo;{quote.quote}&rdquo;</p>
+          <p className="landing-author-quote-source">— {quote.work}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function CraftTooltip({ note, children }: { note: string; children: React.ReactNode }) {
   const [show, setShow] = useState(false)
   const [pos, setPos] = useState({ x: 0, y: 0 })
@@ -278,22 +319,10 @@ useEffect(() => {
           something different.
         </p>
         <div className="landing-authors-list">
-          <div className="landing-author-item">
-            <p className="landing-author-name">Virginia Woolf</p>
-            <p className="landing-author-note">Interiority</p>
-          </div>
-          <div className="landing-author-item">
-            <p className="landing-author-name">Toni Morrison</p>
-            <p className="landing-author-note">Weight &amp; Memory</p>
-          </div>
-          <div className="landing-author-item">
-            <p className="landing-author-name">Ernest Hemingway</p>
-            <p className="landing-author-note">Dialogue</p>
-          </div>
-          <div className="landing-author-item">
-            <p className="landing-author-name">Raymond Carver</p>
-            <p className="landing-author-note">Minimalism</p>
-          </div>
+          <AuthorCard name="Virginia Woolf" note="Interiority" />
+          <AuthorCard name="Toni Morrison" note="Weight &amp; Memory" />
+          <AuthorCard name="Ernest Hemingway" note="Dialogue" />
+          <AuthorCard name="Raymond Carver" note="Minimalism" />
           <span className="landing-author-more">and more</span>
         </div>
       </section>
