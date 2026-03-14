@@ -62,7 +62,6 @@ export default function ProseAnalysisPage() {
     <div className="pa-root">
       <div className="pa-container">
         <div className="pa-header">
-          <p className="pa-eyebrow">Prose Analysis</p>
           <h1 className="pa-title">
             Who Do You
             <br />
@@ -120,20 +119,7 @@ export default function ProseAnalysisPage() {
 
       {/* Footer */}
       <footer className="pa-footer">
-        <div className="pa-footer-top">
-          <Link href="/" className="pa-footer-logo">ProseLab</Link>
-          <span className="pa-footer-tagline">Train Your Voice. Every Day.</span>
-        </div>
-        <div className="pa-footer-links">
-          <Link href="/">Home</Link>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/terms">Terms</Link>
-          <Link href="/cookies">Cookies</Link>
-          <Link href="/contact">Contact</Link>
-          <a href="mailto:contact@proselab.io">Email ↗</a>
-          <a href="https://x.com/proselab_io" target="_blank" rel="noopener noreferrer">X ↗</a>
-          <a href="https://proselab.substack.com" target="_blank" rel="noopener noreferrer">Substack ↗</a>
-        </div>
+        <p className="pa-footer-brought">Brought to you by <Link href="/" className="pa-footer-brought-link">ProseLab</Link></p>
       </footer>
 
       {/* Email Modal */}

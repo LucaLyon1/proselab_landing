@@ -1998,60 +1998,26 @@ body:has(.pa-root) .auth-header {
 
 /* Prose Analysis Footer */
 .pa-footer {
-  padding: 3rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
+  padding: 2rem 2rem;
+  text-align: center;
   border-top: 1px solid var(--pa-aged);
 }
 
-.pa-footer-top {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.pa-footer-logo {
-  font-family: var(--font-brand);
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--pa-ink);
-  text-decoration: none;
-  transition: color 0.15s;
-}
-
-.pa-footer-logo:hover {
-  color: var(--pa-rust);
-}
-
-.pa-footer-tagline {
-  font-family: var(--pa-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--pa-muted);
-}
-
-.pa-footer-links {
-  display: flex;
-  gap: 2rem;
-}
-
-.pa-footer-links a {
+.pa-footer-brought {
   font-family: var(--pa-mono);
   font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--pa-muted);
+}
+
+.pa-footer-brought-link {
+  color: var(--pa-rust);
   text-decoration: none;
   transition: color 0.15s;
 }
 
-.pa-footer-links a:hover {
-  color: var(--pa-rust);
+.pa-footer-brought-link:hover {
+  color: var(--pa-rust-dark);
 }
 
 @media (max-width: 560px) {
@@ -2068,9 +2034,4 @@ body:has(.pa-root) .auth-header {
     gap: 0.25rem;
   }
 
-  .pa-footer-links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-  }
 }
