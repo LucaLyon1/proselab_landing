@@ -1748,6 +1748,16 @@ body {
   margin-top: 0.5rem;
 }
 
+.exit-modal-consent {
+  font-family: "JetBrains Mono", var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: #9a918a;
+  margin-top: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .exit-modal-success {
   display: flex;
   flex-direction: column;

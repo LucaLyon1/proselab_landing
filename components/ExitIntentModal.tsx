@@ -2,6 +2,13 @@
 
 import { useState } from 'react'
 
+declare global {
+  interface Window {
+    datafast?: { track: (event: string, props?: Record<string, unknown>) => void }
+    umami?: { track: (event: string, props?: Record<string, unknown>) => void }
+  }
+}
+
 interface ExitIntentModalProps {
   open: boolean
   onClose: () => void
@@ -25,6 +32,8 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
     if (json.error) {
       setStatus('error')
     } else {
+      window.datafast?.track('waitlist_signup', { source: 'homepage' })
+      window.umami?.track('waitlist_signup', { source: 'homepage' })
       setStatus('success')
     }
   }
@@ -76,6 +85,7 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
                 {status === 'loading' ? 'Joining...' : 'Join waitlist →'}
               </button>
             </form>
+            <p className="exit-modal-consent">By submitting, you agree to receive emails from ProseLab. Unsubscribe anytime.</p>
             {status === 'error' && (
               <p className="exit-modal-error">Something went wrong. Please try again.</p>
             )}

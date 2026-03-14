@@ -49,8 +49,8 @@ export default function ProseAnalysisPage() {
       if (json.error) {
         setStatus('error')
       } else {
-        window.datafast?.track('prose_analysis_submit', { email_provided: true })
-        window.umami?.track('prose_analysis_submit', { email_provided: true })
+        window.datafast?.track('waitlist_signup', { source: 'prose_analysis' })
+        window.umami?.track('waitlist_signup', { source: 'prose_analysis' })
         setStatus('success')
       }
     } catch {
@@ -170,6 +170,7 @@ export default function ProseAnalysisPage() {
                     {status === 'loading' ? 'Sending...' : 'Send my analysis →'}
                   </button>
                 </form>
+                <p className="exit-modal-consent">By submitting, you agree to receive emails from ProseLab. Unsubscribe anytime.</p>
                 {status === 'error' && (
                   <p className="exit-modal-error">Something went wrong. Please try again.</p>
                 )}
