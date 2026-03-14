@@ -23,6 +23,9 @@ export function emailLayout(body: string): string {
           <p style="font-family: Georgia, serif; font-size: 14px; line-height: 1.7; color: #5c5246; margin: 0;">
             ProseLab is coming soon, and by being on this list you&rsquo;ll have access to the inside scoop. Updates, discounts and exclusive content are coming your way.
           </p>
+          <p style="font-family: Georgia, serif; font-size: 12px; color: #9a9088; margin: 16px 0 0;">
+            <a href="{{{ unsubscribe_url }}}" style="color: #9a9088; text-decoration: underline;">Unsubscribe</a>
+          </p>
         </div>
 
       </div>
