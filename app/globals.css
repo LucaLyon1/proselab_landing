@@ -1998,9 +1998,8 @@ body:has(.pa-root) .auth-header {
 
 /* Prose Analysis Footer */
 .pa-footer {
-  padding: 2rem 2rem;
+  padding: 0.5rem 2rem 2.5rem;
   text-align: center;
-  border-top: 1px solid var(--pa-aged);
 }
 
 .pa-footer-brought {
