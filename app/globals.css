@@ -1998,7 +1998,7 @@ body:has(.pa-root) .auth-header {
 
 /* Prose Analysis Footer */
 .pa-footer {
-  padding: 0.5rem 2rem 2.5rem;
+  padding: 0.5rem 2rem 3.5rem;
   text-align: center;
 }
 
@@ -2021,7 +2021,7 @@ body:has(.pa-root) .auth-header {
 
 @media (max-width: 560px) {
   .pa-container {
-    padding: 6rem 1.5rem 3rem;
+    padding: 2rem 1.5rem 3rem;
   }
 
   .pa-title {
@@ -2032,5 +2032,4 @@ body:has(.pa-root) .auth-header {
     flex-direction: column;
     gap: 0.25rem;
   }
-
 }
