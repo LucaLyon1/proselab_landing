@@ -56,7 +56,7 @@ export default function RootLayout({
       <body>
         <header className="auth-header">
           <Link href="/" className="auth-header-logo">
-            Proselab
+            ProseLab
           </Link>
           <AuthNav />
         </header>

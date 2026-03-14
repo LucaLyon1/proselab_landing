@@ -90,6 +90,8 @@ export default function ProseAnalysisPage() {
         </div>
 
         <textarea
+          id="writing-sample"
+          name="writing-sample"
           className="pa-textarea"
           placeholder="Start writing here..."
           value={userText}
@@ -119,7 +121,7 @@ export default function ProseAnalysisPage() {
       {/* Footer */}
       <footer className="pa-footer">
         <div className="pa-footer-top">
-          <Link href="/" className="pa-footer-logo">Proselab</Link>
+          <Link href="/" className="pa-footer-logo">ProseLab</Link>
           <span className="pa-footer-tagline">Train Your Voice. Every Day.</span>
         </div>
         <div className="pa-footer-links">
@@ -165,6 +167,8 @@ export default function ProseAnalysisPage() {
                 </p>
                 <form className="exit-modal-form" onSubmit={handleSubmit}>
                   <input
+                    id="analysis-email"
+                    name="email"
                     type="email"
                     required
                     placeholder="your@email.com"

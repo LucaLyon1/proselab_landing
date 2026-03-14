@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact | Proselab",
+  title: "Contact | ProseLab",
   description:
-    "Contact Proselab. Get in touch for support, feedback, or business inquiries.",
+    "Contact ProseLab. Get in touch for support, feedback, or business inquiries.",
 };
 
 export default function ContactPage() {

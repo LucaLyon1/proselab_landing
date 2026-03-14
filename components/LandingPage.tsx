@@ -392,7 +392,7 @@ useEffect(() => {
           Today.
         </h2>
         <p className="landing-cta-sub">
-          Proselab gives you AI-powered craft analysis, hand-authored
+          ProseLab gives you AI-powered craft analysis, hand-authored
           constraints, and feedback. Study the masters. Write more.
         </p>
         <div className="landing-reveal landing-cta-buttons">
@@ -422,7 +422,7 @@ useEffect(() => {
       {/* FOOTER */}
       <footer className="landing-footer">
         <div className="landing-footer-top">
-          <span className="landing-footer-logo">Proselab</span>
+          <span className="landing-footer-logo">ProseLab</span>
           <span className="landing-footer-tagline">Train Your Voice. Every Day.</span>
         </div>
         <div className="landing-footer-contact">

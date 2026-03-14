@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Proselab",
+  title: "Cookie Policy | ProseLab",
   description:
-    "Proselab cookie policy. How we use cookies and similar technologies.",
+    "ProseLab cookie policy. How we use cookies and similar technologies.",
 };
 
 export default function CookiesPage() {
@@ -33,7 +33,7 @@ export default function CookiesPage() {
 
           <section>
             <h2>2. Cookies We Use</h2>
-            <p>Proselab uses the following types of cookies:</p>
+            <p>ProseLab uses the following types of cookies:</p>
             <ul>
               <li>
                 <strong>Essential cookies:</strong> Required for the Service to

@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Proselab",
+  title: "Privacy Policy | ProseLab",
   description:
-    "Proselab privacy policy. How we collect, use, and protect your personal information.",
+    "ProseLab privacy policy. How we collect, use, and protect your personal information.",
 };
 
 export default function PrivacyPage() {
@@ -25,8 +25,8 @@ export default function PrivacyPage() {
           <section>
             <h2>1. Introduction</h2>
             <p>
-              Proselab (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;)
-              operates the Proselab website and writing practice platform. This
+              ProseLab (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;)
+              operates the ProseLab website and writing practice platform. This
               Privacy Policy explains how we collect, use, disclose, and
               safeguard your information when you use our services.
             </p>

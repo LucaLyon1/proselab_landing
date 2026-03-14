@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   const { name, email, message } = await request.json();
 
   const { data, error } = await resend.emails.send({
-    from: 'Proselab <contact@proselab.io>',
+    from: 'ProseLab <hello@email.proselab.io>',
     to: ['contact@proselab.io'],
     subject: `Message from ${name}`,
     html: `<p><strong>${name}</strong> (${email}):</p><p>${message}</p>`,

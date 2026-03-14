@@ -59,6 +59,8 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
             </p>
             <form className="exit-modal-form" onSubmit={handleSubmit}>
               <input
+                id="waitlist-email"
+                name="email"
                 type="email"
                 required
                 placeholder="your@email.com"

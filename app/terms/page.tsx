@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Proselab",
+  title: "Terms of Service | ProseLab",
   description:
-    "Proselab terms of service. Rules and guidelines for using our writing practice platform.",
+    "ProseLab terms of service. Rules and guidelines for using our writing practice platform.",
 };
 
 export default function TermsPage() {
@@ -25,7 +25,7 @@ export default function TermsPage() {
           <section>
             <h2>1. Acceptance of Terms</h2>
             <p>
-              By accessing or using Proselab (&quot;the Service&quot;), you
+              By accessing or using ProseLab (&quot;the Service&quot;), you
               agree to be bound by these Terms of Service. If you do not agree,
               do not use the Service.
             </p>
@@ -34,7 +34,7 @@ export default function TermsPage() {
           <section>
             <h2>2. Description of Service</h2>
             <p>
-              Proselab is a writing practice platform that provides AI-powered
+              ProseLab is a writing practice platform that provides AI-powered
               craft analysis of literary passages, writing exercises with
               constraints, feedback on user submissions, and progress tracking.
               We reserve the right to modify, suspend, or discontinue any part of
