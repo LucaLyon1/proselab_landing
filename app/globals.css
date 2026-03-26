@@ -2029,6 +2029,163 @@ body:has(.pa-root) .auth-header {
   color: var(--pa-rust-dark);
 }
 
+/* Maintenance overlay */
+.pa-maintenance-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(26, 23, 20, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: pa-overlay-in 0.3s ease-out;
+}
+
+@keyframes pa-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pa-maintenance-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--pa-aged);
+  padding: 2.5rem 2rem;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  animation: landing-fade-up 0.4s 0.1s both;
+}
+
+.pa-maintenance-dismiss {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--pa-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.25rem;
+  transition: color 0.15s;
+}
+
+.pa-maintenance-dismiss:hover {
+  color: var(--pa-ink);
+}
+
+.pa-maintenance-eyebrow {
+  font-family: var(--pa-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pa-rust);
+  margin-bottom: 1rem;
+}
+
+.pa-maintenance-heading {
+  font-family: var(--pa-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--pa-ink);
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+
+.pa-maintenance-sub {
+  font-family: var(--pa-mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--pa-muted);
+  margin-bottom: 1.5rem;
+}
+
+.pa-maintenance-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pa-maintenance-input {
+  font-family: var(--pa-mono);
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--pa-aged);
+  background: #fff;
+  color: var(--pa-ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.pa-maintenance-input:focus {
+  border-color: var(--pa-rust);
+}
+
+.pa-maintenance-input::placeholder {
+  color: #b5ac9e;
+}
+
+.pa-maintenance-submit {
+  font-family: var(--pa-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  padding: 0.85rem 1.5rem;
+  background: var(--pa-rust);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pa-maintenance-submit:hover:not(:disabled) {
+  background: var(--pa-rust-dark);
+}
+
+.pa-maintenance-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pa-maintenance-consent {
+  font-family: var(--pa-mono);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: #9a9088;
+  margin-top: 0.75rem;
+}
+
+.pa-maintenance-error {
+  font-family: var(--pa-mono);
+  font-size: 0.82rem;
+  color: #c0392b;
+  margin-top: 0.75rem;
+}
+
+.pa-maintenance-success {
+  text-align: center;
+}
+
+.pa-maintenance-close-btn {
+  font-family: var(--pa-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  padding: 0.7rem 1.5rem;
+  margin-top: 1.25rem;
+  background: none;
+  border: 1px solid var(--pa-aged);
+  color: var(--pa-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.pa-maintenance-close-btn:hover {
+  border-color: var(--pa-ink);
+  color: var(--pa-ink);
+}
+
 @media (max-width: 560px) {
   .pa-container {
     padding: 2rem 1.5rem 3rem;
@@ -2036,6 +2193,10 @@ body:has(.pa-root) .auth-header {
 
   .pa-title {
     font-size: clamp(2rem, 9vw, 2.75rem);
+  }
+
+  .pa-maintenance-card {
+    padding: 2rem 1.5rem;
   }
 
   .pa-char-row {
