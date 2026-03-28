@@ -23,10 +23,6 @@ export default function ProseAnalysisPage() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
-  const [maintenanceVisible, setMaintenanceVisible] = useState(true)
-  const [maintenanceEmail, setMaintenanceEmail] = useState('')
-  const [maintenanceStatus, setMaintenanceStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-
   const cyclePrompt = useCallback(() => {
     setPromptIndex((i) => (i + 1) % PROMPTS.length)
   }, [])
@@ -59,30 +55,6 @@ export default function ProseAnalysisPage() {
       }
     } catch {
       setStatus('error')
-    }
-  }
-
-  const handleMaintenanceSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setMaintenanceStatus('loading')
-
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: maintenanceEmail }),
-      })
-      const json = await res.json()
-
-      if (json.error) {
-        setMaintenanceStatus('error')
-      } else {
-        window.datafast?.track('waitlist_signup', { source: 'prose_analysis_maintenance' })
-        window.umami?.track('waitlist_signup', { source: 'prose_analysis_maintenance' })
-        setMaintenanceStatus('success')
-      }
-    } catch {
-      setMaintenanceStatus('error')
     }
   }
 
@@ -149,62 +121,6 @@ export default function ProseAnalysisPage() {
       <footer className="pa-footer">
         <p className="pa-footer-brought">Brought to you by <Link href="/" className="pa-footer-brought-link">ProseLab</Link></p>
       </footer>
-
-      {/* Maintenance overlay */}
-      {maintenanceVisible && (
-        <div className="pa-maintenance-overlay">
-          <div className="pa-maintenance-card">
-            <button className="pa-maintenance-dismiss" onClick={() => setMaintenanceVisible(false)} aria-label="Dismiss">
-              ✕
-            </button>
-
-            {maintenanceStatus === 'success' ? (
-              <div className="pa-maintenance-success">
-                <p className="pa-maintenance-heading">You&apos;re on the list.</p>
-                <p className="pa-maintenance-sub">
-                  We&apos;ll let you know at <strong>{maintenanceEmail}</strong> as soon as the prose analysis is back.
-                </p>
-                <button className="pa-maintenance-close-btn" onClick={() => setMaintenanceVisible(false)}>
-                  Got it
-                </button>
-              </div>
-            ) : (
-              <>
-                <p className="pa-maintenance-eyebrow">Temporarily offline</p>
-                <p className="pa-maintenance-heading">
-                  We&apos;re fixing the prose analysis right now
-                </p>
-                <p className="pa-maintenance-sub">
-                  It&apos;ll be back online soon. Drop your email and we&apos;ll let you know the moment it&apos;s live again.
-                </p>
-                <form className="pa-maintenance-form" onSubmit={handleMaintenanceSubmit}>
-                  <input
-                    id="maintenance-email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="your@email.com"
-                    className="pa-maintenance-input"
-                    value={maintenanceEmail}
-                    onChange={(e) => setMaintenanceEmail(e.target.value)}
-                  />
-                  <button
-                    type="submit"
-                    className="pa-maintenance-submit"
-                    disabled={maintenanceStatus === 'loading'}
-                  >
-                    {maintenanceStatus === 'loading' ? 'Joining...' : 'Notify me →'}
-                  </button>
-                </form>
-                <p className="pa-maintenance-consent">By signing up, you agree to receive emails from ProseLab. Unsubscribe anytime.</p>
-                {maintenanceStatus === 'error' && (
-                  <p className="pa-maintenance-error">Something went wrong. Please try again.</p>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Email Modal */}
       {modalOpen && (
