@@ -63,8 +63,8 @@ export default function RootLayout({
         {children}
         <Script
           defer
-          data-website-id={process.env.NEXT_PUBLIC_DATAFAST_WEBSITE_ID}
-          data-domain={process.env.NEXT_PUBLIC_DATAFAST_DOMAIN}
+          data-website-id="dfid_IBYj6a8XOWT1aRRW4PExx"
+          data-domain="www.proselab.io"
           src="https://datafa.st/js/script.js"
           strategy="afterInteractive"
         />
