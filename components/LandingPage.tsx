@@ -7,7 +7,7 @@ import { ExitIntentModal } from './ExitIntentModal'
 
 declare global {
   interface Window {
-    datafast?: { track: (event: string, props?: Record<string, unknown>) => void }
+    datafast?: (event: string, props?: Record<string, unknown>) => void
     umami?: { track: (event: string, props?: Record<string, unknown>) => void }
   }
 }
@@ -147,8 +147,8 @@ useEffect(() => {
               className="landing-btn-primary"
               id="start"
               onClick={() => {
-                window.datafast?.track('explore_click', { location: 'hero' })
-                window.umami?.track('explore_click', { location: 'hero' })
+                window.datafast?.('popup_click', { location: 'hero' })
+                window.umami?.track('popup_click', { location: 'hero' })
                 setDiscountOpen(true)
               }}
             >
@@ -218,8 +218,8 @@ useEffect(() => {
                 className={`landing-btn-analyze${userText.trim() ? '' : ' landing-btn-analyze-disabled'}`}
                 onClick={() => {
                   if (!userText.trim()) return
-                  window.datafast?.track('analyze_click', { text_length: userText.trim().length })
-                  window.umami?.track('analyze_click', { text_length: userText.trim().length })
+                  window.datafast?.('popup_click', { location: 'analyze' })
+                  window.umami?.track('popup_click', { location: 'analyze' })
                   setDiscountOpen(true)
                 }}
               >
@@ -399,14 +399,18 @@ useEffect(() => {
           <button
             className="landing-btn-primary"
             onClick={() => {
-              window.datafast?.track('explore_click', { location: 'cta' })
-              window.umami?.track('explore_click', { location: 'cta' })
+              window.datafast?.('popup_click', { location: 'cta' })
+              window.umami?.track('popup_click', { location: 'cta' })
               setDiscountOpen(true)
             }}
           >
             Explore passages →
           </button>
-          <button className="landing-btn-outline" onClick={() => setDiscountOpen(true)}>
+          <button className="landing-btn-outline" onClick={() => {
+              window.datafast?.('popup_click', { location: 'cta-waitlist' })
+              window.umami?.track('popup_click', { location: 'cta-waitlist' })
+              setDiscountOpen(true)
+            }}>
             Join waitlist →
           </button>
         </div>

@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react'
 
 declare global {
   interface Window {
-    datafast?: { track: (event: string, props?: Record<string, unknown>) => void }
+    datafast?: (event: string, props?: Record<string, unknown>) => void
     umami?: { track: (event: string, props?: Record<string, unknown>) => void }
   }
 }
@@ -29,7 +29,7 @@ export default function ProseAnalysisPage() {
 
   const handleAnalyze = () => {
     if (!userText.trim()) return
-    window.datafast?.track('prose_analysis_click', { text_length: userText.trim().length })
+    window.datafast?.('prose_analysis_click', { text_length: userText.trim().length })
     window.umami?.track('prose_analysis_click', { text_length: userText.trim().length })
     setModalOpen(true)
   }
@@ -49,7 +49,9 @@ export default function ProseAnalysisPage() {
       if (json.error) {
         setStatus('error')
       } else {
-        window.datafast?.track('waitlist_signup', { source: 'prose_analysis' })
+        window.datafast?.('prose_analysis_submit', { source: 'prose_analysis' })
+        window.umami?.track('prose_analysis_submit', { source: 'prose_analysis' })
+        window.datafast?.('waitlist_signup', { source: 'prose_analysis' })
         window.umami?.track('waitlist_signup', { source: 'prose_analysis' })
         setStatus('success')
       }

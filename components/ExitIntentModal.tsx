@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 declare global {
   interface Window {
-    datafast?: { track: (event: string, props?: Record<string, unknown>) => void }
+    datafast?: (event: string, props?: Record<string, unknown>) => void
     umami?: { track: (event: string, props?: Record<string, unknown>) => void }
   }
 }
@@ -32,7 +32,7 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
     if (json.error) {
       setStatus('error')
     } else {
-      window.datafast?.track('waitlist_signup', { source: 'homepage' })
+      window.datafast?.('waitlist_signup', { source: 'homepage' })
       window.umami?.track('waitlist_signup', { source: 'homepage' })
       setStatus('success')
     }

@@ -61,6 +61,12 @@ export default function RootLayout({
           <AuthNav />
         </header>
         {children}
+        <Script id="datafast-queue" strategy="beforeInteractive">{`
+          window.datafast = window.datafast || function() {
+            window.datafast.q = window.datafast.q || [];
+            window.datafast.q.push(arguments);
+          };
+        `}</Script>
         <Script
           defer
           data-website-id="dfid_IBYj6a8XOWT1aRRW4PExx"
