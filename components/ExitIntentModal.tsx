@@ -1,11 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 declare global {
   interface Window {
     datafast?: (event: string, props?: Record<string, unknown>) => void
     umami?: { track: (event: string, props?: Record<string, unknown>) => void }
+    Supascribe?: {
+      trackSubmit: (...args: unknown[]) => void
+      _dfPatched?: boolean
+    }
   }
 }
 
@@ -14,29 +18,53 @@ interface ExitIntentModalProps {
   onClose: () => void
 }
 
+const EMBED_ID = '927249536913'
+
 export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const embedRef = useRef<HTMLDivElement>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setStatus('loading')
+  // Re-initialize Supascribe for dynamically rendered embed divs
+  useEffect(() => {
+    if (!open || !embedRef.current) return
 
-    const res = await fetch('/api/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    })
-    const json = await res.json()
+    const el = embedRef.current
+    const script = document.createElement('script')
+    script.src = 'https://js.supascribe.com/v1/loader/7QcbcihIztbMpucNNbdjdhfkMQT2.js'
+    script.async = true
+    el.appendChild(script)
 
-    if (json.error) {
-      setStatus('error')
-    } else {
-      window.datafast?.('waitlist_signup', { source: 'homepage' })
-      window.umami?.track('waitlist_signup', { source: 'homepage' })
-      setStatus('success')
+    return () => {
+      if (el.contains(script)) {
+        el.removeChild(script)
+      }
     }
-  }
+  }, [open])
+
+  // Patch Supascribe.trackSubmit to fire DataFast/Umami events on successful signup
+  useEffect(() => {
+    const patch = () => {
+      const S = window.Supascribe
+      if (!S?.trackSubmit || S._dfPatched) return false
+
+      const original = S.trackSubmit
+      S.trackSubmit = (...args: unknown[]) => {
+        original.apply(S, args)
+        if (String(args[0]) === EMBED_ID) {
+          window.datafast?.('waitlist_signup', { source: 'homepage' })
+          window.umami?.track('waitlist_signup', { source: 'homepage' })
+        }
+      }
+      S._dfPatched = true
+      return true
+    }
+
+    if (!patch()) {
+      const interval = setInterval(() => {
+        if (patch()) clearInterval(interval)
+      }, 200)
+      return () => clearInterval(interval)
+    }
+  }, [])
 
   if (!open) return null
 
@@ -47,50 +75,19 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
           ✕ close
         </button>
 
-        {status === 'success' ? (
-          <div className="exit-modal-success">
-            <p className="exit-modal-eyebrow">You&apos;re in</p>
-            <h2 className="exit-modal-title">We&apos;ll keep you posted.</h2>
-            <p className="exit-modal-sub">
-              We&apos;ve added {email} to the list. You&apos;ll be the first to know when we open the doors.
-            </p>
-          </div>
-        ) : (
-          <>
-            <p className="exit-modal-eyebrow">Coming soon</p>
-            <h2 className="exit-modal-title">
-              Join the
-              <br />
-              <em>waitlist</em>
-            </h2>
-            <p className="exit-modal-sub">
-              We&apos;re letting people in one by one. Join the waitlist and we&apos;ll reach out when it&apos;s your turn.
-            </p>
-            <form className="exit-modal-form" onSubmit={handleSubmit}>
-              <input
-                id="waitlist-email"
-                name="email"
-                type="email"
-                required
-                placeholder="your@email.com"
-                className="exit-modal-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="exit-modal-submit"
-                disabled={status === 'loading'}
-              >
-                {status === 'loading' ? 'Joining...' : 'Join waitlist →'}
-              </button>
-            </form>
-            <p className="exit-modal-consent">By submitting, you agree to receive emails from ProseLab. Unsubscribe anytime.</p>
-            {status === 'error' && (
-              <p className="exit-modal-error">Something went wrong. Please try again.</p>
-            )}
-          </>
-        )}
+        <p className="exit-modal-eyebrow">Coming soon</p>
+        <h2 className="exit-modal-title">
+          Join the
+          <br />
+          <em>waitlist</em>
+        </h2>
+        <p className="exit-modal-sub">
+          We&apos;re letting people in one by one. Join the waitlist and we&apos;ll reach out when it&apos;s your turn.
+        </p>
+
+        <div ref={embedRef}>
+          <div data-supascribe-embed-id={EMBED_ID} data-supascribe-subscribe></div>
+        </div>
       </div>
     </div>
   )
