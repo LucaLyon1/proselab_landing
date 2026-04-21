@@ -86,10 +86,6 @@ export default function RootLayout({
           src="https://cloud.umami.is/script.js"
           strategy="afterInteractive"
         />
-        <Script
-          src="https://js.supascribe.com/v1/loader/7QcbcihIztbMpucNNbdjdhfkMQT2.js"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );

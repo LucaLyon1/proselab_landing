@@ -419,8 +419,6 @@ useEffect(() => {
         </p>
       </section>
 
-      <div data-supascribe-embed-id="986078388068" data-supascribe-popup=""></div>
-
       <ExitIntentModal open={discountOpen} onClose={() => setDiscountOpen(false)} />
 
       {/* FOOTER */}
