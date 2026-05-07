@@ -86,7 +86,7 @@ export async function POST(request: Request) {
 
     try {
       // Upsert contact in Loops
-      await loops.updateContact({ email, userGroup: 'Extract Demo' });
+      await loops.updateContact({ email, properties: { userGroup: 'Extract Demo' } });
 
       const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-6',
