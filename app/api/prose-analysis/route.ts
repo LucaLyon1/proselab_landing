@@ -1,5 +1,4 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { Resend } from 'resend';
 import { LoopsClient } from 'loops';
 import { NextResponse, after } from 'next/server';
 
@@ -53,7 +52,6 @@ Rules:
 - Return ONLY the JSON object, no markdown, no code fences`;
 
 export async function POST(request: Request) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
   const { email, text, prompt } = await request.json();
 
   if (!email) {
@@ -66,24 +64,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Writing sample is required' }, { status: 400 });
   }
 
-  const { error: contactError } = await resend.contacts.create({
-    email,
-    unsubscribed: false,
-    segments: [{ id: process.env.RESEND_AUDIENCE_ID! }],
-  });
-
-  if (contactError) {
-    if (!contactError.message?.includes('already exists')) {
-      console.error('[prose-analysis] 400: resend.contacts.create failed:', contactError.message);
-      return NextResponse.json({ error: 'Failed to submit' }, { status: 400 });
-    }
-  }
-
   after(async () => {
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
     const loops = new LoopsClient(process.env.LOOPS_API_KEY!);
 
     try {
+      // Upsert contact in Loops
+      await loops.updateContact({ email, properties: { userGroup: 'Prose Analysis' } });
+
       const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-6',
         max_tokens: 1024,
@@ -115,9 +103,9 @@ export async function POST(request: Request) {
         },
       });
 
-      console.log(`Prose analysis sent to ${email} — matched ${analysis.primary.author}`);
+      console.log(`[prose-analysis] sent to ${email} — matched ${analysis.primary.author}`);
     } catch (err) {
-      console.error(`Prose analysis failed for ${email}:`, err);
+      console.error(`[prose-analysis] failed for ${email}:`, err);
     }
   });
 

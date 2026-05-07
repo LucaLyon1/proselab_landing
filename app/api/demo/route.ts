@@ -1,7 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { Resend } from 'resend';
+import { LoopsClient } from 'loops';
 import { NextResponse, after } from 'next/server';
-import { emailLayout } from '@/lib/email-layout';
 
 const ORIGINAL_PASSAGE =
   '"She had a perpetual sense, as she watched the taxi cabs, of being out, out, far out to sea and alone." — Virginia Woolf, Mrs Dalloway';
@@ -68,62 +67,7 @@ Rules:
 type Score = { category: string; score: number; note: string };
 type Analysis = { scores: Score[]; narrative: string; headline: string };
 
-const COLOR_BY_CATEGORY: Record<string, string> = Object.fromEntries(
-  CATEGORIES.map((c) => [c.key, c.color])
-);
-
-function buildResultsEmail(analysis: Analysis, userText: string) {
-  const escapedText = userText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  const rows = analysis.scores
-    .map((s) => {
-      const color = COLOR_BY_CATEGORY[s.category] ?? '#1a1714';
-      const pct = Math.max(0, Math.min(100, Math.round(s.score)));
-      return `
-        <div style="margin-bottom: 22px;">
-          <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px;">
-            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; letter-spacing: 0.12em; color: #1a1714;">
-              <span style="display: inline-block; width: 10px; height: 10px; border-radius: 5px; background: ${color}; margin-right: 8px; vertical-align: middle;"></span>${s.category}
-            </div>
-            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #5c5246;">${pct}</div>
-          </div>
-          <div style="height: 8px; background: rgba(26, 23, 20, 0.08);">
-            <div style="height: 8px; width: ${pct}%; background: ${color}; opacity: 0.85;"></div>
-          </div>
-          <p style="font-family: Georgia, serif; font-size: 14px; line-height: 1.55; color: #5c5246; margin: 8px 0 0;">${s.note}</p>
-        </div>
-      `;
-    })
-    .join('');
-
-  return emailLayout(`
-    <p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #b84c2e; margin: 0 0 20px;">Your Demo Scorecard</p>
-
-    <h1 style="font-size: 26px; font-weight: normal; line-height: 1.2; margin: 0 0 8px;"><em>${analysis.headline}</em></h1>
-    <p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #888; margin: 0 0 28px;">Your rewrite of Woolf, scored across four craft categories.</p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #333; margin: 0 0 32px;">${analysis.narrative}</p>
-
-    <hr style="border: none; border-top: 1px solid #e0d8cf; margin: 8px 0 28px;" />
-
-    ${rows}
-
-    <hr style="border: none; border-top: 1px solid #e0d8cf; margin: 28px 0;" />
-
-    <p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #b84c2e; margin: 0 0 10px;">Your text</p>
-    <blockquote style="font-family: Georgia, serif; font-style: italic; font-size: 16px; line-height: 1.7; color: #1a1714; border-left: 3px solid #b84c2e; padding-left: 16px; margin: 0 0 24px;">
-      ${escapedText}
-    </blockquote>
-
-    <p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #b84c2e; margin: 0 0 10px;">The original</p>
-    <blockquote style="font-family: Georgia, serif; font-style: italic; font-size: 16px; line-height: 1.7; color: #5c5246; border-left: 3px solid #d8cdb8; padding-left: 16px; margin: 0;">
-      ${ORIGINAL_PASSAGE}
-    </blockquote>
-  `);
-}
-
 export async function POST(request: Request) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
   const { email, text } = await request.json();
 
   if (!email) {
@@ -136,30 +80,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Rewrite is required' }, { status: 400 });
   }
 
-  const loopsRes = await fetch('https://app.loops.so/api/v1/contacts/update', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${process.env.LOOPS_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      userGroup: 'Extract Demo',
-      source: 'demo',
-      subscribed: true,
-    }),
-  });
-
-  if (!loopsRes.ok) {
-    const loopsError = await loopsRes.text().catch(() => '(no body)');
-    console.error(`[demo] 400: loops contacts/update failed — status ${loopsRes.status}: ${loopsError}`);
-    return NextResponse.json({ error: 'Failed to submit' }, { status: 400 });
-  }
-
   after(async () => {
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const loops = new LoopsClient(process.env.LOOPS_API_KEY!);
 
     try {
+      // Upsert contact in Loops
+      await loops.updateContact({ email, userGroup: 'Extract Demo' });
+
       const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-6',
         max_tokens: 1024,
@@ -179,19 +107,30 @@ export async function POST(request: Request) {
 
       const analysis = JSON.parse(content.text) as Analysis;
 
-      await resend.emails.send({
-        from: 'ProseLab <hello@email.proselab.io>',
-        to: [email],
-        subject: `Your Woolf rewrite — scorecard inside`,
-        html: buildResultsEmail(analysis, text),
-      });
-
       const scoreSummary = analysis.scores
         .map((s) => `${s.category}: ${Math.round(s.score)}`)
         .join(' · ');
-      console.log(`Demo scorecard sent to ${email} — ${scoreSummary}`);
+
+      await loops.sendTransactionalEmail({
+        transactionalId: process.env.LOOPS_DEMO_TRANSACTIONAL_ID!,
+        email,
+        dataVariables: {
+          headline: analysis.headline,
+          narrative: analysis.narrative,
+          structureScore: String(Math.round(analysis.scores.find(s => s.category === 'STRUCTURE')?.score ?? 0)),
+          structureNote: analysis.scores.find(s => s.category === 'STRUCTURE')?.note ?? '',
+          voiceScore: String(Math.round(analysis.scores.find(s => s.category === 'VOICE')?.score ?? 0)),
+          voiceNote: analysis.scores.find(s => s.category === 'VOICE')?.note ?? '',
+          imageryScore: String(Math.round(analysis.scores.find(s => s.category === 'IMAGERY')?.score ?? 0)),
+          imageryNote: analysis.scores.find(s => s.category === 'IMAGERY')?.note ?? '',
+          pacingScore: String(Math.round(analysis.scores.find(s => s.category === 'PACING')?.score ?? 0)),
+          pacingNote: analysis.scores.find(s => s.category === 'PACING')?.note ?? '',
+        },
+      });
+
+      console.log(`[demo] scorecard sent to ${email} — ${scoreSummary}`);
     } catch (err) {
-      console.error(`Demo scorecard failed for ${email}:`, err);
+      console.error(`[demo] failed for ${email}:`, err);
     }
   });
 
