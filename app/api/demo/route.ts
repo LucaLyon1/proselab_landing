@@ -127,10 +127,12 @@ export async function POST(request: Request) {
   const { email, text } = await request.json();
 
   if (!email) {
+    console.error('[demo] 400: missing email');
     return NextResponse.json({ error: 'Email is required' }, { status: 400 });
   }
 
   if (!text) {
+    console.error('[demo] 400: missing text');
     return NextResponse.json({ error: 'Rewrite is required' }, { status: 400 });
   }
 
@@ -149,6 +151,8 @@ export async function POST(request: Request) {
   });
 
   if (!loopsRes.ok) {
+    const loopsError = await loopsRes.text().catch(() => '(no body)');
+    console.error(`[demo] 400: loops contacts/update failed — status ${loopsRes.status}: ${loopsError}`);
     return NextResponse.json({ error: 'Failed to submit' }, { status: 400 });
   }
 

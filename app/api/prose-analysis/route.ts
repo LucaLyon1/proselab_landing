@@ -57,10 +57,12 @@ export async function POST(request: Request) {
   const { email, text, prompt } = await request.json();
 
   if (!email) {
+    console.error('[prose-analysis] 400: missing email');
     return NextResponse.json({ error: 'Email is required' }, { status: 400 });
   }
 
   if (!text) {
+    console.error('[prose-analysis] 400: missing text');
     return NextResponse.json({ error: 'Writing sample is required' }, { status: 400 });
   }
 
@@ -72,6 +74,7 @@ export async function POST(request: Request) {
 
   if (contactError) {
     if (!contactError.message?.includes('already exists')) {
+      console.error('[prose-analysis] 400: resend.contacts.create failed:', contactError.message);
       return NextResponse.json({ error: 'Failed to submit' }, { status: 400 });
     }
   }
