@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { ExitIntentModal } from './ExitIntentModal'
 import { HeroAnimation } from './HeroAnimation'
+import { HeroAnimationMobile } from './HeroAnimationMobile'
 
 declare global {
   interface Window {
@@ -125,7 +126,12 @@ useEffect(() => {
           </div>
         </div>
         <div className="landing-hero-right">
-          <HeroAnimation />
+          <div className="landing-hero-anim landing-hero-anim-desktop">
+            <HeroAnimation />
+          </div>
+          <div className="landing-hero-anim landing-hero-anim-mobile">
+            <HeroAnimationMobile />
+          </div>
           <Link
             href="/demo"
             className="landing-hero-cta"
