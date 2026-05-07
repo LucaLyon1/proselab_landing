@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react'
 
 declare global {
   interface Window {
-    datafast?: { track: (event: string, props?: Record<string, unknown>) => void }
+    datafast?: (event: string, props?: Record<string, unknown>) => void
     umami?: { track: (event: string, props?: Record<string, unknown>) => void }
   }
 }
@@ -30,7 +30,7 @@ export default function ProseAnalysisPage() {
     e.preventDefault()
     if (!userText.trim() || !email.trim()) return
     setStatus('loading')
-    window.datafast?.track('prose_analysis_click', { text_length: userText.trim().length })
+    window.datafast?.('prose_analysis_click', { text_length: userText.trim().length })
     window.umami?.track('prose_analysis_click', { text_length: userText.trim().length })
 
     try {
@@ -44,7 +44,7 @@ export default function ProseAnalysisPage() {
       if (json.error) {
         setStatus('error')
       } else {
-        window.datafast?.track('prose_analysis_submit', { email_provided: true })
+        window.datafast?.('prose_analysis_submit', { email_provided: true })
         window.umami?.track('prose_analysis_submit', { email_provided: true })
         setStatus('success')
       }
@@ -139,7 +139,6 @@ export default function ProseAnalysisPage() {
         </p>
       </div>
 
-      {/* Footer */}
       <footer className="pa-footer">
         <p className="pa-footer-brought">Brought to you by <Link href="/" className="pa-footer-brought-link">ProseLab</Link></p>
       </footer>

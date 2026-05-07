@@ -5,16 +5,6 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
 
-// Import Cormorant Garamond font from Google Fonts (local or CDN)
-import { Cormorant_Garamond } from "next/font/google";
-
-const cormorantGaramond = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-cormorant-garamond",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "ProseLab",
   description:
@@ -52,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`light ${GeistMono.variable} ${cormorantGaramond.variable}`}>
+    <html lang="en" className={`light ${GeistMono.variable}`}>
       <body>
         <header className="auth-header">
           <Link href="/" className="auth-header-logo">
@@ -61,6 +51,12 @@ export default function RootLayout({
           <AuthNav />
         </header>
         {children}
+        <Script id="datafast-queue" strategy="beforeInteractive">{`
+          window.datafast = window.datafast || function() {
+            window.datafast.q = window.datafast.q || [];
+            window.datafast.q.push(arguments);
+          };
+        `}</Script>
         <Script
           defer
           data-website-id="dfid_IBYj6a8XOWT1aRRW4PExx"
@@ -78,10 +74,6 @@ export default function RootLayout({
           defer
           data-website-id="51d4b355-7309-41fd-84c5-cd2218b76b82"
           src="https://cloud.umami.is/script.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="https://js.supascribe.com/v1/loader/7QcbcihIztbMpucNNbdjdhfkMQT2.js"
           strategy="afterInteractive"
         />
       </body>

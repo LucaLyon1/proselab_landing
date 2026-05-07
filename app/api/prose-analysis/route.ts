@@ -64,7 +64,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Writing sample is required' }, { status: 400 });
   }
 
-  // Add contact to the waitlist segment (fast — do this before returning)
   const { error: contactError } = await resend.contacts.create({
     email,
     unsubscribed: false,
@@ -77,7 +76,6 @@ export async function POST(request: Request) {
     }
   }
 
-  // Run Claude analysis + email delivery in the background after response is sent
   after(async () => {
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
     const loops = new LoopsClient(process.env.LOOPS_API_KEY!);
@@ -102,7 +100,6 @@ export async function POST(request: Request) {
 
       const analysis = JSON.parse(content.text);
 
-      // Send results email via Loops transactional email
       await loops.sendTransactionalEmail({
         transactionalId: process.env.LOOPS_TRANSACTIONAL_ID!,
         email,
@@ -115,32 +112,11 @@ export async function POST(request: Request) {
         },
       });
 
-      // Admin notification
-      const escapedText = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      await resend.emails.send({
-        from: 'ProseLab <hello@email.proselab.io>',
-        to: ['contact@proselab.io'],
-        subject: `Prose analysis: ${email} → ${analysis.primary.author}`,
-        html: `
-          <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1a1a1a;">
-            <h2 style="font-size: 18px; margin-bottom: 16px;">Prose analysis completed</h2>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Primary match:</strong> ${analysis.primary.author}</p>
-            <p><strong>Secondary match:</strong> ${analysis.secondary.author}</p>
-            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;" />
-            <blockquote style="font-style: italic; border-left: 3px solid #b84c2e; padding-left: 16px; margin: 16px 0; color: #444; line-height: 1.8;">
-              ${escapedText}
-            </blockquote>
-          </div>
-        `,
-      });
-
       console.log(`Prose analysis sent to ${email} — matched ${analysis.primary.author}`);
     } catch (err) {
       console.error(`Prose analysis failed for ${email}:`, err);
     }
   });
 
-  // Return immediately — user sees "check your inbox" right away
   return NextResponse.json({ data: { ok: true } });
 }

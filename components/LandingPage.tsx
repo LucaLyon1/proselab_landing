@@ -1,31 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, useState } from 'react'
 import { ExitIntentModal } from './ExitIntentModal'
+import { HeroAnimation } from './HeroAnimation'
 
 declare global {
   interface Window {
-    datafast?: { track: (event: string, props?: Record<string, unknown>) => void }
+    datafast?: (event: string, props?: Record<string, unknown>) => void
     umami?: { track: (event: string, props?: Record<string, unknown>) => void }
   }
 }
-
-
-const CONSTRAINT_PROMPT =
-  "Rewrite this passage so that the character's loneliness is conveyed entirely through concrete, physical detail — what the body does, what the senses register, what the world looks like. Remove every abstraction: no 'sense,' no 'feeling,' no naming of emotions. Let the reader feel the isolation only through tangible things."
-
-const MANUSCRIPT_NOTES = {
-  voice:
-    "Woolf's interior voice: \"perpetual\" suggests something ongoing, inescapable — not a passing mood but a state of being. The word choice bleeds personality.",
-  imagery:
-    'Concrete anchor: the taxi cabs ground the abstract feeling. We see what she sees. The mundane detail makes the loneliness tangible.',
-  structure:
-    'Repetition creates rhythm: "out, out, far out" — each word pushes further. The syntax mirrors the feeling of distance, of being cast away.',
-  pacing:
-    '"Alone." A single word. The sentence stops. The pause lets the weight of isolation land before the next thought.',
-} as const
 
 const AUTHOR_QUOTES: Record<string, { quote: string; work: string }> = {
   'Virginia Woolf': {
@@ -46,11 +31,24 @@ const AUTHOR_QUOTES: Record<string, { quote: string; work: string }> = {
   },
 }
 
-function AuthorCard({ name, note }: { name: string; note: string }) {
+function AuthorCard({
+  name,
+  note,
+  onClick,
+}: {
+  name: string
+  note: string
+  onClick?: () => void
+}) {
   const quote = AUTHOR_QUOTES[name]
 
   return (
-    <div className="landing-author-item">
+    <button
+      type="button"
+      className="landing-author-item"
+      onClick={onClick}
+      aria-label={`Join the waitlist to read ${name} passages`}
+    >
       <p className="landing-author-name">{name}</p>
       <p className="landing-author-note">{note}</p>
       {quote && (
@@ -59,47 +57,12 @@ function AuthorCard({ name, note }: { name: string; note: string }) {
           <p className="landing-author-quote-source">— {quote.work}</p>
         </div>
       )}
-    </div>
-  )
-}
-
-function CraftTooltip({ note, children }: { note: string; children: React.ReactNode }) {
-  const [show, setShow] = useState(false)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const ref = useRef<HTMLSpanElement>(null)
-
-  const handleMouseEnter = () => setShow(true)
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    setPos({ x: rect.left + rect.width / 2, y: rect.top })
-  }
-  const handleMouseLeave = () => setShow(false)
-
-  return (
-    <>
-      <span ref={ref} onMouseEnter={handleMouseEnter} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-        {children}
-      </span>
-      {show &&
-        typeof document !== 'undefined' &&
-        createPortal(
-          <div
-            className="landing-ms-tooltip"
-            style={{ left: pos.x, top: pos.y - 8, transform: 'translate(-50%, -100%)' }}
-          >
-            <span className="landing-ms-tooltip-text">{note}</span>
-            <span className="landing-ms-tooltip-arrow" />
-          </div>,
-          document.body
-        )}
-    </>
+    </button>
   )
 }
 
 export function LandingPage() {
   const [discountOpen, setDiscountOpen] = useState(false)
-  const [userText, setUserText] = useState('')
 
 useEffect(() => {
     if (sessionStorage.getItem('exit-modal-seen')) return
@@ -129,104 +92,51 @@ useEffect(() => {
       {/* HERO */}
       <section className="landing-hero">
         <div className="landing-hero-left">
-          <p className="landing-hero-eyebrow">A writing practice tool</p>
           <h1 className="landing-hero-title">
-            Train Your
+            Write Like
             <br />
-            <em>Voice.</em>
-            <br />
-            Every Day.
+            <em>The Greats.</em>
           </h1>
           <p className="landing-hero-subtitle">
-            Study passages from Eliot, Plath, Tolstoy, Woolf, Morrison, Hemingway, and more with
-            guided craft analysis. Write your own version, get feedback, and
-            track your progress.
+            Study passages from the Classics, and try your hand at writing your own versions from prompts.
           </p>
           <div className="landing-hero-actions">
             <button
               className="landing-btn-primary"
               id="start"
               onClick={() => {
-                window.datafast?.track('explore_click', { location: 'hero' })
-                window.umami?.track('explore_click', { location: 'hero' })
+                window.datafast?.('popup_click', { location: 'hero' })
+                window.umami?.track('popup_click', { location: 'hero' })
                 setDiscountOpen(true)
               }}
             >
-              Explore passages
+              Get started
             </button>
+            <Link
+              href="/demo"
+              className="landing-btn-outline"
+              onClick={() => {
+                window.datafast?.('demo_click', { location: 'hero-secondary' })
+                window.umami?.track('demo_click', { location: 'hero-secondary' })
+              }}
+            >
+              Try the demo
+            </Link>
           </div>
         </div>
         <div className="landing-hero-right">
-          <div className="landing-manuscript-mock">
-            <p className="landing-ms-label">Extract — Woolf</p>
-            <p className="landing-ms-phase-header" style={{ marginBottom: '0.5rem' }}>
-              Craft highlights — segments tagged by category, hover to read notes
-            </p>
-            <p className="landing-ms-passage">
-              &quot;She had a{' '}
-              <CraftTooltip note={MANUSCRIPT_NOTES.voice}>
-                <span className="landing-ms-hl landing-ms-hl-voice">perpetual sense</span>
-              </CraftTooltip>
-              , as she{' '}
-              <CraftTooltip note={MANUSCRIPT_NOTES.imagery}>
-                <span className="landing-ms-hl landing-ms-hl-imagery">watched the taxi cabs</span>
-              </CraftTooltip>
-              , of being{' '}
-              <CraftTooltip note={MANUSCRIPT_NOTES.structure}>
-                <span className="landing-ms-hl landing-ms-hl-structure">out, out, far out</span>
-              </CraftTooltip>
-              {' '}to sea and{' '}
-              <CraftTooltip note={MANUSCRIPT_NOTES.pacing}>
-                <span className="landing-ms-hl landing-ms-hl-pacing">alone</span>
-              </CraftTooltip>
-              ...&quot;
-            </p>
-            <div className="landing-ms-legend">
-              <span className="landing-ms-legend-item">
-                <span className="landing-ms-legend-dot landing-ms-legend-structure" />
-                Structure
-              </span>
-              <span className="landing-ms-legend-item">
-                <span className="landing-ms-legend-dot landing-ms-legend-voice" />
-                Voice
-              </span>
-              <span className="landing-ms-legend-item">
-                <span className="landing-ms-legend-dot landing-ms-legend-imagery" />
-                Imagery
-              </span>
-              <span className="landing-ms-legend-item">
-                <span className="landing-ms-legend-dot landing-ms-legend-pacing" />
-                Pacing
-              </span>
-            </div>
-            <div className="landing-write-section">
-              <p className="landing-ms-phase-header">
-                Try it — write your own version
-              </p>
-              <div className="landing-constraint-prompt">
-                <span className="landing-constraint-label">Prompt</span>
-                <p>{CONSTRAINT_PROMPT}</p>
-              </div>
-              <textarea
-                className="landing-user-textarea"
-                placeholder="Inspired by Woolf's passage, write your own version here..."
-                value={userText}
-                onChange={(e) => setUserText(e.target.value)}
-                rows={4}
-              />
-              <button
-                className={`landing-btn-analyze${userText.trim() ? '' : ' landing-btn-analyze-disabled'}`}
-                onClick={() => {
-                  if (!userText.trim()) return
-                  window.datafast?.track('analyze_click', { text_length: userText.trim().length })
-                  window.umami?.track('analyze_click', { text_length: userText.trim().length })
-                  setDiscountOpen(true)
-                }}
-              >
-                Analyze my writing
-              </button>
-            </div>
-          </div>
+          <HeroAnimation />
+          <Link
+            href="/demo"
+            className="landing-hero-cta"
+            onClick={() => {
+              window.datafast?.('demo_click', { location: 'hero' })
+              window.umami?.track('demo_click', { location: 'hero' })
+            }}
+          >
+            <span className="landing-hero-cta-label">Want to try it yourself?</span>
+            <span className="landing-hero-cta-arrow">Try the demo →</span>
+          </Link>
         </div>
       </section>
 
@@ -278,11 +188,11 @@ useEffect(() => {
             </div>
             <span className="landing-phase-num">03</span>
             <h3 className="landing-phase-name">
-              Get <em>Feedback</em> &amp; Save
+              <em>Feedback</em>, Share &amp; Save
             </h3>
             <p className="landing-phase-desc">
               AI feedback on your writing. Save completions to your profile. Track
-              your activity with a heatmap. Build a daily practice.
+              your activity with a heatmap. Build a daily practice. Share your efforts with other users if you wish.
             </p>
           </div>
         </div>
@@ -299,7 +209,7 @@ useEffect(() => {
           style={{
             fontFamily: 'var(--landing-mono)',
             fontSize: '0.98rem',
-            color: 'rgba(245,240,232,0.7)',
+            color: 'var(--landing-muted)',
             maxWidth: '55ch',
             lineHeight: 1.8,
           }}
@@ -310,75 +220,43 @@ useEffect(() => {
           something different.
         </p>
         <div className="landing-authors-list">
-          <AuthorCard name="Virginia Woolf" note="Interiority" />
-          <AuthorCard name="Toni Morrison" note="Weight &amp; Memory" />
-          <AuthorCard name="Ernest Hemingway" note="Dialogue" />
-          <AuthorCard name="Raymond Carver" note="Minimalism" />
+          <AuthorCard
+            name="Virginia Woolf"
+            note="Interiority"
+            onClick={() => {
+              window.datafast?.('popup_click', { location: 'passages-card', author: 'Virginia Woolf' })
+              window.umami?.track('popup_click', { location: 'passages-card', author: 'Virginia Woolf' })
+              setDiscountOpen(true)
+            }}
+          />
+          <AuthorCard
+            name="Toni Morrison"
+            note="Weight &amp; Memory"
+            onClick={() => {
+              window.datafast?.('popup_click', { location: 'passages-card', author: 'Toni Morrison' })
+              window.umami?.track('popup_click', { location: 'passages-card', author: 'Toni Morrison' })
+              setDiscountOpen(true)
+            }}
+          />
+          <AuthorCard
+            name="Ernest Hemingway"
+            note="Dialogue"
+            onClick={() => {
+              window.datafast?.('popup_click', { location: 'passages-card', author: 'Ernest Hemingway' })
+              window.umami?.track('popup_click', { location: 'passages-card', author: 'Ernest Hemingway' })
+              setDiscountOpen(true)
+            }}
+          />
+          <AuthorCard
+            name="Raymond Carver"
+            note="Minimalism"
+            onClick={() => {
+              window.datafast?.('popup_click', { location: 'passages-card', author: 'Raymond Carver' })
+              window.umami?.track('popup_click', { location: 'passages-card', author: 'Raymond Carver' })
+              setDiscountOpen(true)
+            }}
+          />
           <span className="landing-author-more">and more</span>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="landing-how">
-        <div className="landing-section-header">
-          <span className="landing-section-num">03 /</span>
-          <h2 className="landing-section-title">
-            How It
-            <br />
-            Works
-          </h2>
-        </div>
-        <div className="landing-steps">
-          <div className="landing-step">
-            <span className="landing-step-num">01</span>
-            <div className="landing-step-body">
-              <p className="landing-step-title">Browse &amp; pick a passage</p>
-              <p className="landing-step-desc">
-                Filter by category or tag. Each passage shows author, work, and
-                context. Pick one that speaks to you.
-              </p>
-            </div>
-          </div>
-          <div className="landing-step">
-            <span className="landing-step-num">02</span>
-            <div className="landing-step-body">
-              <p className="landing-step-title">Study the AI analysis</p>
-              <p className="landing-step-desc">
-                Claude annotates structure, voice, imagery, and pacing. Hover
-                highlights to see craft notes. Understand before you write.
-              </p>
-            </div>
-          </div>
-          <div className="landing-step">
-            <span className="landing-step-num">03</span>
-            <div className="landing-step-body">
-              <p className="landing-step-title">Write your version</p>
-              <p className="landing-step-desc">
-                Follow the constraint prompt. Optionally hear your text read
-                aloud with ElevenLabs.
-              </p>
-            </div>
-          </div>
-          <div className="landing-step">
-            <span className="landing-step-num">04</span>
-            <div className="landing-step-body">
-              <p className="landing-step-title">Get AI feedback</p>
-              <p className="landing-step-desc">
-                Submit your writing for analysis. See what works and what to
-                improve.
-              </p>
-            </div>
-          </div>
-          <div className="landing-step">
-            <span className="landing-step-num">05</span>
-            <div className="landing-step-body">
-              <p className="landing-step-title">Save &amp; track progress</p>
-              <p className="landing-step-desc">
-                Sign up to save completions to your profile. View your activity
-                heatmap. Build a daily practice.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -399,14 +277,18 @@ useEffect(() => {
           <button
             className="landing-btn-primary"
             onClick={() => {
-              window.datafast?.track('explore_click', { location: 'cta' })
-              window.umami?.track('explore_click', { location: 'cta' })
+              window.datafast?.('popup_click', { location: 'cta' })
+              window.umami?.track('popup_click', { location: 'cta' })
               setDiscountOpen(true)
             }}
           >
             Explore passages →
           </button>
-          <button className="landing-btn-outline" onClick={() => setDiscountOpen(true)}>
+          <button className="landing-btn-outline" onClick={() => {
+              window.datafast?.('popup_click', { location: 'cta-waitlist' })
+              window.umami?.track('popup_click', { location: 'cta-waitlist' })
+              setDiscountOpen(true)
+            }}>
             Join waitlist →
           </button>
         </div>
@@ -415,13 +297,48 @@ useEffect(() => {
         </p>
       </section>
 
-      <div data-supascribe-embed-id="986078388068" data-supascribe-popup=""></div>
-
       <ExitIntentModal open={discountOpen} onClose={() => setDiscountOpen(false)} />
 
       {/* FOOTER */}
       <footer className="landing-footer">
         <div className="landing-footer-top">
+          <div className="landing-footer-socials">
+            <a
+              href="https://tiktok.com/@proselab.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+              className="landing-footer-social"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z" />
+              </svg>
+            </a>
+            <a
+              href="https://instagram.com/proselab.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="landing-footer-social"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </a>
+            <a
+              href="https://proselab.substack.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Substack"
+              className="landing-footer-social"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+              </svg>
+            </a>
+          </div>
           <span className="landing-footer-logo">ProseLab</span>
           <span className="landing-footer-tagline">Train Your Voice. Every Day.</span>
         </div>
@@ -438,25 +355,6 @@ useEffect(() => {
           <Link href="/contact" className="landing-footer-mono">
             Contact
           </Link>
-          <a href="mailto:contact@proselab.io" className="landing-footer-mono">
-            Email ↗
-          </a>
-          <a
-            href="https://x.com/proselab_io"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="landing-footer-mono"
-          >
-            X ↗
-          </a>
-          <a
-            href="https://proselab.substack.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="landing-footer-mono"
-          >
-            Substack ↗
-          </a>
         </div>
       </footer>
     </div>
