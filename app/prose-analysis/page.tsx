@@ -19,6 +19,7 @@ const PROMPTS = [
 export default function ProseAnalysisPage() {
   const [promptIndex, setPromptIndex] = useState(0)
   const [userText, setUserText] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
@@ -26,12 +27,17 @@ export default function ProseAnalysisPage() {
     setPromptIndex((i) => (i + 1) % PROMPTS.length)
   }, [])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!userText.trim() || !email.trim()) return
-    setStatus('loading')
+  const handleAnalyze = () => {
+    if (!userText.trim()) return
     window.datafast?.('prose_analysis_click', { text_length: userText.trim().length })
     window.umami?.track('prose_analysis_click', { text_length: userText.trim().length })
+    setModalOpen(true)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim()) return
+    setStatus('loading')
 
     try {
       const res = await fetch('/api/prose-analysis', {
@@ -100,39 +106,12 @@ export default function ProseAnalysisPage() {
           )}
         </div>
 
-        {status === 'success' ? (
-          <div className="exit-modal-success">
-            <p className="exit-modal-eyebrow">Sent</p>
-            <h2 className="exit-modal-title">Check your inbox.</h2>
-            <p className="exit-modal-sub">
-              We&apos;re analyzing your writing now. Your prose analysis will arrive at{' '}
-              <strong>{email}</strong> shortly.
-            </p>
-          </div>
-        ) : (
-          <form className="exit-modal-form" onSubmit={handleSubmit}>
-            <input
-              id="analysis-email"
-              name="email"
-              type="email"
-              required
-              placeholder="your@email.com"
-              className="exit-modal-input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button
-              type="submit"
-              className={`pa-btn-analyze${userText.trim().length >= 100 ? '' : ' pa-btn-analyze-disabled'}`}
-              disabled={status === 'loading' || userText.trim().length < 100}
-            >
-              {status === 'loading' ? 'Sending...' : 'Analyze my writing'}
-            </button>
-            {status === 'error' && (
-              <p className="exit-modal-error">Something went wrong. Please try again.</p>
-            )}
-          </form>
-        )}
+        <button
+          className={`pa-btn-analyze${userText.trim().length >= 100 ? '' : ' pa-btn-analyze-disabled'}`}
+          onClick={handleAnalyze}
+        >
+          Analyze my writing
+        </button>
 
         <p className="pa-footer-note">
           Free. No account required. We&apos;ll email your results.
@@ -142,6 +121,63 @@ export default function ProseAnalysisPage() {
       <footer className="pa-footer">
         <p className="pa-footer-brought">Brought to you by <Link href="/" className="pa-footer-brought-link">ProseLab</Link></p>
       </footer>
+
+      {/* Email modal */}
+      {modalOpen && (
+        <div className="exit-modal-backdrop" onClick={() => setModalOpen(false)}>
+          <div className="exit-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="exit-modal-close" onClick={() => setModalOpen(false)} aria-label="Close">
+              ✕ close
+            </button>
+
+            {status === 'success' ? (
+              <div className="exit-modal-success">
+                <p className="exit-modal-eyebrow">Sent</p>
+                <h2 className="exit-modal-title">Check your inbox.</h2>
+                <p className="exit-modal-sub">
+                  We&apos;re analyzing your writing now. Your prose analysis will arrive at{' '}
+                  <strong>{email}</strong> shortly.
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="exit-modal-eyebrow">Almost there</p>
+                <h2 className="exit-modal-title">
+                  Where should we
+                  <br />
+                  send your <em>results</em>?
+                </h2>
+                <p className="exit-modal-sub">
+                  We&apos;ll analyze your writing against 20 renowned authors and email you a
+                  breakdown of who you write like — and why.
+                </p>
+                <form className="exit-modal-form" onSubmit={handleSubmit}>
+                  <input
+                    id="analysis-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="your@email.com"
+                    className="exit-modal-input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="exit-modal-submit"
+                    disabled={status === 'loading'}
+                  >
+                    {status === 'loading' ? 'Sending...' : 'Send my analysis →'}
+                  </button>
+                </form>
+                {status === 'error' && (
+                  <p className="exit-modal-error">Something went wrong. Please try again.</p>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

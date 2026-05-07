@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ExitIntentModal } from '@/components/ExitIntentModal'
 
 declare global {
   interface Window {
@@ -65,19 +64,41 @@ function CraftTooltip({ note, children }: { note: string; children: React.ReactN
 export default function DemoPage() {
   const [userText, setUserText] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
   const ready = userText.trim().length >= 60
-
-  // Auto-open the waitlist overlay on mount — analysis is offline right now.
-  useEffect(() => {
-    setModalOpen(true)
-  }, [])
 
   const handleAnalyze = () => {
     if (!ready) return
     window.datafast?.('demo_analyze_click', { text_length: userText.trim().length })
     window.umami?.track('demo_analyze_click', { text_length: userText.trim().length })
     setModalOpen(true)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim()) return
+    setStatus('loading')
+
+    try {
+      const res = await fetch('/api/demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, text: userText }),
+      })
+      const json = await res.json()
+
+      if (json.error) {
+        setStatus('error')
+      } else {
+        window.datafast?.('demo_submit', { email_provided: true })
+        window.umami?.track('demo_submit', { email_provided: true })
+        setStatus('success')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -197,22 +218,62 @@ export default function DemoPage() {
         </p>
       </footer>
 
-      <ExitIntentModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        variant="dim"
-        source="demo"
-        dismissible={false}
-        eyebrow="Heads up"
-        title={
-          <>
-            Analysis is
-            <br />
-            <em>offline</em> right now
-          </>
-        }
-        sub="We're rebuilding the scoring pipeline. Drop your email — we'll let you know the moment it's back, and lock in your spot on the waitlist for full ProseLab access."
-      />
+      {/* Email modal */}
+      {modalOpen && (
+        <div className="exit-modal-backdrop" onClick={() => setModalOpen(false)}>
+          <div className="exit-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="exit-modal-close" onClick={() => setModalOpen(false)} aria-label="Close">
+              ✕ close
+            </button>
+
+            {status === 'success' ? (
+              <div className="exit-modal-success">
+                <p className="exit-modal-eyebrow">Sent</p>
+                <h2 className="exit-modal-title">Check your inbox.</h2>
+                <p className="exit-modal-sub">
+                  We&apos;re scoring your rewrite now. Your scorecard will arrive at{' '}
+                  <strong>{email}</strong> shortly.
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="exit-modal-eyebrow">Almost there</p>
+                <h2 className="exit-modal-title">
+                  Where should we
+                  <br />
+                  send your <em>scorecard</em>?
+                </h2>
+                <p className="exit-modal-sub">
+                  We&apos;ll score your rewrite across four craft categories and email you a
+                  detailed breakdown.
+                </p>
+                <form className="exit-modal-form" onSubmit={handleSubmit}>
+                  <input
+                    id="demo-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="your@email.com"
+                    className="exit-modal-input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="exit-modal-submit"
+                    disabled={status === 'loading'}
+                  >
+                    {status === 'loading' ? 'Sending...' : 'Send my scorecard →'}
+                  </button>
+                </form>
+                {status === 'error' && (
+                  <p className="exit-modal-error">Something went wrong. Please try again.</p>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
