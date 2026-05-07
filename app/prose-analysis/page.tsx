@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import { ExitIntentModal } from '@/components/ExitIntentModal'
 
 declare global {
   interface Window {
@@ -20,11 +21,14 @@ export default function ProseAnalysisPage() {
   const [promptIndex, setPromptIndex] = useState(0)
   const [userText, setUserText] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
   const cyclePrompt = useCallback(() => {
     setPromptIndex((i) => (i + 1) % PROMPTS.length)
+  }, [])
+
+  // Auto-open the waitlist overlay on mount — analysis is offline right now.
+  useEffect(() => {
+    setModalOpen(true)
   }, [])
 
   const handleAnalyze = () => {
@@ -32,32 +36,6 @@ export default function ProseAnalysisPage() {
     window.datafast?.('prose_analysis_click', { text_length: userText.trim().length })
     window.umami?.track('prose_analysis_click', { text_length: userText.trim().length })
     setModalOpen(true)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setStatus('loading')
-
-    try {
-      const res = await fetch('/api/prose-analysis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, text: userText, prompt: PROMPTS[promptIndex] }),
-      })
-      const json = await res.json()
-
-      if (json.error) {
-        setStatus('error')
-      } else {
-        window.datafast?.('prose_analysis_submit', { source: 'prose_analysis' })
-        window.umami?.track('prose_analysis_submit', { source: 'prose_analysis' })
-        window.datafast?.('waitlist_signup', { source: 'prose_analysis' })
-        window.umami?.track('waitlist_signup', { source: 'prose_analysis' })
-        setStatus('success')
-      }
-    } catch {
-      setStatus('error')
-    }
   }
 
   return (
@@ -124,63 +102,22 @@ export default function ProseAnalysisPage() {
         <p className="pa-footer-brought">Brought to you by <Link href="/" className="pa-footer-brought-link">ProseLab</Link></p>
       </footer>
 
-      {/* Email Modal */}
-      {modalOpen && (
-        <div className="exit-modal-backdrop" onClick={() => setModalOpen(false)}>
-          <div className="exit-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="exit-modal-close" onClick={() => setModalOpen(false)} aria-label="Close">
-              ✕ close
-            </button>
-
-            {status === 'success' ? (
-              <div className="exit-modal-success">
-                <p className="exit-modal-eyebrow">Sent</p>
-                <h2 className="exit-modal-title">Check your inbox.</h2>
-                <p className="exit-modal-sub">
-                  We&apos;re analyzing your writing now. Your prose analysis will arrive at{' '}
-                  <strong>{email}</strong> shortly.
-                </p>
-              </div>
-            ) : (
-              <>
-                <p className="exit-modal-eyebrow">Almost there</p>
-                <h2 className="exit-modal-title">
-                  Where should we
-                  <br />
-                  send your <em>results</em>?
-                </h2>
-                <p className="exit-modal-sub">
-                  We&apos;ll analyze your writing against 20 renowned authors and email you a
-                  breakdown of who you write like — and why.
-                </p>
-                <form className="exit-modal-form" onSubmit={handleSubmit}>
-                  <input
-                    id="analysis-email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="your@email.com"
-                    className="exit-modal-input"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <button
-                    type="submit"
-                    className="exit-modal-submit"
-                    disabled={status === 'loading'}
-                  >
-                    {status === 'loading' ? 'Sending...' : 'Send my analysis →'}
-                  </button>
-                </form>
-                <p className="exit-modal-consent">By submitting, you agree to receive emails from ProseLab. Unsubscribe anytime.</p>
-                {status === 'error' && (
-                  <p className="exit-modal-error">Something went wrong. Please try again.</p>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      <ExitIntentModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        variant="dim"
+        source="prose_analysis"
+        dismissible={false}
+        eyebrow="Heads up"
+        title={
+          <>
+            Analysis is
+            <br />
+            <em>offline</em> right now
+          </>
+        }
+        sub="We're rebuilding the analyzer. Drop your email — we'll let you know the moment it's back, and lock in your spot on the waitlist for full ProseLab access."
+      />
     </div>
   )
 }

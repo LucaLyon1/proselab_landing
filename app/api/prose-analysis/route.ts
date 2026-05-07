@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { Resend } from 'resend';
 import { NextResponse, after } from 'next/server';
-import { emailLayout } from '@/lib/email-layout';
+
+const PROSE_ANALYSIS_TRANSACTIONAL_ID = 'cmoo2ssfg15vr0i1834fxs15g';
 
 const AUTHORS = [
   { name: 'Virginia Woolf', traits: 'Stream of consciousness, interior monologue, fluid sentence structure, lyrical prose, deep psychological interiority' },
@@ -52,34 +52,7 @@ Rules:
 - Keep traits to short phrases (2-5 words each)
 - Return ONLY the JSON object, no markdown, no code fences`;
 
-function buildResultsEmail(analysis: { primary: { author: string; traits: string[] }; secondary: { author: string; traits: string[] }; narrative: string }) {
-  const primaryTraits = analysis.primary.traits.map(t => `<li style="padding: 4px 0; color: #444;">${t}</li>`).join('');
-  const secondaryTraits = analysis.secondary.traits.map(t => `<li style="padding: 4px 0; color: #444;">${t}</li>`).join('');
-
-  return emailLayout(`
-    <p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #b84c2e; margin: 0 0 24px;">Your Prose Analysis</p>
-
-    <h1 style="font-size: 28px; font-weight: normal; margin: 0 0 8px;">You write like <em>${analysis.primary.author}</em></h1>
-    <p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #888; margin: 0 0 32px;">with traces of ${analysis.secondary.author}</p>
-
-    <p style="font-size: 16px; line-height: 1.8; color: #333; margin: 0 0 32px;">${analysis.narrative}</p>
-
-    <hr style="border: none; border-top: 1px solid #e0d8cf; margin: 32px 0;" />
-
-    <h2 style="font-size: 16px; font-weight: normal; color: #b84c2e; margin: 0 0 12px;">Primary match &mdash; ${analysis.primary.author}</h2>
-    <ul style="list-style: none; padding: 0; font-size: 15px; line-height: 1.6; margin: 0 0 28px;">
-      ${primaryTraits}
-    </ul>
-
-    <h2 style="font-size: 16px; font-weight: normal; color: #b84c2e; margin: 0 0 12px;">Secondary match &mdash; ${analysis.secondary.author}</h2>
-    <ul style="list-style: none; padding: 0; font-size: 15px; line-height: 1.6; margin: 0 0 16px;">
-      ${secondaryTraits}
-    </ul>
-  `);
-}
-
 export async function POST(request: Request) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
   const { email, text, prompt } = await request.json();
 
   if (!email) {
@@ -90,17 +63,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Writing sample is required' }, { status: 400 });
   }
 
-  // Add contact to the waitlist segment (fast — do this before returning)
-  const { error: contactError } = await resend.contacts.create({
-    email,
-    unsubscribed: false,
-    segments: [{ id: process.env.RESEND_SEGMENT_ID! }],
+  // Add contact to Loops mailing list, tagged with the lead magnet they used
+  const loopsRes = await fetch('https://app.loops.so/api/v1/contacts/update', {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${process.env.LOOPS_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email,
+      userGroup: 'Prose Analysis',
+      source: 'prose-analysis',
+      subscribed: true,
+    }),
   });
 
-  if (contactError) {
-    if (!contactError.message?.includes('already exists')) {
-      return NextResponse.json({ error: 'Failed to submit' }, { status: 400 });
-    }
+  if (!loopsRes.ok) {
+    return NextResponse.json({ error: 'Failed to submit' }, { status: 400 });
   }
 
   // Run Claude analysis + email delivery in the background after response is sent
@@ -127,32 +106,26 @@ export async function POST(request: Request) {
 
       const analysis = JSON.parse(content.text);
 
-      // Send results email to user
-      await resend.emails.send({
-        from: 'ProseLab <hello@email.proselab.io>',
-        to: [email],
-        subject: `You write like ${analysis.primary.author}`,
-        html: buildResultsEmail(analysis),
-      });
+      const primaryTraits = analysis.primary.traits.map((t: string) => `• ${t}`).join('\n');
+      const secondaryTraits = analysis.secondary.traits.map((t: string) => `• ${t}`).join('\n');
 
-      // Admin notification
-      const escapedText = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      await resend.emails.send({
-        from: 'ProseLab <hello@email.proselab.io>',
-        to: ['contact@proselab.io'],
-        subject: `Prose analysis: ${email} → ${analysis.primary.author}`,
-        html: `
-          <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1a1a1a;">
-            <h2 style="font-size: 18px; margin-bottom: 16px;">Prose analysis completed</h2>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Primary match:</strong> ${analysis.primary.author}</p>
-            <p><strong>Secondary match:</strong> ${analysis.secondary.author}</p>
-            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;" />
-            <blockquote style="font-style: italic; border-left: 3px solid #b84c2e; padding-left: 16px; margin: 16px 0; color: #444; line-height: 1.8;">
-              ${escapedText}
-            </blockquote>
-          </div>
-        `,
+      await fetch('https://app.loops.so/api/v1/transactional', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${process.env.LOOPS_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          transactionalId: PROSE_ANALYSIS_TRANSACTIONAL_ID,
+          email,
+          dataVariables: {
+            primaryAuthor: analysis.primary.author,
+            secondaryAuthor: analysis.secondary.author,
+            narrative: analysis.narrative,
+            primaryTraits,
+            secondaryTraits,
+          },
+        }),
       });
 
       console.log(`Prose analysis sent to ${email} — matched ${analysis.primary.author}`);

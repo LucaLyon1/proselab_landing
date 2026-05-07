@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 declare global {
   interface Window {
@@ -12,12 +13,39 @@ declare global {
 interface ExitIntentModalProps {
   open: boolean
   onClose: () => void
+  /** Override copy. Defaults match the homepage exit-intent flow. */
+  eyebrow?: string
+  title?: React.ReactNode
+  sub?: React.ReactNode
+  /** "default" = solid backdrop. "blur" = blurred page-behind look. */
+  variant?: 'default' | 'dim'
+  /** Tag waitlist signup events. Defaults to "homepage". */
+  source?: string
+  /** Hide the close button (e.g. when dismissal isn't desired). */
+  dismissible?: boolean
 }
 
 const LOOPS_FORM_ENDPOINT =
   'https://app.loops.so/api/newsletter-form/cmnx3ea9a0afl0iz5xwexankm'
 
-export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
+const DEFAULT_TITLE = (
+  <>
+    Join the
+    <br />
+    <em>waitlist</em>
+  </>
+)
+
+export function ExitIntentModal({
+  open,
+  onClose,
+  eyebrow = 'Coming soon',
+  title = DEFAULT_TITLE,
+  sub = "We're letting people in one by one. Join the waitlist and we'll reach out when it's your turn.",
+  variant = 'default',
+  source = 'homepage',
+  dismissible = true,
+}: ExitIntentModalProps) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
@@ -54,8 +82,8 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
         return
       }
 
-      window.datafast?.('waitlist_signup', { source: 'homepage' })
-      window.umami?.track('waitlist_signup', { source: 'homepage' })
+      window.datafast?.('waitlist_signup', { source })
+      window.umami?.track('waitlist_signup', { source })
       setStatus('success')
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Something went wrong.'
@@ -65,14 +93,37 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
     }
   }
 
-  if (!open) return null
+  // Track client mount so we only portal once `document` exists.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  return (
-    <div className="exit-modal-backdrop" onClick={onClose}>
+  // Lock page scroll while the modal is open.
+  useEffect(() => {
+    if (!open) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [open])
+
+  if (!open || !mounted) return null
+
+  const backdropClass =
+    variant === 'dim'
+      ? 'exit-modal-backdrop exit-modal-backdrop-dim'
+      : 'exit-modal-backdrop'
+
+  const overlay = (
+    <div className={backdropClass} onClick={dismissible ? onClose : undefined}>
       <div className="exit-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="exit-modal-close" onClick={onClose} aria-label="Close">
-          ✕ close
-        </button>
+        {dismissible && (
+          <button className="exit-modal-close" onClick={onClose} aria-label="Close">
+            ✕ close
+          </button>
+        )}
 
         {status === 'success' ? (
           <div className="exit-modal-success">
@@ -84,15 +135,9 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
           </div>
         ) : (
           <>
-            <p className="exit-modal-eyebrow">Coming soon</p>
-            <h2 className="exit-modal-title">
-              Join the
-              <br />
-              <em>waitlist</em>
-            </h2>
-            <p className="exit-modal-sub">
-              We&apos;re letting people in one by one. Join the waitlist and we&apos;ll reach out when it&apos;s your turn.
-            </p>
+            <p className="exit-modal-eyebrow">{eyebrow}</p>
+            <h2 className="exit-modal-title">{title}</h2>
+            <p className="exit-modal-sub">{sub}</p>
 
             <form className="exit-modal-form" onSubmit={handleSubmit}>
               <input
@@ -120,4 +165,6 @@ export function ExitIntentModal({ open, onClose }: ExitIntentModalProps) {
       </div>
     </div>
   )
+
+  return createPortal(overlay, document.body)
 }

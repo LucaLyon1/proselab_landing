@@ -5,6 +5,34 @@ import { useState } from 'react'
 
 type BillingPeriod = 'yearly' | 'monthly'
 
+interface FaqItem {
+  q: string
+  a: string
+}
+
+const FAQS: FaqItem[] = [
+  {
+    q: 'What is "pre-release pricing"?',
+    a: 'ProseLab is in pre-release. Sign up now to lock in early-bird pricing — 20% below the launch rate — for as long as you stay subscribed.',
+  },
+  {
+    q: 'Will my price go up after launch?',
+    a: 'No. As long as you remain subscribed without a gap, your rate stays at the early-bird price. If you cancel and resubscribe later, you\'ll pay the then-current launch price.',
+  },
+  {
+    q: 'Can I cancel anytime?',
+    a: 'Yes — cancel in one click from your account. You keep access through the end of the current billing period.',
+  },
+  {
+    q: 'Can I switch between monthly and yearly?',
+    a: 'Yes. You can change your billing period from your account settings whenever you like.',
+  },
+  {
+    q: 'What does ProseLab actually do?',
+    a: 'ProseLab is a craft tool for prose. You rewrite passages from a curated extract library, then get a side-by-side comparison and detailed AI feedback — strong points, weak points, and what to try next — plus a follow-up chat about each rewrite.',
+  },
+]
+
 interface Plan {
   id: string
   label: string
@@ -13,26 +41,13 @@ interface Plan {
   billingNote?: { yearly: string; monthly: string }
   features: string[]
   cta: string
-  isPopular?: boolean
   /** Plan slug passed through to the app's signup flow. */
-  signupPlan: 'free' | 'pro'
+  signupPlan: 'pro'
 }
 
 const APP_SIGNUP_URL = 'https://app.proselab.io/signup'
 
 const PLANS: Plan[] = [
-  {
-    id: 'free',
-    label: 'Free',
-    price: { yearly: 'Free', monthly: 'Free' },
-    features: [
-      '1 session per day',
-      'Full rewrite + side-by-side comparison',
-      'Browse the full extract library',
-    ],
-    cta: 'Get started',
-    signupPlan: 'free',
-  },
   {
     id: 'pro',
     label: 'Pro',
@@ -54,14 +69,12 @@ const PLANS: Plan[] = [
       'Cancel anytime',
     ],
     cta: 'Get Pro',
-    isPopular: true,
     signupPlan: 'pro',
   },
 ]
 
 function buildSignupUrl(plan: Plan, billing: BillingPeriod): string {
-  const params = new URLSearchParams({ plan: plan.signupPlan })
-  if (plan.signupPlan === 'pro') params.set('billing', billing)
+  const params = new URLSearchParams({ plan: plan.signupPlan, billing })
   return `${APP_SIGNUP_URL}?${params.toString()}`
 }
 
@@ -71,11 +84,11 @@ export default function PricingPrereleasePage() {
   const handleCtaClick = (plan: Plan) => {
     window.datafast?.('pricing_prerelease_click', {
       plan: plan.id,
-      billing: plan.signupPlan === 'pro' ? billing : 'n/a',
+      billing,
     })
     window.umami?.track('pricing_prerelease_click', {
       plan: plan.id,
-      billing: plan.signupPlan === 'pro' ? billing : 'n/a',
+      billing,
     })
     window.location.assign(buildSignupUrl(plan, billing))
   }
@@ -89,9 +102,18 @@ export default function PricingPrereleasePage() {
 
   return (
     <div className="pp-root">
+      <div className="pp-banner" role="status" aria-live="polite">
+        <span className="pp-banner-label">Pre-release pricing</span>
+        <span className="pp-banner-sep" aria-hidden>
+          ·
+        </span>
+        <span className="pp-banner-text">
+          code <code className="pp-banner-code">PRERELEASE2026</code> already
+          applied at checkout
+        </span>
+      </div>
       <div className="pp-container">
         <header className="pp-header">
-          <p className="pp-eyebrow">Pre-release pricing</p>
           <h1 className="pp-title">
             Choose your
             <br />
@@ -129,24 +151,17 @@ export default function PricingPrereleasePage() {
           </button>
         </div>
 
-        <section className="pp-grid pp-grid-two" aria-label="Available plans">
+        <section className="pp-grid pp-grid-one" aria-label="Available plans">
           {PLANS.map((plan) => {
             const price = plan.price[billing]
             const note = plan.billingNote?.[billing]
             return (
-              <article
-                key={plan.id}
-                className={`pp-card ${plan.isPopular ? 'pp-card-popular' : ''}`}
-              >
-                {plan.isPopular && (
-                  <span className="pp-badge">Most popular</span>
-                )}
-
+              <article key={plan.id} className="pp-card pp-card-popular">
                 <div className="pp-card-header">
                   <h2 className="pp-card-title">{plan.label}</h2>
                   <p className="pp-card-price">
                     {price}
-                    {plan.cadence && price !== 'Free' && (
+                    {plan.cadence && (
                       <span className="pp-card-cadence">{plan.cadence}</span>
                     )}
                   </p>
@@ -168,11 +183,7 @@ export default function PricingPrereleasePage() {
                   <button
                     type="button"
                     onClick={() => handleCtaClick(plan)}
-                    className={
-                      plan.isPopular
-                        ? 'pp-btn pp-btn-primary'
-                        : 'pp-btn pp-btn-outline'
-                    }
+                    className="pp-btn pp-btn-primary"
                   >
                     {plan.cta}
                   </button>
@@ -186,6 +197,28 @@ export default function PricingPrereleasePage() {
           All plans include AI craft analysis, feedback, and text-to-speech.
           Cancel anytime from your account.
         </p>
+
+        <section className="pp-faq" aria-label="Frequently asked questions">
+          <p className="pp-faq-eyebrow">Questions, answered</p>
+          <div className="pp-faq-list">
+            {FAQS.map((item, i) => (
+              <details key={item.q} className="pp-faq-item">
+                <summary className="pp-faq-question">
+                  <span className="pp-faq-num" aria-hidden>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="pp-faq-q-text">{item.q}</span>
+                  <span className="pp-faq-icon" aria-hidden>
+                    →
+                  </span>
+                </summary>
+                <div className="pp-faq-answer">
+                  <p>{item.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
       </div>
 
       <footer className="pp-footer">

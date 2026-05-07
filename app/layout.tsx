@@ -5,16 +5,6 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
 
-// Import Cormorant Garamond font from Google Fonts (local or CDN)
-import { Cormorant_Garamond } from "next/font/google";
-
-const cormorantGaramond = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-cormorant-garamond",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "ProseLab",
   description:
@@ -52,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`light ${GeistMono.variable} ${cormorantGaramond.variable}`}>
+    <html lang="en" className={`light ${GeistMono.variable}`}>
       <body>
         <header className="auth-header">
           <Link href="/" className="auth-header-logo">
