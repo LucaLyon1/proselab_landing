@@ -37,6 +37,7 @@ html {
   -webkit-font-smoothing: antialiased;
   color-scheme: light;
   scroll-behavior: smooth;
+  background: var(--paper);
 }
 
 body {
@@ -44,6 +45,7 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   min-height: 100dvh;
+  overscroll-behavior-y: none;
 }
 
 /* ─── Auth header (layout) ─────────────────────────────────── */
@@ -56,9 +58,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
+  padding: calc(1rem + env(safe-area-inset-top)) 2rem 1rem;
   background: var(--paper);
   border-bottom: 1px solid var(--line);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .auth-header-logo {
@@ -1055,6 +1060,14 @@ body {
   .landing-hero-left {
     min-height: auto;
     padding: 9rem 7% 4.5rem;
+  }
+
+  .landing-hero-left .landing-hero-subtitle {
+    margin-top: 1.6rem;
+  }
+
+  .landing-hero-left .landing-hero-actions {
+    margin-top: 2.4rem;
   }
 
   .landing-hero-right {

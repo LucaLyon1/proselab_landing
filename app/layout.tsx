@@ -1,9 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
+
+export const viewport: Viewport = {
+  themeColor: "#f5f0ea",
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "ProseLab",
