@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { ExitIntentModal } from './ExitIntentModal'
 import { HeroAnimation } from './HeroAnimation'
 import { HeroAnimationMobile } from './HeroAnimationMobile'
+import { LandingPricing } from './LandingPricing'
 
 declare global {
   interface Window {
@@ -266,6 +267,29 @@ useEffect(() => {
         </div>
       </section>
 
+      {/* PRICING */}
+      <section
+        id="pricing"
+        className="landing-pricing"
+        aria-label="Pricing"
+      >
+        <div className="landing-section-header">
+          <span className="landing-section-num">03 /</span>
+          <h2 className="landing-section-title">
+            Now live —
+            <br />
+            <em>lock in</em> pre-release pricing
+          </h2>
+        </div>
+        <p className="landing-pricing-intro">
+          ProseLab is in pre-release and we&apos;re letting people in soon. Join
+          the waitlist to start your countdown — when it hits zero, you&apos;re
+          inside, locked in at 20% off the launch rate for as long as you stay
+          subscribed.
+        </p>
+        <LandingPricing />
+      </section>
+
       {/* CTA */}
       <section className="landing-cta">
         <h2 className="landing-cta-title">
@@ -288,19 +312,16 @@ useEffect(() => {
               setDiscountOpen(true)
             }}
           >
-            Explore passages →
+            Explore passages
           </button>
           <button className="landing-btn-outline" onClick={() => {
               window.datafast?.('popup_click', { location: 'cta-waitlist' })
               window.umami?.track('popup_click', { location: 'cta-waitlist' })
               setDiscountOpen(true)
             }}>
-            Join waitlist →
+            Join waitlist
           </button>
         </div>
-        <p className="landing-cta-badge">
-          We&apos;re letting people in gradually — join the waitlist
-        </p>
       </section>
 
       <ExitIntentModal open={discountOpen} onClose={() => setDiscountOpen(false)} />

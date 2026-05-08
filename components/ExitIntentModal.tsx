@@ -30,18 +30,18 @@ const LOOPS_FORM_ENDPOINT =
 
 const DEFAULT_TITLE = (
   <>
-    Join the
+    Join the waitlist,
     <br />
-    <em>waitlist</em>
+    <em>spots open fast</em>
   </>
 )
 
 export function ExitIntentModal({
   open,
   onClose,
-  eyebrow = 'Coming soon',
+  eyebrow = 'Counting down',
   title = DEFAULT_TITLE,
-  sub = "We're letting people in one by one. Join the waitlist and we'll reach out when it's your turn.",
+  sub = "We're sending invites manually, to personally ensure the best experience, but it won't take longer than 48 hours to get yours…",
   variant = 'default',
   source = 'homepage',
   dismissible = true,

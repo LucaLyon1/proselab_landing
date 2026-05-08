@@ -386,6 +386,11 @@ body {
   letter-spacing: -0.02em;
 }
 
+.landing-section-title em {
+  font-style: italic;
+  color: var(--landing-rust);
+}
+
 .landing-phases-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -476,7 +481,6 @@ body {
   padding: 10rem 8% 6rem 8%;
   position: relative;
   overflow: hidden;
-  border-top: 1px solid var(--landing-aged);
 }
 
 .landing-passages::before {
@@ -585,266 +589,130 @@ body {
   background: var(--landing-paper);
 }
 
-/* Pricing */
+/* Pricing section embedded in landing page */
 .landing-pricing {
   padding: 10rem 8% 8rem;
-  position: relative;
-  border-top: 1px solid var(--landing-aged);
 }
 
-.landing-pricing-prelaunch {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  background: rgba(201, 168, 76, 0.1);
-  border: 1px solid rgba(201, 168, 76, 0.25);
-  margin-bottom: 4rem;
-  max-width: 42rem;
+.landing-pricing .landing-section-header {
+  margin-bottom: 2rem;
 }
 
-.landing-pricing-prelaunch-dot {
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--landing-gold);
-  margin-top: 0.45rem;
-  animation: landing-pulse 2s ease-in-out infinite;
-}
-
-@keyframes landing-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.landing-pricing-prelaunch-text {
-  font-family: var(--landing-mono);
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--landing-muted);
-}
-
-.landing-pricing-prelaunch-text strong {
+.landing-pricing-intro {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.65;
   color: var(--landing-ink);
-  font-weight: 500;
-}
-
-.landing-pricing-toggle {
-  display: inline-flex;
-  border: 1px solid rgba(26, 23, 20, 0.18);
-  margin-bottom: 3rem;
-}
-
-.landing-pricing-toggle-btn {
-  font-family: var(--landing-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.65rem 1.5rem;
-  border: none;
-  background: transparent;
-  color: var(--landing-muted);
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.landing-pricing-toggle-btn.active {
-  background: var(--landing-ink);
-  color: var(--landing-paper);
-}
-
-.landing-pricing-toggle-save {
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
-  color: var(--landing-gold);
-  border: 1px solid var(--landing-gold);
-  padding: 0.15rem 0.4rem;
-  line-height: 1;
-}
-
-.landing-pricing-toggle-btn.active .landing-pricing-toggle-save {
-  color: var(--landing-gold);
-  border-color: rgba(201, 168, 76, 0.5);
+  max-width: 56ch;
+  margin: 0 0 5.5rem;
 }
 
 .landing-pricing-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+/* LEFT — the offer */
+.landing-pricing-offer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0;
-  border: 1px solid rgba(26, 23, 20, 0.12);
+}
+
+.landing-pricing-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.landing-pricing-toggle {
+  align-self: center;
+  margin: 0;
 }
 
 .landing-pricing-card {
-  padding: 3rem 2.5rem;
-  border-right: 1px solid rgba(26, 23, 20, 0.12);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  transition: background 0.3s;
-}
-
-.landing-pricing-card:last-child {
-  border-right: none;
-}
-
-.landing-pricing-card:hover {
-  background: var(--landing-aged);
-}
-
-.landing-pricing-card-featured {
-  background: rgba(184, 76, 46, 0.04);
-}
-
-.landing-pricing-card-featured:hover {
-  background: rgba(184, 76, 46, 0.08);
-}
-
-.landing-pricing-card-lifetime {
-  background: rgba(201, 168, 76, 0.06);
-}
-
-.landing-pricing-card-lifetime:hover {
-  background: rgba(201, 168, 76, 0.12);
-}
-
-.landing-pricing-card-lifetime .landing-pricing-badge {
-  background: var(--landing-gold);
-}
-
-.landing-pricing-badge {
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
-  font-family: var(--landing-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--landing-paper);
-  background: var(--landing-rust);
-  padding: 0.3rem 0.75rem;
-}
-
-.landing-pricing-tier {
-  font-family: var(--landing-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--landing-rust);
-  margin-bottom: 1.25rem;
-}
-
-.landing-pricing-price {
-  display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
-  margin-bottom: 0.5rem;
-}
-
-.landing-pricing-anchor {
-  font-family: var(--landing-serif);
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--landing-muted);
-  text-decoration: line-through;
-  text-decoration-color: var(--landing-muted);
-  align-self: center;
-}
-
-.landing-pricing-amount {
-  font-family: var(--landing-serif);
-  font-size: 3rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--landing-ink);
-}
-
-.landing-pricing-period {
-  font-family: var(--landing-mono);
-  font-size: 0.82rem;
-  color: var(--landing-muted);
-}
-
-.landing-pricing-original {
-  font-family: var(--landing-mono);
-  font-size: 0.78rem;
-  color: var(--landing-muted);
-  margin-bottom: 0.75rem;
-}
-
-.landing-pricing-billed {
-  font-family: var(--landing-mono);
-  font-size: 0.78rem;
-  color: var(--landing-muted);
-  margin-bottom: 0.75rem;
-}
-
-.landing-pricing-amount-animate {
-  animation: landing-price-in 0.25s ease;
-}
-
-@keyframes landing-price-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.landing-pricing-desc {
-  font-family: var(--landing-mono);
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--landing-muted);
-  margin-bottom: 2rem;
-}
-
-.landing-pricing-features {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 2.5rem;
-  flex: 1;
-}
-
-.landing-pricing-features li {
-  font-family: var(--landing-mono);
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: var(--landing-ink);
-  padding-left: 1.25rem;
-  position: relative;
-}
-
-.landing-pricing-features li::before {
-  content: "—";
-  position: absolute;
-  left: 0;
-  color: var(--landing-rust);
-}
-
-.landing-pricing-cta {
   width: 100%;
-  text-align: center;
-  margin-top: auto;
+  max-width: none;
 }
 
 .landing-pricing-note {
-  font-family: var(--landing-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  color: var(--landing-muted);
-  margin-top: 2rem;
   text-align: center;
+  width: 100%;
+  max-width: none;
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+
+/* RIGHT — questions */
+.landing-pricing-questions {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* Push FAQ down so its first item aligns with the top of the white card.
+     Toggle row (~2.6rem) + gap to card (1.25rem) ≈ 3.85rem. */
+  padding-top: 3.85rem;
+}
+
+.landing-pricing-faq-eyebrow {
+  font-family: var(--landing-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--landing-rust);
+  margin: 0 0 2rem;
+  text-align: left;
+}
+
+.landing-pricing-faq-list {
+  border-top: 1px solid rgba(26, 23, 20, 0.18);
+}
+
+@media (max-width: 900px) {
+  .landing-pricing {
+    padding: 6rem 7% 5rem;
+  }
+
+  .landing-pricing-intro {
+    margin-bottom: 3rem;
+    font-size: 1.05rem;
+  }
+
+  .landing-pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .landing-pricing-offer {
+    align-items: stretch;
+  }
+
+  .landing-pricing-stack {
+    max-width: none;
+  }
+
+  .landing-pricing-questions {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .landing-pricing {
+    padding: 4.5rem 5% 4rem;
+  }
+
+  .landing-pricing-grid {
+    gap: 3rem;
+  }
+
+  .landing-pricing-intro {
+    margin-bottom: 2.5rem;
+  }
 }
 
 /* CTA */
@@ -993,17 +861,6 @@ body {
   color: var(--landing-muted);
 }
 
-.landing-footer-mono::after {
-  content: " →";
-  margin-left: 0.35em;
-  opacity: 0.55;
-  transition: opacity 0.2s;
-}
-
-.landing-footer-mono:hover::after {
-  opacity: 1;
-}
-
 .landing-footer-socials {
   display: flex;
   align-items: center;
@@ -1143,24 +1000,6 @@ body {
     padding: 2rem 1.5rem;
   }
 
-  .landing-pricing {
-    padding: 6rem 7%;
-  }
-
-  .landing-pricing-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .landing-pricing-card {
-    border-right: none;
-    border-bottom: 1px solid rgba(26, 23, 20, 0.12);
-    padding: 2.5rem 2rem;
-  }
-
-  .landing-pricing-card:last-child {
-    border-bottom: none;
-  }
-
   .landing-cta {
     padding: 8rem 7%;
   }
@@ -1193,18 +1032,6 @@ body {
 
   .landing-authors-list {
     grid-template-columns: 1fr;
-  }
-
-  .landing-pricing {
-    padding: 5rem 1.5rem;
-  }
-
-  .landing-pricing-prelaunch {
-    padding: 1.25rem 1.5rem;
-  }
-
-  .landing-pricing-card {
-    padding: 2rem 1.5rem;
   }
 
   .landing-cta {
@@ -2045,7 +1872,8 @@ body:has(.pa-root) .auth-header {
 }
 
 /* ─── Pricing (pre-release) ─────────────────────────────────────── */
-.pp-root {
+.pp-root,
+.pp-embedded {
   --pp-ink: #1a1714;
   --pp-paper: #f5f0e8;
   --pp-aged: #e8dfc8;
@@ -2054,13 +1882,20 @@ body:has(.pa-root) .auth-header {
   --pp-muted: #5c5246;
   --pp-serif: "Playfair Display", Georgia, serif;
   --pp-mono: var(--font-mono);
+}
 
+.pp-root {
   background-color: var(--pp-paper);
   color: var(--pp-ink);
   font-family: var(--pp-serif);
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+.pp-embedded {
+  color: var(--pp-ink);
+  font-family: var(--pp-serif);
 }
 
 .pp-root::before {
@@ -2199,7 +2034,7 @@ body:has(.pp-banner) .auth-header {
   margin-bottom: 2.5rem;
   padding: 0.3rem;
   background: var(--pp-aged);
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid rgba(26, 23, 20, 0.08);
 }
 
@@ -2216,7 +2051,7 @@ body:has(.pp-banner) .auth-header {
   color: var(--pp-muted);
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: 0;
   cursor: pointer;
   transition: color 0.2s, background 0.2s, box-shadow 0.2s;
 }
@@ -2239,7 +2074,7 @@ body:has(.pp-banner) .auth-header {
   color: white;
   background: var(--pp-rust);
   padding: 0.15rem 0.5rem;
-  border-radius: 999px;
+  border-radius: 0;
 }
 
 .pp-grid {
@@ -2269,7 +2104,7 @@ body:has(.pp-banner) .auth-header {
   position: relative;
   background: white;
   border: 1px solid rgba(26, 23, 20, 0.12);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   padding: 2rem 1.75rem;
   display: flex;
   flex-direction: column;
@@ -2363,7 +2198,7 @@ body:has(.pp-banner) .auth-header {
   letter-spacing: 0.02em;
   padding: 0.08rem 0.4rem;
   margin: 0 0.1rem;
-  border-radius: 3px;
+  border-radius: 0;
   background: rgba(178, 92, 56, 0.1);
   border: 1px solid rgba(178, 92, 56, 0.3);
   color: var(--pp-rust);
@@ -2421,7 +2256,7 @@ body:has(.pp-banner) .auth-header {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  border-radius: 999px;
+  border-radius: 0;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -2635,4 +2470,17 @@ body:has(.pp-banner) .auth-header {
     padding: 0.5rem 0.95rem;
     font-size: 0.72rem;
   }
+}
+
+/* ─── Forced overrides ─────────────────────────────────────────── */
+/* Section 01 → 02 has no dividing line. */
+section.landing-passages {
+  border-top: 0 !important;
+}
+
+/* Footer text links (Privacy / Terms / Cookies / Contact) — no arrows. */
+.landing-footer-mono::after,
+.landing-footer-mono::before {
+  content: none !important;
+  display: none !important;
 }
