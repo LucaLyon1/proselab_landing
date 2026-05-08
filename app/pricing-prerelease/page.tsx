@@ -1,13 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 type BillingPeriod = 'yearly' | 'monthly'
 
 interface FaqItem {
   q: string
-  a: string
+  a: ReactNode
 }
 
 const FAQS: FaqItem[] = [
@@ -29,7 +29,19 @@ const FAQS: FaqItem[] = [
   },
   {
     q: 'What does ProseLab actually do?',
-    a: 'ProseLab is a craft tool for prose. You rewrite passages from a curated extract library, then get a side-by-side comparison and detailed AI feedback — strong points, weak points, and what to try next — plus a follow-up chat about each rewrite.',
+    a: (
+      <>
+        ProseLab is a craft tool for prose. You rewrite passages from a curated
+        extract library, then get a side-by-side comparison and detailed AI
+        feedback — strong points, weak points, and what to try next — plus a
+        follow-up chat about each rewrite. Want a taste before paying? Try a
+        small snippet of everything at{' '}
+        <Link href="/demo" className="pp-faq-link">
+          proselab.io/demo
+        </Link>
+        .
+      </>
+    ),
   },
 ]
 
@@ -50,7 +62,7 @@ const APP_SIGNUP_URL = 'https://app.proselab.io/signup'
 const PLANS: Plan[] = [
   {
     id: 'pro',
-    label: 'Pro',
+    label: 'ProseLab Core',
     price: { yearly: '$6.58', monthly: '$7.99' },
     cadence: '/ month',
     billingNote: {
@@ -68,7 +80,7 @@ const PLANS: Plan[] = [
       'Full extract library',
       'Cancel anytime',
     ],
-    cta: 'Get Pro',
+    cta: 'Get ProseLab Core',
     signupPlan: 'pro',
   },
 ]
@@ -108,7 +120,7 @@ export default function PricingPrereleasePage() {
           ·
         </span>
         <span className="pp-banner-text">
-          code <code className="pp-banner-code">PRERELEASE2026</code> already
+          code <code className="pp-banner-code">PRERELEASE26</code> already
           applied at checkout
         </span>
       </div>
@@ -166,6 +178,18 @@ export default function PricingPrereleasePage() {
                     )}
                   </p>
                   {note && <p className="pp-card-savings">{note}</p>}
+                  <p className="pp-card-applied" aria-live="polite">
+                    <span className="pp-card-applied-check" aria-hidden>
+                      ✓
+                    </span>
+                    <span>
+                      code{' '}
+                      <code className="pp-card-applied-code">
+                        PRERELEASE26
+                      </code>{' '}
+                      applied — 20% off
+                    </span>
+                  </p>
                 </div>
 
                 <ul className="pp-features" aria-label="Plan features">
@@ -194,8 +218,7 @@ export default function PricingPrereleasePage() {
         </section>
 
         <p className="pp-note">
-          All plans include AI craft analysis, feedback, and text-to-speech.
-          Cancel anytime from your account.
+          Cancel anytime from your account, 7-day money-back guarantee included.
         </p>
 
         <section className="pp-faq" aria-label="Frequently asked questions">
