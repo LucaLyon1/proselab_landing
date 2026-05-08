@@ -94,6 +94,10 @@ useEffect(() => {
       {/* HERO */}
       <section className="landing-hero">
         <div className="landing-hero-left">
+          <span className="landing-hero-pill">
+            <span className="landing-hero-pill-dot" aria-hidden />
+            Pre-release invites going out now
+          </span>
           <h1 className="landing-hero-title">
             Write Like
             <br />
