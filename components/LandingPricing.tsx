@@ -12,14 +12,6 @@ interface FaqItem {
 
 const FAQS: FaqItem[] = [
   {
-    q: 'What is "pre-release pricing"?',
-    a: 'ProseLab is in pre-release. Sign up now to lock in early-bird pricing — 20% below the launch rate — for as long as you stay subscribed.',
-  },
-  {
-    q: 'Will my price go up after launch?',
-    a: "No. As long as you remain subscribed without a gap, your rate stays at the early-bird price. If you cancel and resubscribe later, you'll pay the then-current launch price.",
-  },
-  {
     q: 'Can I cancel anytime?',
     a: 'Yes — cancel in one click from your account. You keep access through the end of the current billing period.',
   },
@@ -49,7 +41,7 @@ interface Plan {
   id: string
   label: string
   price: { yearly: string; monthly: string }
-  cadence?: string
+  cadence?: { yearly: string; monthly: string }
   billingNote?: { yearly: string; monthly: string }
   features: string[]
   cta: string
@@ -59,10 +51,10 @@ interface Plan {
 const PLAN: Plan = {
   id: 'pro',
   label: 'ProseLab Core',
-  price: { yearly: '$6.58', monthly: '$7.99' },
-  cadence: '/ month',
+  price: { yearly: '$8.25', monthly: '$9.99' },
+  cadence: { yearly: '/ month', monthly: '/ month' },
   billingNote: {
-    yearly: 'Billed $79 annually — save 17%',
+    yearly: 'Billed $99 annually — save 17%',
     monthly: 'Billed monthly',
   },
   features: [
@@ -113,6 +105,7 @@ export function LandingPricing() {
   }
 
   const price = PLAN.price[billing]
+  const cadence = PLAN.cadence?.[billing]
   const note = PLAN.billingNote?.[billing]
 
   return (
@@ -151,21 +144,11 @@ export function LandingPricing() {
             <h3 className="pp-card-title">{PLAN.label}</h3>
             <p className="pp-card-price">
               {price}
-              {PLAN.cadence && (
-                <span className="pp-card-cadence">{PLAN.cadence}</span>
+              {cadence && (
+                <span className="pp-card-cadence">{cadence}</span>
               )}
             </p>
             {note && <p className="pp-card-savings">{note}</p>}
-            <p className="pp-card-applied" aria-live="polite">
-              <span className="pp-card-applied-check" aria-hidden>
-                ✓
-              </span>
-              <span>
-                code{' '}
-                <code className="pp-card-applied-code">PRERELEASE26</code>{' '}
-                applied — 20% off
-              </span>
-            </p>
           </div>
 
           <ul className="pp-features" aria-label="Plan features">

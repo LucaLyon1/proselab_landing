@@ -280,16 +280,15 @@ useEffect(() => {
         <div className="landing-section-header">
           <span className="landing-section-num">03 /</span>
           <h2 className="landing-section-title">
-            Now live —
+            Simple,
             <br />
-            <em>lock in</em> pre-release pricing
+            <em>honest</em> pricing
           </h2>
         </div>
         <p className="landing-pricing-intro">
           ProseLab is in pre-release and we&apos;re letting people in soon. Join
           the waitlist to start your countdown — when it hits zero, you&apos;re
-          inside, locked in at 20% off the launch rate for as long as you stay
-          subscribed.
+          inside.
         </p>
         <LandingPricing />
       </section>
