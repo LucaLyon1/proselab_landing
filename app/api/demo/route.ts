@@ -1,6 +1,6 @@
-import Anthropic from '@anthropic-ai/sdk';
-import { LoopsClient } from 'loops';
-import { NextResponse, after } from 'next/server';
+import Anthropic from "@anthropic-ai/sdk";
+import { LoopsClient } from "loops";
+import { NextResponse, after } from "next/server";
 
 const ORIGINAL_PASSAGE =
   '"She had a perpetual sense, as she watched the taxi cabs, of being out, out, far out to sea and alone." — Virginia Woolf, Mrs Dalloway';
@@ -10,28 +10,28 @@ const CONSTRAINT_PROMPT =
 
 const CATEGORIES = [
   {
-    key: 'STRUCTURE',
-    color: '#E8D78A',
+    key: "STRUCTURE",
+    color: "#E8D78A",
     description:
-      'Sentence shape, rhythm, syntactic variation, repetition. How is the prose architected on the page? Is there a discernible cadence — short/long, fragment vs. flowing?',
+      "Sentence shape, rhythm, syntactic variation, repetition. How is the prose architected on the page? Is there a discernible cadence — short/long, fragment vs. flowing?",
   },
   {
-    key: 'VOICE',
-    color: '#A9C7E0',
+    key: "VOICE",
+    color: "#A9C7E0",
     description:
-      'The personality bleeding through word choice and sensibility. Is the diction precise, lyrical, restrained, ornate? Does it feel like a particular consciousness is observing?',
+      "The personality bleeding through word choice and sensibility. Is the diction precise, lyrical, restrained, ornate? Does it feel like a particular consciousness is observing?",
   },
   {
-    key: 'IMAGERY',
-    color: '#B8D6B0',
+    key: "IMAGERY",
+    color: "#B8D6B0",
     description:
-      'Concrete sensory anchors. The constraint is to convey loneliness through the physical world — score how well the writer chose specific, tangible images instead of abstractions.',
+      "Concrete sensory anchors. The constraint is to convey loneliness through the physical world — score how well the writer chose specific, tangible images instead of abstractions.",
   },
   {
-    key: 'PACING',
-    color: '#E5B09A',
+    key: "PACING",
+    color: "#E5B09A",
     description:
-      'How time and emotional weight are distributed. Pauses, white space, where the sentence stops. Does silence land where it should?',
+      "How time and emotional weight are distributed. Pauses, white space, where the sentence stops. Does silence land where it should?",
   },
 ];
 
@@ -45,7 +45,7 @@ The constraint they were given was:
 Your job is to grade their rewrite across four craft categories and write a short, warm, specific reflection.
 
 The four categories are:
-${CATEGORIES.map((c, i) => `${i + 1}. ${c.key} — ${c.description}`).join('\n')}
+${CATEGORIES.map((c, i) => `${i + 1}. ${c.key} — ${c.description}`).join("\n")}
 
 Return a JSON object with this exact structure:
 {
@@ -62,7 +62,7 @@ Return a JSON object with this exact structure:
 Rules:
 - The score for IMAGERY should weigh whether they actually obeyed the constraint (no abstractions like 'feel', 'sense', 'lonely').
 - Notes must reference the writer's actual text — do not write generic praise.
-- Return ONLY the JSON object, no markdown, no code fences.`;
+- Return ONLY the raw JSON object. Do not include markdown code blocks, backticks, or any preamble.`;
 
 type Score = { category: string; score: number; note: string };
 type Analysis = { scores: Score[]; narrative: string; headline: string };
@@ -71,13 +71,13 @@ export async function POST(request: Request) {
   const { email, text } = await request.json();
 
   if (!email) {
-    console.error('[demo] 400: missing email');
-    return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    console.error("[demo] 400: missing email");
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
 
   if (!text) {
-    console.error('[demo] 400: missing text');
-    return NextResponse.json({ error: 'Rewrite is required' }, { status: 400 });
+    console.error("[demo] 400: missing text");
+    return NextResponse.json({ error: "Rewrite is required" }, { status: 400 });
   }
 
   after(async () => {
@@ -86,49 +86,65 @@ export async function POST(request: Request) {
 
     try {
       // Upsert contact in Loops
-      await loops.updateContact({ email, properties: { userGroup: 'Extract Demo' } });
+      await loops.updateContact({
+        email,
+        properties: { userGroup: "Extract Demo" },
+      });
 
       const message = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
+        model: "claude-sonnet-4-6",
         max_tokens: 1024,
         system: SYSTEM_PROMPT,
         messages: [
           {
-            role: 'user',
+            role: "user",
             content: `Here is the writer's rewrite of the Woolf passage:\n\n${text}`,
           },
         ],
       });
 
       const content = message.content[0];
-      if (content.type !== 'text') {
-        throw new Error('Unexpected response type');
+      if (content.type !== "text") {
+        throw new Error("Unexpected response type");
       }
 
-      const analysis = JSON.parse(content.text) as Analysis;
+      const rawText = content.text;
+      const jsonString = rawText
+        .replace(/^```(?:json)?\s*/, "")
+        .replace(/```\s*$/, "")
+        .trim();
+
+      const analysis = JSON.parse(jsonString) as Analysis;
 
       const scoreSummary = analysis.scores
         .map((s) => `${s.category}: ${Math.round(s.score)}`)
-        .join(' · ');
+        .join(" · ");
+
+      const demoDate = new Date().toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
+      const highlights = analysis.scores
+        .map((s) => {
+          const category =
+            s.category.charAt(0) + s.category.slice(1).toLowerCase();
+          return `<li><strong>${category} — ${Math.round(s.score)}.</strong> ${s.note}</li>`;
+        })
+        .join("");
 
       await loops.sendTransactionalEmail({
         transactionalId: process.env.LOOPS_DEMO_TRANSACTIONAL_ID!,
         email,
         dataVariables: {
-          headline: analysis.headline,
-          narrative: analysis.narrative,
-          structureScore: String(Math.round(analysis.scores.find(s => s.category === 'STRUCTURE')?.score ?? 0)),
-          structureNote: analysis.scores.find(s => s.category === 'STRUCTURE')?.note ?? '',
-          voiceScore: String(Math.round(analysis.scores.find(s => s.category === 'VOICE')?.score ?? 0)),
-          voiceNote: analysis.scores.find(s => s.category === 'VOICE')?.note ?? '',
-          imageryScore: String(Math.round(analysis.scores.find(s => s.category === 'IMAGERY')?.score ?? 0)),
-          imageryNote: analysis.scores.find(s => s.category === 'IMAGERY')?.note ?? '',
-          pacingScore: String(Math.round(analysis.scores.find(s => s.category === 'PACING')?.score ?? 0)),
-          pacingNote: analysis.scores.find(s => s.category === 'PACING')?.note ?? '',
+          summary: `${analysis.headline} ${analysis.narrative}`,
+          demoDate,
+          highlights: `<ul>${highlights}</ul>`,
         },
       });
 
-      console.log(`[demo] scorecard sent to ${email} — ${scoreSummary}`);
+      console.log(`[demo] summary sent to ${email} — ${scoreSummary}`);
     } catch (err) {
       console.error(`[demo] failed for ${email}:`, err);
     }
