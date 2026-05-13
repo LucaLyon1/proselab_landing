@@ -62,10 +62,42 @@ Return a JSON object with this exact structure:
 Rules:
 - The score for IMAGERY should weigh whether they actually obeyed the constraint (no abstractions like 'feel', 'sense', 'lonely').
 - Notes must reference the writer's actual text — do not write generic praise.
-- Return ONLY the raw JSON object. Do not include markdown code blocks, backticks, or any preamble.`;
+- Return ONLY the raw JSON object. Do not include markdown code blocks, backticks, commentary, or any preamble.`;
 
 type Score = { category: string; score: number; note: string };
 type Analysis = { scores: Score[]; narrative: string; headline: string };
+
+function parseAnalysisResponse(rawText: string): Analysis {
+  const stripFences = (value: string) =>
+    value
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/, "")
+      .trim();
+
+  const candidates = [stripFences(rawText)];
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate) as Analysis;
+    } catch {
+      const firstBrace = candidate.indexOf("{");
+      const lastBrace = candidate.lastIndexOf("}");
+
+      if (firstBrace !== -1 && lastBrace > firstBrace) {
+        try {
+          return JSON.parse(candidate.slice(firstBrace, lastBrace + 1)) as Analysis;
+        } catch {
+          // Try the next candidate.
+        }
+      }
+    }
+  }
+
+  throw new Error(
+    `Anthropic response was not valid JSON: ${rawText.slice(0, 120)}`
+  );
+}
 
 export async function POST(request: Request) {
   const { email, text } = await request.json();
@@ -108,13 +140,7 @@ export async function POST(request: Request) {
         throw new Error("Unexpected response type");
       }
 
-      const rawText = content.text;
-      const jsonString = rawText
-        .replace(/^```(?:json)?\s*/, "")
-        .replace(/```\s*$/, "")
-        .trim();
-
-      const analysis = JSON.parse(jsonString) as Analysis;
+      const analysis = parseAnalysisResponse(content.text);
 
       const scoreSummary = analysis.scores
         .map((s) => `${s.category}: ${Math.round(s.score)}`)
@@ -135,7 +161,7 @@ export async function POST(request: Request) {
         .join("");
 
       await loops.sendTransactionalEmail({
-        transactionalId: process.env.LOOPS_DEMO_TRANSACTIONAL_ID!,
+        transactionalId: process.env.LOOPS_TRANSACTIONAL_ID!,
         email,
         dataVariables: {
           summary: `${analysis.headline} ${analysis.narrative}`,
