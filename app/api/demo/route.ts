@@ -135,7 +135,7 @@ export async function POST(request: Request) {
         .join("");
 
       await loops.sendTransactionalEmail({
-        transactionalId: process.env.LOOPS_DEMO_TRANSACTIONAL_ID!,
+        transactionalId: process.env.LOOPS_TRANSACTIONAL_ID!,
         email,
         dataVariables: {
           summary: `${analysis.headline} ${analysis.narrative}`,
