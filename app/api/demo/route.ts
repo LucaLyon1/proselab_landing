@@ -62,12 +62,10 @@ Return a JSON object with this exact structure:
 Rules:
 - The score for IMAGERY should weigh whether they actually obeyed the constraint (no abstractions like 'feel', 'sense', 'lonely').
 - Notes must reference the writer's actual text — do not write generic praise.
-- Return ONLY the raw JSON object. Do not include markdown code blocks, backticks, or any preamble.`;
+- Return ONLY the raw JSON object. Do not include markdown code blocks, backticks, commentary, or any preamble.`;
 
 type Score = { category: string; score: number; note: string };
 type Analysis = { scores: Score[]; narrative: string; headline: string };
-
-const JSON_RESPONSE_PREFILL = "{";
 
 function parseAnalysisResponse(rawText: string): Analysis {
   const stripFences = (value: string) =>
@@ -77,10 +75,7 @@ function parseAnalysisResponse(rawText: string): Analysis {
       .replace(/\s*```$/, "")
       .trim();
 
-  const candidates = [
-    stripFences(`${JSON_RESPONSE_PREFILL}${rawText}`),
-    stripFences(rawText),
-  ];
+  const candidates = [stripFences(rawText)];
 
   for (const candidate of candidates) {
     try {
@@ -136,10 +131,6 @@ export async function POST(request: Request) {
           {
             role: "user",
             content: `Here is the writer's rewrite of the Woolf passage:\n\n${text}`,
-          },
-          {
-            role: "assistant",
-            content: JSON_RESPONSE_PREFILL,
           },
         ],
       });
