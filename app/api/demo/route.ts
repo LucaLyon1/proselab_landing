@@ -67,6 +67,43 @@ Rules:
 type Score = { category: string; score: number; note: string };
 type Analysis = { scores: Score[]; narrative: string; headline: string };
 
+const JSON_RESPONSE_PREFILL = "{";
+
+function parseAnalysisResponse(rawText: string): Analysis {
+  const stripFences = (value: string) =>
+    value
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/, "")
+      .trim();
+
+  const candidates = [
+    stripFences(`${JSON_RESPONSE_PREFILL}${rawText}`),
+    stripFences(rawText),
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate) as Analysis;
+    } catch {
+      const firstBrace = candidate.indexOf("{");
+      const lastBrace = candidate.lastIndexOf("}");
+
+      if (firstBrace !== -1 && lastBrace > firstBrace) {
+        try {
+          return JSON.parse(candidate.slice(firstBrace, lastBrace + 1)) as Analysis;
+        } catch {
+          // Try the next candidate.
+        }
+      }
+    }
+  }
+
+  throw new Error(
+    `Anthropic response was not valid JSON: ${rawText.slice(0, 120)}`
+  );
+}
+
 export async function POST(request: Request) {
   const { email, text } = await request.json();
 
@@ -100,6 +137,10 @@ export async function POST(request: Request) {
             role: "user",
             content: `Here is the writer's rewrite of the Woolf passage:\n\n${text}`,
           },
+          {
+            role: "assistant",
+            content: JSON_RESPONSE_PREFILL,
+          },
         ],
       });
 
@@ -108,13 +149,7 @@ export async function POST(request: Request) {
         throw new Error("Unexpected response type");
       }
 
-      const rawText = content.text;
-      const jsonString = rawText
-        .replace(/^```(?:json)?\s*/, "")
-        .replace(/```\s*$/, "")
-        .trim();
-
-      const analysis = JSON.parse(jsonString) as Analysis;
+      const analysis = parseAnalysisResponse(content.text);
 
       const scoreSummary = analysis.scores
         .map((s) => `${s.category}: ${Math.round(s.score)}`)
