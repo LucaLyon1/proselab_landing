@@ -1368,6 +1368,7 @@ body {
     font-size: 0.88rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    text-align: center;
     color: var(--landing-paper, #f5f0e8);
     background: var(--landing-ink, #1a1714);
     border: 2px solid var(--landing-ink, #1a1714);

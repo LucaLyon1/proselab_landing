@@ -1,14 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useCallback } from "react";
-
-declare global {
-  interface Window {
-    datafast?: (event: string, props?: Record<string, unknown>) => void;
-    umami?: { track: (event: string, props?: Record<string, unknown>) => void };
-  }
-}
+import { useCallback, useRef, useState } from "react";
+import { trackCTA, trackEvent } from "@/lib/analytics";
 
 const PROMPTS = [
   "Write about the last dinner you had at a restaurant — the light, the noise, the feeling of sitting across from someone.",
@@ -24,18 +18,25 @@ export default function ProseAnalysisPage() {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+  const writeStartFired = useRef(false);
 
   const cyclePrompt = useCallback(() => {
     setPromptIndex((i) => (i + 1) % PROMPTS.length);
   }, []);
 
+  const handleTextChange = (value: string) => {
+    if (!writeStartFired.current && value.trim().length > 0) {
+      writeStartFired.current = true;
+      trackEvent("prose_write_start", { prompt_index: promptIndex });
+    }
+    setUserText(value);
+  };
+
   const handleAnalyze = () => {
     if (!userText.trim()) return;
-    window.datafast?.("prose_analysis_click", {
+    trackEvent("prose_analyze_click", {
       text_length: userText.trim().length,
-    });
-    window.umami?.track("prose_analysis_click", {
-      text_length: userText.trim().length,
+      prompt_index: promptIndex,
     });
     setModalOpen(true);
   };
@@ -43,6 +44,12 @@ export default function ProseAnalysisPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
+
+    trackEvent("prose_email_submit", {
+      text_length: userText.trim().length,
+      prompt_index: promptIndex,
+    });
+
     setStatus("loading");
 
     try {
@@ -60,8 +67,6 @@ export default function ProseAnalysisPage() {
       if (json.error) {
         setStatus("error");
       } else {
-        window.datafast?.("prose_analysis_submit", { email_provided: true });
-        window.umami?.track("prose_analysis_submit", { email_provided: true });
         setStatus("success");
       }
     } catch {
@@ -121,7 +126,7 @@ export default function ProseAnalysisPage() {
           className="pa-textarea"
           placeholder="Start writing here..."
           value={userText}
-          onChange={(e) => setUserText(e.target.value)}
+          onChange={(e) => handleTextChange(e.target.value)}
           rows={5}
         />
 
@@ -187,6 +192,7 @@ export default function ProseAnalysisPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="exit-modal-signup"
+                  onClick={() => trackCTA("prose-success", "signup")}
                 >
                   Sign up & create an account →
                 </a>

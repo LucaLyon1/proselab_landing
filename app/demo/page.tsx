@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
-
-declare global {
-  interface Window {
-    datafast?: (event: string, props?: Record<string, unknown>) => void;
-    umami?: { track: (event: string, props?: Record<string, unknown>) => void };
-  }
-}
+import { trackCTA, trackEvent } from "@/lib/analytics";
 
 const CONSTRAINT_PROMPT =
   "Rewrite this passage so that the character's loneliness is conveyed entirely through concrete, physical detail — what the body does, what the senses register, what the world looks like. Remove every abstraction: no 'sense,' no 'feeling,' no naming of emotions. Let the reader feel the isolation only through tangible things.";
@@ -78,15 +72,21 @@ export default function DemoPage() {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+  const writeStartFired = useRef(false);
 
   const ready = userText.trim().length >= 60;
 
+  const handleTextChange = (value: string) => {
+    if (!writeStartFired.current && value.trim().length > 0) {
+      writeStartFired.current = true;
+      trackEvent("demo_write_start");
+    }
+    setUserText(value);
+  };
+
   const handleAnalyze = () => {
     if (!ready) return;
-    window.datafast?.("demo_analyze_click", {
-      text_length: userText.trim().length,
-    });
-    window.umami?.track("demo_analyze_click", {
+    trackEvent("demo_analyze_click", {
       text_length: userText.trim().length,
     });
     setModalOpen(true);
@@ -95,6 +95,11 @@ export default function DemoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
+
+    trackEvent("demo_email_submit", {
+      text_length: userText.trim().length,
+    });
+
     setStatus("loading");
 
     try {
@@ -108,8 +113,6 @@ export default function DemoPage() {
       if (json.error) {
         setStatus("error");
       } else {
-        window.datafast?.("demo_submit", { email_provided: true });
-        window.umami?.track("demo_submit", { email_provided: true });
         setStatus("success");
       }
     } catch {
@@ -206,7 +209,7 @@ export default function DemoPage() {
             className="pa-textarea"
             placeholder="Inspired by Woolf's passage, write your own version here…"
             value={userText}
-            onChange={(e) => setUserText(e.target.value)}
+            onChange={(e) => handleTextChange(e.target.value)}
             rows={6}
           />
 
@@ -273,6 +276,7 @@ export default function DemoPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="exit-modal-signup"
+                  onClick={() => trackCTA("demo-success", "signup")}
                 >
                   Sign up & create an account →
                 </a>

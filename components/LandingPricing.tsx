@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { type ReactNode, useState } from "react";
+import { trackCTA, trackEvent } from "@/lib/analytics";
 
 type BillingPeriod = "yearly" | "monthly";
 
@@ -76,27 +77,14 @@ export function LandingPricing() {
   const [billing, setBilling] = useState<BillingPeriod>("yearly");
 
   const handleCtaClick = () => {
-    window.datafast?.("signup_click", {
-      location: "pricing-card",
-      plan: PLAN.id,
-      billing,
-    });
-    window.umami?.track("signup_click", {
-      location: "pricing-card",
-      plan: PLAN.id,
-      billing,
-    });
+    trackCTA("pricing-card", "signup", { plan: PLAN.id, billing });
     window.location.href = "https://app.proselab.io/signup";
   };
 
   const handleToggle = (next: BillingPeriod) => {
     if (next === billing) return;
     setBilling(next);
-    window.datafast?.("pricing_prerelease_toggle", {
-      billing: next,
-      location: "landing",
-    });
-    window.umami?.track("pricing_prerelease_toggle", {
+    trackEvent("pricing_prerelease_toggle", {
       billing: next,
       location: "landing",
     });

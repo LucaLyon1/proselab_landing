@@ -6,13 +6,7 @@ import { ExitIntentModal } from "./ExitIntentModal";
 import { HeroAnimation } from "./HeroAnimation";
 import { HeroAnimationMobile } from "./HeroAnimationMobile";
 import { LandingPricing } from "./LandingPricing";
-
-declare global {
-  interface Window {
-    datafast?: (event: string, props?: Record<string, unknown>) => void;
-    umami?: { track: (event: string, props?: Record<string, unknown>) => void };
-  }
-}
+import { trackCTA } from "@/lib/analytics";
 
 const AUTHOR_QUOTES: Record<string, { quote: string; work: string }> = {
   "Virginia Woolf": {
@@ -39,20 +33,22 @@ const AUTHOR_QUOTES: Record<string, { quote: string; work: string }> = {
 function AuthorCard({
   name,
   note,
+  href,
   onClick,
 }: {
   name: string;
   note: string;
+  href: string;
   onClick?: () => void;
 }) {
   const quote = AUTHOR_QUOTES[name];
 
   return (
-    <button
-      type="button"
+    <a
+      href={href}
       className="landing-author-item"
       onClick={onClick}
-      aria-label={`Join the waitlist to read ${name} passages`}
+      aria-label={`Read ${name} passages on ProseLab`}
     >
       <p className="landing-author-name">{name}</p>
       <p className="landing-author-note">{note}</p>
@@ -62,7 +58,7 @@ function AuthorCard({
           <p className="landing-author-quote-source">— {quote.work}</p>
         </div>
       )}
-    </button>
+    </a>
   );
 }
 
@@ -122,24 +118,14 @@ export function LandingPage() {
               href="https://app.proselab.io/signup"
               className="landing-btn-primary"
               id="start"
-              onClick={() => {
-                window.datafast?.("signup_click", { location: "hero" });
-                window.umami?.track("signup_click", { location: "hero" });
-              }}
+              onClick={() => trackCTA("hero", "signup")}
             >
               Get started
             </a>
             <a
               href="https://app.proselab.io"
               className="landing-btn-outline"
-              onClick={() => {
-                window.datafast?.("browse_click", {
-                  location: "hero-secondary",
-                });
-                window.umami?.track("browse_click", {
-                  location: "hero-secondary",
-                });
-              }}
+              onClick={() => trackCTA("hero-secondary", "app")}
             >
               Browse passages
             </a>
@@ -155,10 +141,7 @@ export function LandingPage() {
           <Link
             href="/demo"
             className="landing-hero-cta"
-            onClick={() => {
-              window.datafast?.("demo_click", { location: "hero" });
-              window.umami?.track("demo_click", { location: "hero" });
-            }}
+            onClick={() => trackCTA("hero", "demo")}
           >
             <span className="landing-hero-cta-label">
               Want to try it yourself?
@@ -264,62 +247,34 @@ export function LandingPage() {
           <AuthorCard
             name="Virginia Woolf"
             note="Interiority"
-            onClick={() => {
-              window.datafast?.("popup_click", {
-                location: "passages-card",
-                author: "Virginia Woolf",
-              });
-              window.umami?.track("popup_click", {
-                location: "passages-card",
-                author: "Virginia Woolf",
-              });
-              setDiscountOpen(true);
-            }}
+            href="https://app.proselab.io"
+            onClick={() =>
+              trackCTA("passages-card", "app", { author: "Virginia Woolf" })
+            }
           />
           <AuthorCard
             name="Toni Morrison"
             note="Weight &amp; Memory"
-            onClick={() => {
-              window.datafast?.("popup_click", {
-                location: "passages-card",
-                author: "Toni Morrison",
-              });
-              window.umami?.track("popup_click", {
-                location: "passages-card",
-                author: "Toni Morrison",
-              });
-              setDiscountOpen(true);
-            }}
+            href="https://app.proselab.io"
+            onClick={() =>
+              trackCTA("passages-card", "app", { author: "Toni Morrison" })
+            }
           />
           <AuthorCard
             name="Ernest Hemingway"
             note="Dialogue"
-            onClick={() => {
-              window.datafast?.("popup_click", {
-                location: "passages-card",
-                author: "Ernest Hemingway",
-              });
-              window.umami?.track("popup_click", {
-                location: "passages-card",
-                author: "Ernest Hemingway",
-              });
-              setDiscountOpen(true);
-            }}
+            href="https://app.proselab.io"
+            onClick={() =>
+              trackCTA("passages-card", "app", { author: "Ernest Hemingway" })
+            }
           />
           <AuthorCard
             name="Raymond Carver"
             note="Minimalism"
-            onClick={() => {
-              window.datafast?.("popup_click", {
-                location: "passages-card",
-                author: "Raymond Carver",
-              });
-              window.umami?.track("popup_click", {
-                location: "passages-card",
-                author: "Raymond Carver",
-              });
-              setDiscountOpen(true);
-            }}
+            href="https://app.proselab.io"
+            onClick={() =>
+              trackCTA("passages-card", "app", { author: "Raymond Carver" })
+            }
           />
           <span className="landing-author-more">and more</span>
         </div>
@@ -360,20 +315,14 @@ export function LandingPage() {
           <a
             href="https://app.proselab.io/signup"
             className="landing-btn-primary"
-            onClick={() => {
-              window.datafast?.("signup_click", { location: "cta" });
-              window.umami?.track("signup_click", { location: "cta" });
-            }}
+            onClick={() => trackCTA("cta-section", "signup")}
           >
             Get started
           </a>
           <a
             href="https://app.proselab.io"
             className="landing-btn-outline"
-            onClick={() => {
-              window.datafast?.("browse_click", { location: "cta" });
-              window.umami?.track("browse_click", { location: "cta" });
-            }}
+            onClick={() => trackCTA("cta-section", "app")}
           >
             Explore passages
           </a>
