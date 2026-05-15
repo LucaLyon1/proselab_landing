@@ -1,18 +1,11 @@
-'use client'
+"use client";
 
 export function AuthNav() {
   return (
     <nav className="auth-nav">
-      <a
-        href="#"
-        className="auth-nav-cta"
-        onClick={(e) => {
-          e.preventDefault()
-          window.dispatchEvent(new CustomEvent('open-subscribe-modal'))
-        }}
-      >
+      <a href="https://app.proselab.io/signup" className="auth-nav-cta">
         Sign up
       </a>
     </nav>
-  )
+  );
 }
