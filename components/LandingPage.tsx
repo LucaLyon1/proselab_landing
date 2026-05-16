@@ -116,7 +116,7 @@ export function LandingPage() {
               id="start"
               onClick={() => trackCTA("hero", "signup")}
             >
-              Get started
+              Get started for free
             </a>
             <a
               href="https://app.proselab.io"
@@ -126,6 +126,7 @@ export function LandingPage() {
               Browse passages
             </a>
           </div>
+          <p className="landing-hero-no-card">(No card required)</p>
         </div>
         <Link
           href="/demo"
@@ -308,7 +309,7 @@ export function LandingPage() {
             className="landing-btn-primary"
             onClick={() => trackCTA("cta-section", "signup")}
           >
-            Get started
+            Get started for free
           </a>
           <a
             href="https://app.proselab.io"

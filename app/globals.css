@@ -212,6 +212,17 @@ body {
     animation: landing-fade-up 0.8s 0.8s forwards;
 }
 
+.landing-hero-no-card {
+    margin-top: 1.25rem;
+    font-family: var(--landing-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--landing-muted);
+    font-style: italic;
+    opacity: 0;
+    animation: landing-fade-up 0.8s 1s forwards;
+}
+
 .landing-btn-primary {
     font-family: var(--landing-mono);
     font-size: 0.9rem;
@@ -905,15 +916,15 @@ body {
 
     .landing-hero-left {
         min-height: auto;
-        padding: 6rem 7% 7rem;
+        padding: 11rem 9% 9rem;
     }
 
     .landing-hero-left .landing-hero-subtitle {
-        margin-top: 1.6rem;
+        margin-top: 2.2rem;
     }
 
     .landing-hero-left .landing-hero-actions {
-        margin-top: 2.4rem;
+        margin-top: 3.2rem;
     }
 
     .landing-hero-right {
