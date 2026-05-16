@@ -264,7 +264,8 @@ export default function DemoPage() {
                 <p className="exit-modal-eyebrow">Sent</p>
                 <h2 className="exit-modal-title">Check your inbox.</h2>
                 <p className="exit-modal-sub">
-                  We're scoring your rewrite now. Your scorecard will arrive at{" "}
+                  We&apos;re scoring your rewrite now. Your scorecard will
+                  arrive at
                   <strong>{email}</strong> shortly.
                 </p>
                 <p className="exit-modal-sub">

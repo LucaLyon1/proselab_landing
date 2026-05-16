@@ -180,8 +180,8 @@ export default function ProseAnalysisPage() {
                 <p className="exit-modal-eyebrow">Sent</p>
                 <h2 className="exit-modal-title">Check your inbox.</h2>
                 <p className="exit-modal-sub">
-                  We're analyzing your writing now. Your prose analysis will
-                  arrive at <strong>{email}</strong> shortly.
+                  We&apos;re analyzing your writing now. Your prose analysis
+                  will arrive at <strong>{email}</strong> shortly.
                 </p>
                 <p className="exit-modal-sub">
                   If you want to save, manage and browse your extracts, create
