@@ -100,10 +100,6 @@ export function LandingPage() {
       {/* HERO */}
       <section className="landing-hero">
         <div className="landing-hero-left">
-          <span className="landing-hero-pill">
-            <span className="landing-hero-pill-dot" aria-hidden />
-            Pre-release pricing available until 1 JUN
-          </span>
           <h1 className="landing-hero-title">
             Write Like
             <br />
@@ -131,30 +127,27 @@ export function LandingPage() {
             </a>
           </div>
         </div>
-        <div className="landing-hero-right">
+        <Link
+          href="/demo"
+          className="landing-hero-right landing-hero-right-link"
+          onClick={() => trackCTA("hero-animation", "demo")}
+          aria-label="Try the demo"
+        >
           <div className="landing-hero-anim landing-hero-anim-desktop">
             <HeroAnimation />
           </div>
           <div className="landing-hero-anim landing-hero-anim-mobile">
             <HeroAnimationMobile />
           </div>
-          <Link
-            href="/demo"
-            className="landing-hero-cta"
-            onClick={() => trackCTA("hero", "demo")}
-          >
-            <span className="landing-hero-cta-label">
-              Want to try it yourself?
-            </span>
-            <span className="landing-hero-cta-arrow">Try the demo →</span>
-          </Link>
-        </div>
+          <span className="landing-hero-anim-cta" aria-hidden>
+            Click anywhere to try →
+          </span>
+        </Link>
       </section>
 
       {/* PHASES */}
       <section className="landing-phases" id="how">
         <div className="landing-section-header">
-          <span className="landing-section-num">01 /</span>
           <h2 className="landing-section-title">
             Study, Write,
             <br />
@@ -225,7 +218,6 @@ export function LandingPage() {
       {/* PASSAGES */}
       <section className="landing-passages">
         <div className="landing-section-header">
-          <span className="landing-section-num">02 /</span>
           <h2 className="landing-section-title">9 Categories, 40+ Passages</h2>
         </div>
         <p
@@ -283,7 +275,6 @@ export function LandingPage() {
       {/* PRICING */}
       <section id="pricing" className="landing-pricing" aria-label="Pricing">
         <div className="landing-section-header">
-          <span className="landing-section-num">03 /</span>
           <h2 className="landing-section-title">
             Simple,
             <br />
