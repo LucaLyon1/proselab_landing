@@ -6,7 +6,7 @@ import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
 
 export const viewport: Viewport = {
-  themeColor: "#f5f0ea",
+  themeColor: "#f5f0e8",
   viewportFit: "cover",
 };
 

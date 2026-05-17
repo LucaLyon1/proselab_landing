@@ -169,14 +169,11 @@ export function LandingPricing() {
         className="landing-pricing-questions"
         aria-label="Frequently asked questions"
       >
-        <p className="landing-pricing-faq-eyebrow">Questions, answered</p>
+        <p className="landing-pricing-faq-eyebrow">FAQs</p>
         <div className="pp-faq-list landing-pricing-faq-list">
-          {FAQS.map((item, i) => (
+          {FAQS.map((item) => (
             <details key={item.q} className="pp-faq-item">
               <summary className="pp-faq-question">
-                <span className="pp-faq-num" aria-hidden>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
                 <span className="pp-faq-q-text">{item.q}</span>
                 <span className="pp-faq-icon" aria-hidden>
                   →

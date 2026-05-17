@@ -18,8 +18,8 @@ const COLORS = {
 } as const
 
 const FONTS = {
-  mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
-  serif: 'Georgia, "Times New Roman", serif',
+  mono: '"Geist Mono", ui-monospace, SFMono-Regular, monospace',
+  serif: '"Georgia Brand", Georgia, "Times New Roman", serif',
 } as const
 
 const STAGE_W = 1200

@@ -103,7 +103,7 @@ export function LandingPage() {
           <h1 className="landing-hero-title">
             Write Like
             <br />
-            <em>The Greats.</em>
+            <em>The Greats</em>
           </h1>
           <p className="landing-hero-subtitle">
             Study passages from the Classics, and try your hand at writing your
@@ -152,9 +152,14 @@ export function LandingPage() {
           <h2 className="landing-section-title">
             Study, Write,
             <br />
-            Improve
+            <em>Improve</em>
           </h2>
         </div>
+        <p className="landing-section-intro">
+          A three-step practice for getting better on the page — study how the
+          greats built it, write your own version, and learn from craft-level
+          feedback.
+        </p>
         <div className="landing-phases-grid">
           <div className="landing-phase-card">
             <div className="landing-phase-image">
@@ -219,18 +224,13 @@ export function LandingPage() {
       {/* PASSAGES */}
       <section className="landing-passages">
         <div className="landing-section-header">
-          <h2 className="landing-section-title">9 Categories, 40+ Passages</h2>
+          <h2 className="landing-section-title">
+            <span style={{ color: "var(--landing-rust)" }}>9</span> Categories,
+            <br />
+            <span style={{ color: "var(--landing-rust)" }}>40+</span> Passages
+          </h2>
         </div>
-        <p
-          className="landing-reveal"
-          style={{
-            fontFamily: "var(--landing-mono)",
-            fontSize: "0.98rem",
-            color: "var(--landing-muted)",
-            maxWidth: "55ch",
-            lineHeight: 1.8,
-          }}
-        >
+        <p className="landing-section-intro">
           Passages organized by craft: character intro, in medias res, place
           &amp; atmosphere, dialogue, interiority, time &amp; memory, rhythm
           &amp; style, tension &amp; dread, poetry. Filter by tags. Each one
@@ -282,7 +282,7 @@ export function LandingPage() {
             <em>honest</em> pricing
           </h2>
         </div>
-        <p className="landing-pricing-intro">
+        <p className="landing-section-intro">
           ProseLab is in pre-release and we&apos;re letting people in soon. Join
           the waitlist to start your countdown — when it hits zero, you&apos;re
           inside.
@@ -297,7 +297,7 @@ export function LandingPage() {
           <br />
           <em>Writing</em>
           <br />
-          Today.
+          Today
         </h2>
         <p className="landing-cta-sub">
           ProseLab gives you AI-powered craft analysis, hand-authored
@@ -319,6 +319,7 @@ export function LandingPage() {
             Explore passages
           </a>
         </div>
+        <p className="landing-hero-no-card">(No card required)</p>
       </section>
 
       <ExitIntentModal

@@ -1,23 +1,55 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;700&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
+
+/* ─── Brand serif (Georgia, self-hosted) ─────────────────── */
+@font-face {
+    font-family: "Georgia Brand";
+    src: url("/fonts/Georgia.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Georgia Brand";
+    src: url("/fonts/Georgia_Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Georgia Brand";
+    src: url("/fonts/Georgia_Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Georgia Brand";
+    src: url("/fonts/Georgia_Bold_Italic.ttf") format("truetype");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
 
 /* ─── Tokens ─────────────────────────────────────────────── */
 :root {
-    --ink: #1a1613;
+    --ink: #1a1714;
     --ink-soft: #3d3530;
-    --ink-muted: #7a6e68;
+    --ink-muted: #5c5246;
     --ink-faint: #b5aca6;
-    --paper: #f5f0ea;
+    --paper: #f5f0e8;
     --paper-warm: #ede7df;
     --paper-deep: #e2d9cf;
+    --paper-aged: #e8dfc8;
     --accent: #b84a2e;
     --accent-soft: #d4694d;
     --accent-pale: #f0e0da;
+    --accent-dark: #8f3a22;
     --line: rgba(26, 22, 19, 0.12);
 
-    --font-display: "Playfair Display", Georgia, serif;
-    --font-body: "Lora", Georgia, serif;
-    --font-mono: "JetBrains Mono", monospace;
+    --font-display: "Georgia Brand", Georgia, "Times New Roman", serif;
+    --font-body: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 
     --radius: 4px;
     --radius-lg: 10px;
@@ -73,7 +105,7 @@ body {
     text-transform: uppercase;
     color: var(--ink);
     text-decoration: none;
-    font-family: Georgia, serif;
+    font-family: var(--font-display);
     transition: color 0.15s;
 }
 
@@ -88,7 +120,7 @@ body {
 }
 
 .auth-nav a {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.75rem;
     letter-spacing: 0.04em;
     color: var(--ink-muted);
@@ -105,7 +137,7 @@ body {
     background: var(--accent);
     color: #fff;
     border-radius: 0px;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.7rem;
     letter-spacing: 0.04em;
     text-decoration: none;
@@ -127,8 +159,21 @@ body {
     --landing-gold: #c9a84c;
     --landing-muted: #5c5246;
     --landing-body: var(--landing-serif);
-    --landing-serif: "Playfair Display", Georgia, serif;
-    --landing-mono: var(--font-mono);
+    --landing-serif: "Georgia Brand", Georgia, "Times New Roman", serif;
+    --landing-mono: var(--font-body); /* sans by default; restore var(--font-mono) on numeric/code rules */
+
+    /* Unified section padding — all content sections share these tokens
+       so the vertical rhythm and gutters stay consistent. CTA finale gets
+       a slight vertical emphasis bump; Passages runs tighter at full-width
+       layouts since its neighbours already contribute padding. The first
+       content section after the hero gets extra padding (--section-y-hero-bridge),
+       and the CTA mirrors that gap above its aged panel via margin-top.
+       Overridden per breakpoint below. */
+    --section-x: 8%;
+    --section-y: 6rem;
+    --section-y-passages: 3rem;
+    --section-y-cta: 8rem;
+    --section-y-hero-bridge: 9rem; /* paper gap below hero / above CTA */
 
     background-color: var(--landing-paper);
     color: var(--landing-ink);
@@ -178,7 +223,7 @@ body {
 
 .landing-hero-title {
     font-size: clamp(3.75rem, 6.5vw, 5.75rem);
-    font-weight: 900;
+    font-weight: 700;
     line-height: 0.95;
     letter-spacing: -0.02em;
     color: var(--landing-ink);
@@ -204,12 +249,19 @@ body {
 
 .landing-hero-actions {
     margin-top: 3rem;
-    display: flex;
-    flex-wrap: wrap;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-start !important;
     gap: 1rem;
-    align-items: center;
     opacity: 0;
     animation: landing-fade-up 0.8s 0.8s forwards;
+}
+
+.landing-hero-actions > .landing-btn-primary,
+.landing-hero-actions > .landing-btn-outline,
+.landing-hero-actions > .landing-btn-secondary {
+    width: max-content;
 }
 
 .landing-hero-no-card {
@@ -361,7 +413,7 @@ body {
 
 /* Phases */
 .landing-phases {
-    padding: 10rem 8% 10rem;
+    padding: var(--section-y-hero-bridge) var(--section-x) var(--section-y);
     position: relative;
     border-top: 1px solid var(--landing-aged);
 }
@@ -374,7 +426,7 @@ body {
 }
 
 .landing-section-num {
-    font-family: var(--landing-mono);
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     letter-spacing: 0.2em;
     color: var(--landing-rust);
@@ -417,7 +469,7 @@ body {
 }
 
 .landing-phase-num {
-    font-family: var(--landing-mono);
+    font-family: var(--font-mono);
     font-size: 4rem;
     font-weight: 300;
     color: var(--landing-rust);
@@ -477,24 +529,11 @@ body {
     filter: brightness(1);
 }
 
-/* Passages */
+/* Passages — decorative ::before quote ornament removed */
 .landing-passages {
-    padding: 10rem 8% 6rem 8%;
+    padding: var(--section-y-passages) var(--section-x);
     position: relative;
     overflow: hidden;
-}
-
-.landing-passages::before {
-    content: '"';
-    position: absolute;
-    top: -2rem;
-    left: 5%;
-    font-size: 30rem;
-    font-family: var(--landing-serif);
-    color: var(--landing-rust);
-    opacity: 0.08;
-    line-height: 1;
-    pointer-events: none;
 }
 
 .landing-authors-list {
@@ -592,21 +631,23 @@ body {
 
 /* Pricing section embedded in landing page */
 .landing-pricing {
-    padding: 10rem 8% 8rem;
+    padding: var(--section-y) var(--section-x);
 }
 
-.landing-pricing .landing-section-header {
-    margin-bottom: 2rem;
-}
-
-.landing-pricing-intro {
+/* Section intro paragraph — sits directly under a section title.
+   The :has() rule tightens the header's gap automatically so the
+   title and intro feel like one block of copy. */
+.landing-section-intro {
     font-family: var(--font-body);
-    font-style: italic;
     font-size: 1.15rem;
     line-height: 1.65;
     color: var(--landing-ink);
     max-width: 56ch;
     margin: 0 0 5.5rem;
+}
+
+.landing-section-header:has(+ .landing-section-intro) {
+    margin-bottom: 2rem;
 }
 
 .landing-pricing-grid {
@@ -675,11 +716,7 @@ body {
 }
 
 @media (max-width: 900px) {
-    .landing-pricing {
-        padding: 6rem 7% 5rem;
-    }
-
-    .landing-pricing-intro {
+    .landing-section-intro {
         margin-bottom: 3rem;
         font-size: 1.05rem;
     }
@@ -703,22 +740,19 @@ body {
 }
 
 @media (max-width: 600px) {
-    .landing-pricing {
-        padding: 4.5rem 5% 4rem;
-    }
-
     .landing-pricing-grid {
         gap: 3rem;
     }
 
-    .landing-pricing-intro {
+    .landing-section-intro {
         margin-bottom: 2.5rem;
     }
 }
 
-/* CTA */
+/* CTA — margin-top mirrors the hero→phases paper gap. */
 .landing-cta {
-    padding: 12rem 8%;
+    margin-top: calc(var(--section-y-hero-bridge) - var(--section-y));
+    padding: var(--section-y-cta) var(--section-x);
     text-align: center;
     background: var(--landing-aged);
     border-top: 1px solid rgba(26, 23, 20, 0.1);
@@ -756,7 +790,7 @@ body {
 
 .landing-cta-title {
     font-size: clamp(2.75rem, 5.5vw, 4.75rem);
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1;
     letter-spacing: -0.03em;
     max-width: 14ch;
@@ -780,11 +814,17 @@ body {
 }
 
 .landing-cta-buttons {
-    display: flex;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
     gap: 1rem;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+}
+
+.landing-cta-buttons > .landing-btn-primary,
+.landing-cta-buttons > .landing-btn-outline,
+.landing-cta-buttons > .landing-btn-secondary {
+    width: max-content;
 }
 
 .landing-cta-badge {
@@ -843,7 +883,7 @@ body {
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    font-family: Georgia, serif;
+    font-family: var(--font-display);
     color: var(--ink);
 }
 
@@ -970,8 +1010,12 @@ body {
         flex-shrink: 0;
     }
 
-    .landing-phases {
-        padding: 6rem 7%;
+    .landing-root {
+        --section-x: 7%;
+        --section-y: 4rem;
+        --section-y-passages: 4rem; /* stacked layout — match standard rhythm */
+        --section-y-cta: 5rem;
+        --section-y-hero-bridge: 6.5rem;
     }
 
     .landing-section-header {
@@ -988,10 +1032,6 @@ body {
         border-bottom: 1px solid rgba(26, 23, 20, 0.12);
     }
 
-    .landing-passages {
-        padding: 6rem 7% 4rem;
-    }
-
     .landing-authors-list {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -999,23 +1039,23 @@ body {
     .landing-author-item {
         padding: 2rem 1.5rem;
     }
-
-    .landing-cta {
-        padding: 8rem 7%;
-    }
 }
 
 @media (max-width: 560px) {
+    .landing-root {
+        --section-x: 1.5rem;
+        --section-y: 2.5rem;
+        --section-y-passages: 2.5rem;
+        --section-y-cta: 3.5rem;
+        --section-y-hero-bridge: 5rem;
+    }
+
     .landing-hero-left {
         padding: 8rem 1.5rem 7rem;
     }
 
     .landing-hero-title {
         font-size: clamp(2.75rem, 10vw, 3.75rem);
-    }
-
-    .landing-phases {
-        padding: 5rem 1.5rem;
     }
 
     .landing-section-header {
@@ -1026,16 +1066,8 @@ body {
         padding: 2rem 1.5rem;
     }
 
-    .landing-passages {
-        padding: 5rem 1.5rem 3.5rem;
-    }
-
     .landing-authors-list {
         grid-template-columns: 1fr;
-    }
-
-    .landing-cta {
-        padding: 6rem 1.5rem;
     }
 
     .landing-footer-contact {
@@ -1051,7 +1083,7 @@ body {
     --legal-aged: #e8dfc8;
     --legal-rust: #b84c2e;
     --legal-muted: #5c5246;
-    --legal-mono: var(--font-mono);
+    --legal-mono: var(--font-body);
 
     min-height: 100dvh;
     background: var(--legal-paper);
@@ -1283,7 +1315,7 @@ body {
     position: absolute;
     top: 1rem;
     right: 1.25rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1300,7 +1332,7 @@ body {
 }
 
 .exit-modal-eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.78rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
@@ -1309,9 +1341,9 @@ body {
 }
 
 .exit-modal-title {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 2.75rem);
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: var(--landing-ink, #1a1714);
@@ -1324,7 +1356,7 @@ body {
 }
 
 .exit-modal-sub {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.9rem;
     line-height: 1.7;
     color: var(--landing-muted, #5c5246);
@@ -1338,7 +1370,7 @@ body {
 }
 
 .exit-modal-input {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.9rem;
     color: var(--landing-ink, #1a1714);
     background: #fff;
@@ -1358,7 +1390,7 @@ body {
 }
 
 .exit-modal-submit {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.88rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1384,14 +1416,14 @@ body {
 }
 
 .exit-modal-error {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.82rem;
     color: var(--landing-rust, #b84c2e);
     margin-top: 0.5rem;
 }
 
 .exit-modal-consent {
-    font-family: "JetBrains Mono", var(--font-mono), monospace;
+    font-family: var(--font-body);
     font-size: 0.68rem;
     letter-spacing: 0.02em;
     color: #9a918a;
@@ -1409,7 +1441,7 @@ body {
 .exit-modal-signup {
     display: inline-block;
     margin-top: 0.5rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: 0.88rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1458,8 +1490,8 @@ body {
     --pa-rust: #b84c2e;
     --pa-rust-dark: #8f3a22;
     --pa-muted: #5c5246;
-    --pa-serif: "Playfair Display", Georgia, serif;
-    --pa-mono: var(--font-mono);
+    --pa-serif: "Georgia Brand", Georgia, "Times New Roman", serif;
+    --pa-mono: var(--font-body);
 
     background-color: var(--pa-paper);
     color: var(--pa-ink);
@@ -1513,7 +1545,7 @@ body:has(.pa-root) .auth-header {
 
 .pa-title {
     font-size: clamp(2.5rem, 5.5vw, 3.75rem);
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1;
     letter-spacing: -0.02em;
     color: var(--pa-ink);
@@ -1638,7 +1670,7 @@ body:has(.pa-root) .auth-header {
 }
 
 .pa-char-count {
-    font-family: var(--pa-mono);
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     letter-spacing: 0.06em;
     color: var(--pa-muted);
@@ -1754,7 +1786,7 @@ body:has(.pa-root) .auth-header {
 }
 
 .demo-section-num {
-    font-family: var(--pa-mono);
+    font-family: var(--font-mono);
     font-size: 0.78rem;
     letter-spacing: 0.18em;
     color: var(--pa-muted);
@@ -1873,7 +1905,7 @@ body:has(.pa-root) .auth-header {
     padding: 0.85rem 1.1rem;
     background: #1a1714;
     color: #f5f0e8;
-    font-family: Georgia, serif;
+    font-family: var(--font-display);
     font-size: 0.88rem;
     line-height: 1.5;
     border-radius: 4px;
@@ -1943,8 +1975,8 @@ body:has(.pa-root) .auth-header {
     --pp-rust: #b84c2e;
     --pp-rust-dark: #8f3a22;
     --pp-muted: #5c5246;
-    --pp-serif: "Playfair Display", Georgia, serif;
-    --pp-mono: var(--font-mono);
+    --pp-serif: "Georgia Brand", Georgia, "Times New Roman", serif;
+    --pp-mono: var(--font-body);
 }
 
 .pp-root {
@@ -2050,7 +2082,7 @@ body:has(.pa-root) .auth-header {
 }
 
 .pp-banner-code {
-    font-family: var(--pp-mono);
+    font-family: var(--font-mono);
     font-size: 0.74rem;
     letter-spacing: 0.04em;
     padding: 0.1rem 0.5rem;
@@ -2219,7 +2251,7 @@ body:has(.pp-banner) .auth-header {
 }
 
 .pp-card-price {
-    font-family: var(--pp-mono);
+    font-family: var(--font-mono);
     font-size: 1.75rem;
     font-weight: 600;
     color: var(--pp-rust);
@@ -2260,7 +2292,7 @@ body:has(.pp-banner) .auth-header {
 }
 
 .pp-card-applied-code {
-    font-family: var(--pp-mono);
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -2389,7 +2421,7 @@ body:has(.pp-banner) .auth-header {
 
 .pp-faq-question {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 1fr auto;
     align-items: baseline;
     gap: 1.25rem;
     padding: 1.4rem 0.25rem;
@@ -2410,7 +2442,7 @@ body:has(.pp-banner) .auth-header {
 }
 
 .pp-faq-num {
-    font-family: var(--pp-mono);
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.08em;
     color: var(--pp-rust);
@@ -2434,6 +2466,7 @@ body:has(.pp-banner) .auth-header {
     font-size: 1rem;
     color: var(--pp-rust);
     align-self: center;
+    justify-self: end;
     transition: transform 0.25s ease;
     display: inline-block;
 }
@@ -2555,3 +2588,35 @@ section.landing-passages {
     display: none !important;
 }
 
+/* ─── UI label weight (Geist sans uppercase buttons/toggles/eyebrows) ─── */
+.auth-nav a,
+.landing-btn-primary,
+.landing-btn-outline,
+.landing-btn-secondary,
+.landing-hero-eyebrow,
+.landing-hero-anim-cta,
+.landing-cta-tag,
+.landing-cta-badge,
+.landing-pricing-faq-eyebrow,
+.landing-author-note,
+.landing-footer-tagline,
+.legal-eyebrow,
+.exit-modal-close,
+.exit-modal-eyebrow,
+.exit-modal-submit,
+.exit-modal-signup,
+.pa-eyebrow,
+.pa-prompt-label,
+.pa-btn-analyze,
+.demo-section-label,
+.demo-legend,
+.pp-back-link,
+.pp-eyebrow,
+.pp-banner-label,
+.pp-toggle-btn,
+.pp-toggle-pill,
+.pp-badge,
+.pp-btn,
+.pp-faq-eyebrow {
+    font-weight: 600;
+}
