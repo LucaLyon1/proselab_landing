@@ -84,8 +84,9 @@ export default function ProseAnalysisPage() {
             <em>Write</em> Like?
           </h1>
           <p className="pa-subtitle">
-            Write a short passage below and we&apos;ll tell you which author
-            your prose most resembles.
+            Write or paste a short passage below (it can be the prompt or your
+            own work), and we&apos;ll tell you which author out of the 25+ in
+            the ProseLab library your work most resembles in style…
           </p>
         </div>
 
@@ -146,9 +147,7 @@ export default function ProseAnalysisPage() {
           Analyze my writing
         </button>
 
-        <p className="pa-footer-note">
-          Free. No account required. We&apos;ll email your results.
-        </p>
+        <p className="pa-footer-note">Free. No account required.</p>
       </div>
 
       <footer className="pa-footer">

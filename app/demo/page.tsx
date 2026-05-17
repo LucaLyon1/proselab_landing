@@ -127,25 +127,17 @@ export default function DemoPage() {
           <h1 className="pa-title">
             Rewrite
             <br />
-            <em>Woolf</em>.
+            <em>Woolf</em>
           </h1>
           <p className="pa-subtitle">
-            Read the extract. Notice the craft. Then rewrite it under a
-            constraint and get a scorecard back.
+            Study the following passage from Virginia Woolf&apos;s Mrs Dalloway
+            (hover the highlights to read annotations), and rewrite under a
+            prompted constraint…
           </p>
         </div>
 
-        {/* SECTION 01 — READ */}
+        {/* READ */}
         <section className="demo-section">
-          <div className="demo-section-head">
-            <span className="demo-section-num">01</span>
-            <span className="demo-section-label">READ — WOOLF</span>
-            <span className="demo-section-rule" />
-          </div>
-          <p className="demo-section-caption">
-            Hover the highlighted segments to read craft notes.
-          </p>
-
           <p className="demo-passage">
             &ldquo;She had a{" "}
             <CraftTooltip note={CRAFT_NOTES.voice}>
@@ -169,7 +161,6 @@ export default function DemoPage() {
             </CraftTooltip>
             …&rdquo;
           </p>
-          <p className="demo-passage-source">— Virginia Woolf, Mrs Dalloway</p>
 
           <div className="demo-legend">
             <span className="demo-legend-item">
@@ -188,14 +179,8 @@ export default function DemoPage() {
           </div>
         </section>
 
-        {/* SECTION 02 — WRITE */}
+        {/* WRITE */}
         <section className="demo-section">
-          <div className="demo-section-head">
-            <span className="demo-section-num">02</span>
-            <span className="demo-section-label">WRITE — YOUR TURN</span>
-            <span className="demo-section-rule" />
-          </div>
-
           <div className="pa-prompt-box demo-prompt-box">
             <div className="pa-prompt-top">
               <span className="pa-prompt-label">Prompt</span>
@@ -229,9 +214,7 @@ export default function DemoPage() {
             Analyze my rewrite
           </button>
 
-          <p className="pa-footer-note">
-            Free. No account required. We&apos;ll email your scorecard.
-          </p>
+          <p className="pa-footer-note">Free. No account required.</p>
         </section>
       </div>
 

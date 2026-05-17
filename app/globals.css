@@ -1631,13 +1631,11 @@ body:has(.pa-root) .auth-header {
     width: 100%;
     font-family: var(--font-body);
     font-size: 1.05rem;
-    font-style: italic;
     line-height: 1.8;
     color: var(--pa-ink);
     background: rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(26, 23, 20, 0.15);
-    border-left: 3px solid var(--pa-rust);
-    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+    padding: 1.25rem;
     resize: vertical;
     outline: none;
     transition:
@@ -1650,12 +1648,10 @@ body:has(.pa-root) .auth-header {
 
 .pa-textarea:focus {
     border-color: rgba(26, 23, 20, 0.28);
-    border-left-color: var(--pa-rust);
     background: rgba(255, 255, 255, 0.7);
 }
 
 .pa-textarea::placeholder {
-    font-style: italic;
     color: rgba(92, 82, 70, 0.4);
 }
 
@@ -1764,18 +1760,19 @@ body:has(.pa-root) .auth-header {
     color: var(--pa-rust);
 }
 
+/* Tight rhythm around the demo passage (halved from prior values). */
 .demo-root .pa-header {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .demo-section {
-    margin-top: 20px;
+    margin-top: 10px;
     opacity: 0;
     animation: landing-fade-up 0.8s 0.5s forwards;
 }
 
 .demo-section + .demo-section {
-    margin-top: 4rem;
+    margin-top: 2rem;
 }
 
 .demo-section-head {
