@@ -20,7 +20,7 @@ const AUTHOR_QUOTES: Record<string, { quote: string; work: string }> = {
   },
   "Ernest Hemingway": {
     quote:
-      '"Would you please please please please please please please stop talking?"',
+      "Would you please please please please please please please stop talking?",
     work: "Hills Like White Elephants",
   },
   "Raymond Carver": {

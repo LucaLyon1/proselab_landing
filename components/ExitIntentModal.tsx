@@ -8,8 +8,8 @@ import { trackCTA } from '@/lib/analytics'
 interface ExitIntentModalProps {
   open: boolean
   onClose: () => void
-  /** Override copy. Defaults nudge people toward the demo. */
-  eyebrow?: string
+  /** Override copy. Defaults nudge people toward /prose-analysis. */
+  eyebrow?: string | null
   title?: React.ReactNode
   sub?: React.ReactNode
   /** "default" = solid backdrop. "dim" = dimmer page-behind look. */
@@ -24,16 +24,20 @@ const DEFAULT_TITLE = (
   <>
     Before you go —
     <br />
-    <em>try the demo</em>
+    <em>
+      who do you
+      <br />
+      write like?
+    </em>
   </>
 )
 
 export function ExitIntentModal({
   open,
   onClose,
-  eyebrow = 'See it in action',
+  eyebrow = null,
   title = DEFAULT_TITLE,
-  sub = "Study a passage, write your own version, and get instant AI feedback. No signup needed.",
+  sub = "Enter some writing of yours and we'll match you to your classic author twin in the ProseLab library, with reasons. Free, and no signup required…",
   variant = 'default',
   source = 'homepage',
   dismissible = true,
@@ -68,17 +72,17 @@ export function ExitIntentModal({
           </button>
         )}
 
-        <p className="exit-modal-eyebrow">{eyebrow}</p>
+        {eyebrow && <p className="exit-modal-eyebrow">{eyebrow}</p>}
         <h2 className="exit-modal-title">{title}</h2>
         <p className="exit-modal-sub">{sub}</p>
 
         <div className="exit-modal-form">
           <Link
-            href="/demo"
+            href="/prose-analysis"
             className="exit-modal-submit"
-            onClick={() => trackCTA('exit-modal', 'demo', { source })}
+            onClick={() => trackCTA('exit-modal', 'prose-analysis', { source })}
           >
-            Try the demo
+            TRY NOW
           </Link>
         </div>
       </div>

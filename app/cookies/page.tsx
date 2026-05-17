@@ -11,12 +11,7 @@ export default function CookiesPage() {
   return (
     <div className="legal-root">
       <div className="legal-inner">
-        <Link href="/" className="legal-back-link">
-          ← Back to home
-        </Link>
-
         <header className="legal-header">
-          <p className="legal-eyebrow">Legal</p>
           <h1 className="legal-title">Cookie Policy</h1>
           <p className="legal-updated">Last updated: March 2026</p>
         </header>
