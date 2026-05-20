@@ -160,63 +160,66 @@ export function LandingPage() {
           greats built it, write your own version, and learn from craft-level
           feedback.
         </p>
-        <div className="landing-phases-grid">
-          <div className="landing-phase-card">
+        <div className="landing-phases-stack">
+          <div className="landing-phase-row">
+            <div className="landing-phase-text">
+              <h3 className="landing-phase-name">
+                <em>Study</em> the Extract
+              </h3>
+              <p className="landing-phase-desc">
+                AI-powered analysis highlights structure, voice, imagery, and
+                pacing. Hover over segments to see craft notes. Understand
+                what makes the passage work before you write.
+              </p>
+            </div>
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/features/feature-01-study.gif"
-                alt="Craft analysis — hover highlighted segments to read annotations"
+                src="/features/phase-01-study.svg"
+                alt="Mrs Dalloway passage with four craft-color highlights and an overlaid structure annotation card"
                 className="landing-phase-gif"
               />
             </div>
-            <span className="landing-phase-num">01</span>
-            <h3 className="landing-phase-name">
-              <em>Study</em> the Extract
-            </h3>
-            <p className="landing-phase-desc">
-              AI-powered analysis highlights structure, voice, imagery, and
-              pacing. Hover over segments to see craft notes. Understand what
-              makes the passage work before you write.
-            </p>
           </div>
-          <div className="landing-phase-card">
+          <div className="landing-phase-row">
+            <div className="landing-phase-text">
+              <h3 className="landing-phase-name">
+                Write <em>Your</em> Version
+              </h3>
+              <p className="landing-phase-desc">
+                Each passage comes with hand-authored constraints — prompts
+                that push you to think differently. Write your own take.
+                Optionally hear it read aloud with ElevenLabs.
+              </p>
+            </div>
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/features/feature-02-write.gif"
-                alt="Writing exercise with constraints"
+                src="/features/phase-02-write.svg"
+                alt="Exercise card with rust left border and CTA above a writing surface with a draft in progress"
                 className="landing-phase-gif"
               />
             </div>
-            <span className="landing-phase-num">02</span>
-            <h3 className="landing-phase-name">
-              Write <em>Your</em> Version
-            </h3>
-            <p className="landing-phase-desc">
-              Each passage comes with hand-authored constraints — prompts that
-              push you to think differently. Write your own take. Optionally
-              hear it read aloud with ElevenLabs.
-            </p>
           </div>
-          <div className="landing-phase-card">
+          <div className="landing-phase-row">
+            <div className="landing-phase-text">
+              <h3 className="landing-phase-name">
+                <em>Feedback</em>, Share &amp; Save
+              </h3>
+              <p className="landing-phase-desc">
+                AI feedback on your writing. Save completions to your profile.
+                Track your activity with a heatmap. Build a daily practice.
+                Share your efforts with other users if you wish.
+              </p>
+            </div>
             <div className="landing-phase-image">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/features/feature-03-feedback.gif"
-                alt="AI feedback on your writing"
+                src="/features/phase-03-feedback.svg"
+                alt="Writing Feedback modal with What Works and What to Work On sections, plus a Practice heatmap and Saved/Share pills"
                 className="landing-phase-gif"
               />
             </div>
-            <span className="landing-phase-num">03</span>
-            <h3 className="landing-phase-name">
-              <em>Feedback</em>, Share &amp; Save
-            </h3>
-            <p className="landing-phase-desc">
-              AI feedback on your writing. Save completions to your profile.
-              Track your activity with a heatmap. Build a daily practice. Share
-              your efforts with other users if you wish.
-            </p>
           </div>
         </div>
       </section>
