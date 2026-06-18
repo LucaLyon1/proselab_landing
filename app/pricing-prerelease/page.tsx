@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { type ReactNode, useState } from 'react'
 
+import { trackEvent } from '@/lib/analytics'
+
 type BillingPeriod = 'yearly' | 'monthly'
 
 interface FaqItem {
@@ -94,11 +96,7 @@ export default function PricingPrereleasePage() {
   const [billing, setBilling] = useState<BillingPeriod>('yearly')
 
   const handleCtaClick = (plan: Plan) => {
-    window.datafast?.('pricing_prerelease_click', {
-      plan: plan.id,
-      billing,
-    })
-    window.umami?.track('pricing_prerelease_click', {
+    trackEvent('pricing_prerelease_click', {
       plan: plan.id,
       billing,
     })
@@ -108,8 +106,7 @@ export default function PricingPrereleasePage() {
   const handleToggle = (next: BillingPeriod) => {
     if (next === billing) return
     setBilling(next)
-    window.datafast?.('pricing_prerelease_toggle', { billing: next })
-    window.umami?.track('pricing_prerelease_toggle', { billing: next })
+    trackEvent('pricing_prerelease_toggle', { billing: next })
   }
 
   return (

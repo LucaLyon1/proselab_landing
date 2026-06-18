@@ -56,19 +56,19 @@ export default function RootLayout({
           <AuthNav />
         </header>
         {children}
-        <Script id="datafast-queue" strategy="beforeInteractive">{`
-          window.datafast = window.datafast || function() {
-            window.datafast.q = window.datafast.q || [];
-            window.datafast.q.push(arguments);
-          };
-        `}</Script>
         <Script
           defer
-          data-website-id="dfid_IBYj6a8XOWT1aRRW4PExx"
           data-domain="www.proselab.io"
-          src="https://datafa.st/js/script.js"
+          data-api="/assets/pl/api/event"
+          src="/assets/pl/js/pa-R4Nu9a6RngMVOiNn7nRID.js"
           strategy="afterInteractive"
         />
+        <Script id="plausible-queue" strategy="beforeInteractive">{`
+          window.plausible = window.plausible || function() {
+            window.plausible.q = window.plausible.q || [];
+            window.plausible.q.push(arguments);
+          };
+        `}</Script>
         <Script
           id="cookieyes"
           type="text/javascript"

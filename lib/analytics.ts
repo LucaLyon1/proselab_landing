@@ -1,8 +1,21 @@
 declare global {
   interface Window {
-    datafast?: (event: string, props?: Record<string, unknown>) => void;
+    plausible?: (
+      event: string,
+      options?: { props?: Record<string, unknown> },
+    ) => void;
     umami?: { track: (event: string, props?: Record<string, unknown>) => void };
   }
+}
+
+function trackPlausibleEvent(name: string, props?: Record<string, unknown>) {
+  if (!window.plausible) return;
+  if (props && Object.keys(props).length > 0) {
+    window.plausible(name, { props });
+    return;
+  }
+
+  window.plausible(name);
 }
 
 export function trackCTA(
@@ -11,11 +24,11 @@ export function trackCTA(
   extra?: Record<string, unknown>,
 ) {
   const props = { location, destination, ...extra };
-  window.datafast?.("cta", props);
+  trackPlausibleEvent("cta", props);
   window.umami?.track("cta", props);
 }
 
 export function trackEvent(name: string, props?: Record<string, unknown>) {
-  window.datafast?.(name, props);
+  trackPlausibleEvent(name, props);
   window.umami?.track(name, props);
 }
