@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
-import { trackCTA, trackEvent } from "@/lib/analytics";
+import { trackCTA, trackEvent, trackWhopEvent } from "@/lib/analytics";
 
 const PROMPTS = [
   "Write about the last dinner you had at a restaurant — the light, the noise, the feeling of sitting across from someone.",
@@ -67,6 +67,7 @@ export default function ProseAnalysisPage() {
       if (json.error) {
         setStatus("error");
       } else {
+        trackWhopEvent("lead");
         setStatus("success");
       }
     } catch {

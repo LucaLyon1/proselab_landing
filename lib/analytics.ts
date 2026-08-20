@@ -5,6 +5,7 @@ declare global {
       options?: { props?: Record<string, unknown> },
     ) => void;
     umami?: { track: (event: string, props?: Record<string, unknown>) => void };
+    whop?: { track: (event: string) => void };
   }
 }
 
@@ -26,9 +27,16 @@ export function trackCTA(
   const props = { location, destination, ...extra };
   trackPlausibleEvent("cta", props);
   window.umami?.track("cta", props);
+  if (destination === "app" || destination === "signup") {
+    window.whop?.track("app_click");
+  }
 }
 
 export function trackEvent(name: string, props?: Record<string, unknown>) {
   trackPlausibleEvent(name, props);
   window.umami?.track(name, props);
+}
+
+export function trackWhopEvent(name: "lead") {
+  window.whop?.track(name);
 }

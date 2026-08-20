@@ -100,6 +100,7 @@ export default function PricingPrereleasePage() {
       plan: plan.id,
       billing,
     })
+    window.whop?.track('app_click')
     window.location.assign(buildSignupUrl(plan, billing))
   }
 
