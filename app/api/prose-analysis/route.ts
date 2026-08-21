@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { LoopsClient } from 'loops';
-import { NextResponse, after } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const AUTHORS = [
   { name: 'Virginia Woolf', traits: 'Stream of consciousness, interior monologue, fluid sentence structure, lyrical prose, deep psychological interiority' },
@@ -64,50 +64,70 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Writing sample is required' }, { status: 400 });
   }
 
-  after(async () => {
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const loops = new LoopsClient(process.env.LOOPS_API_KEY!);
+  const loopsApiKey = process.env.LOOPS_API_KEY;
+  const transactionalId =
+    process.env.LOOPS_AUTHOR_TRANSACTIONAL_ID ??
+    process.env.LOOPS_TRANSACTIONAL_ID;
 
-    try {
-      // Upsert contact in Loops
-      await loops.updateContact({ email, properties: { userGroup: 'Prose Analysis' } });
+  if (!loopsApiKey || !transactionalId) {
+    console.error('[prose-analysis] 500: missing Loops configuration');
+    return NextResponse.json(
+      { error: 'Email delivery is temporarily unavailable' },
+      { status: 500 },
+    );
+  }
 
-      const message = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1024,
-        system: SYSTEM_PROMPT,
-        messages: [
-          {
-            role: 'user',
-            content: `Here is the writing prompt they responded to:\n"${prompt}"\n\nHere is their writing:\n\n${text}`,
-          },
-        ],
-      });
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const loops = new LoopsClient(loopsApiKey);
 
-      const content = message.content[0];
-      if (content.type !== 'text') {
-        throw new Error('Unexpected response type');
-      }
+  try {
+    // Upsert contact in Loops
+    await loops.updateContact({ email, properties: { userGroup: 'Prose Analysis' } });
 
-      const analysis = JSON.parse(content.text);
-
-      await loops.sendTransactionalEmail({
-        transactionalId: process.env.LOOPS_TRANSACTIONAL_ID!,
-        email,
-        dataVariables: {
-          primaryAuthor: analysis.primary.author,
-          secondaryAuthor: analysis.secondary.author,
-          narrative: analysis.narrative,
-          primaryTraits: analysis.primary.traits.join(', '),
-          secondaryTraits: analysis.secondary.traits.join(', '),
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: [
+        {
+          role: 'user',
+          content: `Here is the writing prompt they responded to:\n"${prompt}"\n\nHere is their writing:\n\n${text}`,
         },
-      });
+      ],
+    });
 
-      console.log(`[prose-analysis] sent to ${email} — matched ${analysis.primary.author}`);
-    } catch (err) {
-      console.error(`[prose-analysis] failed for ${email}:`, err);
+    const content = message.content[0];
+    if (content.type !== 'text') {
+      throw new Error('Unexpected response type');
     }
-  });
 
-  return NextResponse.json({ data: { ok: true } });
+    const analysis = JSON.parse(content.text);
+    const demoDate = new Date().toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    await loops.sendTransactionalEmail({
+      transactionalId,
+      email,
+      dataVariables: {
+        primaryAuthor: analysis.primary.author,
+        secondaryAuthor: analysis.secondary.author,
+        narrative: analysis.narrative,
+        primaryTraits: analysis.primary.traits.join(', '),
+        secondaryTraits: analysis.secondary.traits.join(', '),
+        demoDate,
+      },
+    });
+
+    console.log(`[prose-analysis] sent to ${email} — matched ${analysis.primary.author}`);
+    return NextResponse.json({ data: { ok: true } });
+  } catch (err) {
+    console.error(`[prose-analysis] failed for ${email}:`, err);
+    return NextResponse.json(
+      { error: 'We could not send your analysis. Please try again.' },
+      { status: 500 },
+    );
+  }
 }
