@@ -42,7 +42,8 @@ export default function CookiesPage() {
               <li>
                 <strong>Analytics cookies:</strong> Help us understand how
                 visitors use the Service (e.g., pages viewed, features used) so
-                we can improve it.
+                we can improve it. We use PostHog (EU), Plausible, Umami, and
+                Whop for product and marketing analytics.
               </li>
             </ul>
           </section>
@@ -50,9 +51,12 @@ export default function CookiesPage() {
           <section>
             <h2>3. Third-Party Cookies</h2>
             <p>
-              Our third-party providers (Supabase, Anthropic, ElevenLabs) may set
+              Our third-party providers (including PostHog, Plausible, Umami,
+              Whop, CookieYes, Supabase, Anthropic, and ElevenLabs) may set
               their own cookies when you use the Service. These are governed by
-              their respective privacy and cookie policies.
+              their respective privacy and cookie policies. PostHog events are
+              sent via a first-party <code>/ingest</code> proxy to PostHog&apos;s
+              EU cloud.
             </p>
           </section>
 
