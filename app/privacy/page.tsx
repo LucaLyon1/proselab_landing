@@ -81,8 +81,8 @@ export default function PrivacyPage() {
                 events), shared with the ProseLab app
               </li>
               <li>
-                <strong>Plausible / Umami / Whop:</strong> Privacy-focused and
-                marketing analytics on the marketing site
+                <strong>Whop:</strong> Marketing analytics and conversion
+                tracking on the marketing site
               </li>
             </ul>
             <p>
