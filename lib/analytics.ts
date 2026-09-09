@@ -1,3 +1,5 @@
+import posthog from "posthog-js";
+
 declare global {
   interface Window {
     plausible?: (
@@ -19,6 +21,12 @@ function trackPlausibleEvent(name: string, props?: Record<string, unknown>) {
   window.plausible(name);
 }
 
+function trackPostHog(name: string, props?: Record<string, unknown>) {
+  if (typeof window === "undefined") return;
+  if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) return;
+  posthog.capture(name, props);
+}
+
 export function trackCTA(
   location: string,
   destination: string,
@@ -27,6 +35,7 @@ export function trackCTA(
   const props = { location, destination, ...extra };
   trackPlausibleEvent("cta", props);
   window.umami?.track("cta", props);
+  trackPostHog("cta", props);
   if (destination === "app" || destination === "signup") {
     window.whop?.track("app_click");
   }
@@ -35,6 +44,7 @@ export function trackCTA(
 export function trackEvent(name: string, props?: Record<string, unknown>) {
   trackPlausibleEvent(name, props);
   window.umami?.track(name, props);
+  trackPostHog(name, props);
 }
 
 export function trackWhopEvent(name: "lead") {

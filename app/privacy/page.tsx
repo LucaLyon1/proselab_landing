@@ -76,6 +76,14 @@ export default function PrivacyPage() {
               <li>
                 <strong>ElevenLabs:</strong> Text-to-speech for reading aloud
               </li>
+              <li>
+                <strong>PostHog (EU):</strong> Product analytics (pageviews and
+                events), shared with the ProseLab app
+              </li>
+              <li>
+                <strong>Plausible / Umami / Whop:</strong> Privacy-focused and
+                marketing analytics on the marketing site
+              </li>
             </ul>
             <p>
               Each provider has its own privacy policy. We recommend reviewing
