@@ -36,6 +36,7 @@ export function trackCTA(
   trackPlausibleEvent("cta", props);
   window.umami?.track("cta", props);
   trackPostHog("cta", props);
+  trackPostHog("landing_cta_clicked", props);
   if (destination === "app" || destination === "signup") {
     window.whop?.track("app_click");
   }
