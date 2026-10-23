@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { trackCTA, trackEvent, trackWhopEvent } from "@/lib/analytics";
+import { trackCTA, trackEvent, trackWhopLead } from "@/lib/analytics";
 
 const CONSTRAINT_PROMPT =
   "Rewrite this passage so that the character's loneliness is conveyed entirely through concrete, physical detail — what the body does, what the senses register, what the world looks like. Remove every abstraction: no 'sense,' no 'feeling,' no naming of emotions. Let the reader feel the isolation only through tangible things.";
@@ -101,6 +101,7 @@ export default function DemoPage() {
     });
 
     setStatus("loading");
+    void trackWhopLead(email);
 
     try {
       const res = await fetch("/api/demo", {
@@ -113,7 +114,6 @@ export default function DemoPage() {
       if (json.error) {
         setStatus("error");
       } else {
-        trackWhopEvent("lead");
         setStatus("success");
       }
     } catch {
