@@ -1122,7 +1122,11 @@ html:not(.bf-live) .bf-banner {
     }
 
     .landing-hero-left {
-        padding: 2rem 1.5rem 5rem;
+        padding: 3.5rem 1.5rem 5rem;
+    }
+
+    .landing-hero-left .landing-hero-actions {
+        margin-top: 3.75rem;
     }
 
     .landing-hero-title {
