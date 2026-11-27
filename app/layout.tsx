@@ -4,6 +4,7 @@ import Script from "next/script";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
+import { BlackFridayBanner } from "@/components/BlackFridayBanner";
 
 export const viewport: Viewport = {
   themeColor: "#f5f0e8",
@@ -58,6 +59,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <BlackFridayBanner />
         <header className="auth-header">
           <Link href="/" className="auth-header-logo">
             ProseLab
