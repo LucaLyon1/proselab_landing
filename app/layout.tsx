@@ -4,7 +4,11 @@ import Script from "next/script";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthNav } from "@/components/auth/AuthNav";
-import { BlackFridayBanner } from "@/components/BlackFridayBanner";
+import { SiteChrome } from "@/components/SiteChrome";
+import {
+  BLACK_FRIDAY_ENDS_AT,
+  BLACK_FRIDAY_STARTS_AT,
+} from "@/lib/black-friday";
 
 export const viewport: Viewport = {
   themeColor: "#f5f0e8",
@@ -52,6 +56,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`light ${GeistMono.variable}`}>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var n=Date.now();if(n>=${BLACK_FRIDAY_STARTS_AT}&&n<=${BLACK_FRIDAY_ENDS_AT})document.documentElement.classList.add("bf-live")})()`,
+          }}
+        />
         <Script
           id="whop-pixel"
           strategy="beforeInteractive"
@@ -59,13 +68,14 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <BlackFridayBanner />
-        <header className="auth-header">
-          <Link href="/" className="auth-header-logo">
-            ProseLab
-          </Link>
-          <AuthNav />
-        </header>
+        <SiteChrome>
+          <header className="auth-header">
+            <Link href="/" className="auth-header-logo">
+              ProseLab
+            </Link>
+            <AuthNav />
+          </header>
+        </SiteChrome>
         {children}
         <Script
           id="cookieyes"
