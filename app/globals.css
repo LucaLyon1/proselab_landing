@@ -149,6 +149,104 @@ body {
     color: #fff;
 }
 
+/* ─── Black Friday site-wide banner ───────────────────────────── */
+.bf-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 120;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.85rem;
+    padding: 0.6rem 1rem;
+    background: var(--accent);
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+}
+
+.bf-banner:hover,
+.bf-banner:focus-visible {
+    background: var(--accent-dark);
+    color: #ffffff;
+}
+
+.bf-banner-label {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+}
+
+.bf-banner-text {
+    font-weight: 600;
+}
+
+.bf-banner-code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    letter-spacing: 0.04em;
+    padding: 0.1rem 0.5rem;
+    margin: 0 0.15rem;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-weight: 700;
+}
+
+.bf-banner-cta {
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+
+body:has(.bf-banner) .auth-header {
+    top: var(--bf-banner-height, 36px);
+}
+
+/* Stack the pre-release page banner under the site-wide strip if both show. */
+body:has(.bf-banner) .pp-banner {
+    top: var(--bf-banner-height, 36px);
+}
+
+body:has(.bf-banner):has(.pp-banner) .auth-header {
+    top: calc(var(--bf-banner-height, 36px) + var(--pp-banner-height, 36px));
+}
+
+/* Desktop hero padding is tight against the fixed header; add the strip. */
+body:has(.bf-banner) .landing-hero-left {
+    padding-top: calc(6rem + var(--bf-banner-height, 36px));
+}
+
+/* Prose analysis and demo hide the auth header but still show this banner. */
+body:has(.bf-banner) .pa-container {
+    padding-top: calc(4rem + var(--bf-banner-height, 36px));
+}
+
+@media (max-width: 640px) {
+    .bf-banner {
+        font-size: 0.65rem;
+        padding: 0.5rem 0.85rem;
+        gap: 0.25rem 0.5rem;
+    }
+}
+
+@media (max-width: 560px) {
+    body:has(.bf-banner) .pa-container {
+        padding-top: calc(2rem + var(--bf-banner-height, 36px));
+    }
+}
+
 /* ─── Landing Page ───────────────────────────────────────────── */
 .landing-root {
     --landing-ink: #1a1714;
@@ -2522,6 +2620,7 @@ section.landing-passages {
 .pp-back-link,
 .pp-eyebrow,
 .pp-banner-label,
+.bf-banner-label,
 .pp-toggle-btn,
 .pp-toggle-pill,
 .pp-badge,
